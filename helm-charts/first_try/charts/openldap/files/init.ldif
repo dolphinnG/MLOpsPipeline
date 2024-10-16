@@ -1,0 +1,91 @@
+# Base DN
+dn: dc=dolphin,dc=lmao
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: Dolphin Organization
+dc: dolphin
+
+# Organizational Unit
+dn: ou=ccc,dc=dolphin,dc=lmao
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+# New User Entry with additional attributes
+dn: uid=lmaohehe,ou=ccc,dc=dolphin,dc=lmao
+# objectClass: top
+# objectClass: person
+# objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: User Two
+sn: Two
+uid: lmaohehe
+mail: lmaohehe@dolphin.lmao
+userPassword: password2
+# description: 30
+title: Software Engineer
+l: USA
+# displayName is user account name
+telephoneNumber: +1234567890
+# photo:
+
+# User Entry 1
+dn: uid=user1,ou=ccc,dc=dolphin,dc=lmao
+objectClass: inetOrgPerson
+cn: User One
+sn: One
+uid: user1
+mail: user1@dolphin.lmao
+userPassword: password1
+title: Data Analyst
+l: Canada
+telephoneNumber: +1234567891
+
+# User Entry 2
+dn: uid=user2,ou=ccc,dc=dolphin,dc=lmao
+objectClass: inetOrgPerson
+cn: User Three
+sn: Three
+uid: user2
+mail: user2@dolphin.lmao
+userPassword: password3
+title: Project Manager
+l: UK
+telephoneNumber: +1234567892
+
+# User Entry 3
+dn: uid=user3,ou=ccc,dc=dolphin,dc=lmao
+objectClass: inetOrgPerson
+cn: User Four
+sn: Four
+uid: user3
+mail: user3@dolphin.lmao
+userPassword: password4
+title: System Administrator
+l: Germany
+telephoneNumber: +1234567893
+
+# User Entry 4
+dn: uid=user4,ou=ccc,dc=dolphin,dc=lmao
+objectClass: inetOrgPerson
+cn: User Five
+sn: Five
+uid: user4
+mail: user4@dolphin.lmao
+userPassword: password5
+title: Network Engineer
+l: Australia
+telephoneNumber: +1234567894
+
+# User Entry 5
+dn: uid=user5,ou=ccc,dc=dolphin,dc=lmao
+objectClass: inetOrgPerson
+cn: User Six
+sn: Six
+uid: user5
+mail: user5@dolphin.lmao
+userPassword: password6
+title: Software Developer
+l: India
+telephoneNumber: +1234567895

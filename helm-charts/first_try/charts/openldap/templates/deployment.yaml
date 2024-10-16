@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  labels:
+    {{include "openldap.labels" . | nindent 4}}
+spec:
+  selector:
+    matchLabels:
+      {{- include "openldap.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "openldap.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "bitnami/openldap:latest"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LDAP_PORT_NUMBER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{include "openldap.configmap-env" .}}
+                  key: LDAP_PORT_NUMBER
+            - name: LDAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{include "openldap.secrets" .}}
+                  key: LDAP_ADMIN_USERNAME
+            - name: LDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{include "openldap.secrets" .}}
+                  key: LDAP_ADMIN_PASSWORD
+            - name: LDAP_ROOT
+              valueFrom:
+                secretKeyRef:
+                  name: {{include "openldap.secrets" .}}
+                  key: LDAP_ROOT
+          ports:
+            - name: ldap
+              containerPort: {{ .Values.LDAP_PORT_NUMBER }}
+              protocol: TCP
+          volumeMounts:
+            - name: openldap-data
+              mountPath: /bitnami/openldap
+            - name: openldap-config
+              mountPath: /ldifs
+      volumes:
+        - name: openldap-data
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: openldap-data
+        - name: openldap-config
+          configMap:
+            name: {{include "openldap.configmap-init-files" .}}
+            # items: # not specifying items will mount all keys in the configmap into files in a directory
+            #   - key: init.ldif

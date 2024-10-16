@@ -1,0 +1,10 @@
+LDAP_PORT_NUMBER: 389
+service:
+  port: 389
+  type: ClusterIP
+  nodePort: 30000 
+## secrets
+secrets:
+  LDAP_ADMIN_USERNAME: topg
+  LDAP_ADMIN_PASSWORD: supahakka
+  LDAP_ROOT: dc=dolphin,dc=lmao
