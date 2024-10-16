@@ -17,27 +17,11 @@ spec:
         - name: {{ .Chart.Name }}
           image: "bitnami/openldap:latest"
           imagePullPolicy: IfNotPresent
-          env:
-            - name: LDAP_PORT_NUMBER
-              valueFrom:
-                configMapKeyRef:
-                  name: {{include "openldap.configmap-env" .}}
-                  key: LDAP_PORT_NUMBER
-            - name: LDAP_ADMIN_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{include "openldap.secrets" .}}
-                  key: LDAP_ADMIN_USERNAME
-            - name: LDAP_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{include "openldap.secrets" .}}
-                  key: LDAP_ADMIN_PASSWORD
-            - name: LDAP_ROOT
-              valueFrom:
-                secretKeyRef:
-                  name: {{include "openldap.secrets" .}}
-                  key: LDAP_ROOT
+          envFrom:
+            - configMapRef:
+                name: {{include "openldap.configmap-env" .}}
+            - secretRef:
+                name: {{include "openldap.secrets" .}}
           ports:
             - name: ldap
               containerPort: {{ .Values.LDAP_PORT_NUMBER }}

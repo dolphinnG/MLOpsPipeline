@@ -1,0 +1,3 @@
+  # image: bitnami/keycloak:latest
+  volumes:
+    - ./realms:/opt/bitnami/keycloak/data/import

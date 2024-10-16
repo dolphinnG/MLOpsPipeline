@@ -1,6 +1,6 @@
 apiVersion: v2
-name: openldap
-description: A Helm chart for Kubernetes
+name: dolphin-openldap
+description: Openldap server as a identity provider for the cluster
 
 # A chart can be either an 'application' or a 'library' chart.
 #
