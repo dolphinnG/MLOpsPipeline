@@ -1,5 +1,2 @@
-sdfasdfasdfasd HAHAHA
-
-HAHAH
-
-hAHAHA
+G has deployed OpenLdap server deployed!
+Available at: ldap://{{include "openldap.service-name" .}}.{{.Release.Namespace}}.svc.cluster.local:{{.Values.service.port}}

@@ -13,3 +13,7 @@ app: {{ .Release.Name }}-{{ .Chart.Name }}
 {{- define "openldap.configmap-env" -}}
 {{ .Release.Name }}-ldap-config-env
 {{- end }}
+
+{{- define "openldap.service-name" -}}
+{{ .Release.Name }}-{{ .Chart.Name }}-service
+{{- end }}
