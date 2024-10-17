@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{include "openldap.service-name" .}}
+  # name: {{include "openldap.service-name" .}}
+  name: openldap-dolphin-service # must be hardcoded for the keycloak realm import json to work
   labels:
     {{- include "openldap.labels" . | nindent 4 }}
 spec:
@@ -9,7 +10,7 @@ spec:
     {{- include "openldap.labels" . | nindent 4 }}
   ports:
     - protocol: TCP
-      port: {{ .Values.service.port }}
+      port: 389 # must be hardcoded for the keycloak realm import json to work
       targetPort: {{ .Values.LDAP_PORT_NUMBER }}
       {{- if eq .Values.service.type "NodePort" }}
       nodePort: {{ .Values.service.nodePort | default 30000 }}

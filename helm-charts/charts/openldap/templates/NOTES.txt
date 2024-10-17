@@ -1,2 +1,2 @@
 G has deployed OpenLdap server deployed!
-Available at: ldap://{{include "openldap.service-name" .}}.{{.Release.Namespace}}.svc.cluster.local:{{.Values.service.port}}
+Available at: ldap://openldap-dolphin-service.default.svc.cluster.local:389
