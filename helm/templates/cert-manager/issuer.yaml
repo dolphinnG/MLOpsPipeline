@@ -1,0 +1,7 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: dolphin-ca-issuer
+spec:
+  ca:
+    secretName: dolphin-ca-key-cert

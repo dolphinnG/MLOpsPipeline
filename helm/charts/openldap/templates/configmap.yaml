@@ -13,4 +13,7 @@ metadata:
     name: {{include "openldap.configmap-env" .}}
 data:
     LDAP_PORT_NUMBER: {{ .Values.LDAP_PORT_NUMBER | quote}}
-
+    LDAP_ENABLE_TLS: "yes"
+    LDAP_TLS_CERT_FILE: /etc/ldap/ssl/tls.crt
+    LDAP_TLS_KEY_FILE: /etc/ldap/ssl/tls.key
+    LDAP_TLS_CA_FILE: /etc/ldap/ssl/ca.crt

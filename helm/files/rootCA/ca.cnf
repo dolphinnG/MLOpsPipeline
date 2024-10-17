@@ -1,0 +1,22 @@
+[ req ]
+default_bits       = 2048
+default_keyfile    = openldap.key
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_ca
+req_extensions     = v3_req
+prompt             = no
+
+[ req_distinguished_name ]
+
+CN = dolphin.lmao
+
+[ v3_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical,CA:true
+keyUsage = critical,keyCertSign,cRLSign
+
+[ v3_req ]
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
