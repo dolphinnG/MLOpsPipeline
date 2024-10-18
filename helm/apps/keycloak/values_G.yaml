@@ -11,10 +11,7 @@ extraEnvVars:
 extraVolumes:
   - name: realm-config
     configMap:
-      name: dolphin-realm-configmap
-  - name: keycloak-tls
-    secret:
-      secretName: keycloak-tls-secret     
+      name: dolphin-realm-configmap 
   - name: bundle-inject
     configMap:
       name: dolphin-trusted-ca-bundle
@@ -25,9 +22,6 @@ extraVolumes:
 extraVolumeMounts:
   - name: realm-config
     mountPath: /opt/bitnami/keycloak/data/import
-    readOnly: true
-  - name: keycloak-tls
-    mountPath: /test/tls
     readOnly: true
   - name: bundle-inject
     mountPath: /etc/ssl/certs/
