@@ -1,0 +1,63 @@
+fullnameOverride: keycloak-dolphin-service
+
+# extraEnvVars:
+#   - name: KEYCLOAK_IMPORT
+#     value: /realm
+extraEnvVars:
+  - name: KEYCLOAK_EXTRA_ARGS
+    # value: --import-realm
+    value: "--import-realm"
+
+extraVolumes:
+  - name: realm-config
+    configMap:
+      name: dolphin-realm-configmap
+  - name: keycloak-tls
+    secret:
+      secretName: keycloak-tls-secret     
+  - name: bundle-inject
+    configMap:
+      name: dolphin-trusted-ca-bundle
+      items:
+        - key: root-certs.pem
+          path: ca-certificates.crt # must overwrite "/etc/ssl/certs/ca-certificates.crt" on debian
+
+extraVolumeMounts:
+  - name: realm-config
+    mountPath: /opt/bitnami/keycloak/data/import
+    readOnly: true
+  - name: keycloak-tls
+    mountPath: /test/tls
+    readOnly: true
+  - name: bundle-inject
+    mountPath: /etc/ssl/certs/
+    readOnly: true
+
+auth:
+  adminUser: admin
+  adminPassword: secret
+
+postgresql:
+  primary:
+    persistence:
+      enabled: false # disable persistence
+
+
+
+# BOTH TLS AND SPI TRUST STORE SETTINGS MUST BE SPECIFIED OTHERWISE YOU ARE FUCKED!
+tls: 
+  enabled: true
+  existingSecret: keycloak-tls-secret
+  keystoreFilename: keystore.jks
+  truststoreFilename: truststore.jks
+  keystorePassword: lmaohehe
+  truststorePassword: lmaohehe
+spi:
+  existingSecret: keycloak-tls-secret
+  truststorePassword: lmaohehe
+  truststoreFilename: truststore.jks
+
+# extraStartupArgs: >-
+#   --spi-truststore-file-file=/test/tls/truststore.jks
+#   --spi-truststore-file-password=lmaohehe
+#   --spi-truststore-file-hostname-verification-policy=WILDCARD

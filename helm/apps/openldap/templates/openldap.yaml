@@ -22,7 +22,11 @@ spec:
                 name: {{include "openldap.configmap-env" .}}
             - secretRef:
                 name: {{include "openldap.secrets" .}}
-        
+          env: 
+            - name: LDAP_TLS_VERIFY_CLIENT
+              value: "never"
+            # - name: LDAP_LOGLEVEL
+            #   value: "8"
           # env:
           #   - name: LDAP_TLS_CERT_FILE
           #     value: /etc/ldap/ssl/my-org-new.crt
@@ -60,7 +64,7 @@ spec:
             #   - key: init.ldif
         - name: ca-roor-certs-bundle
           configMap:
-            name: dolphin-bundle
+            name: dolphin-trusted-ca-bundle 
             # defaultMode: 0644
             # optional: false
             items:

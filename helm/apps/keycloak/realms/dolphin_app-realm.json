@@ -1483,7 +1483,7 @@
       "config" : {
         "pagination" : [ "false" ],
         "fullSyncPeriod" : [ "86400" ],
-        "startTls" : [ "false" ],
+        "startTls" : [ "true" ],
         "usersDn" : [ "ou=ccc,dc=dolphin,dc=lmao" ],
         "connectionPooling" : [ "false" ],
         "cachePolicy" : [ "DEFAULT" ],
@@ -1497,7 +1497,7 @@
         "lastSync" : [ "1729097527" ],
         "vendor" : [ "other" ],
         "uuidLDAPAttribute" : [ "entryUUID" ],
-        "connectionUrl" : [ "ldap://openldap-dolphin-service.default.svc.cluster.local:389" ],
+        "connectionUrl" : [ "ldap://openldap-dolphin-service:389" ],
         "allowKerberosAuthentication" : [ "false" ],
         "syncRegistrations" : [ "false" ],
         "authType" : [ "simple" ],

@@ -1,4 +1,4 @@
-LDAP_PORT_NUMBER: 389
+LDAP_PORT_NUMBER: 1389
 service:
   # port: 389
   type: ClusterIP

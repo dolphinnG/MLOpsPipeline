@@ -1,7 +1,8 @@
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: dolphin-bundle # The bundle name will also be used for the target
+  name: dolphin-trusted-ca-bundle 
+  # The bundle name will also be used for the target
 spec:
   sources:
   # Include a bundle of publicly trusted certificates which can be

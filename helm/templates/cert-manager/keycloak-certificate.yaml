@@ -1,0 +1,43 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak-hehe 
+spec:
+  secretName: keycloak-tls-secret
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+
+  keystores:
+    # keystore.jks contains the private key and the certificate
+    # truststore.jks contains the issuer certificate 
+    jks:
+      create: true
+      alias: certificate # the default alias of the key in the keystore
+      passwordSecretRef: # this must be a sreference to an existing k8s secret
+        name: dolphin-jks-keystore-password 
+        key: password
+    #   profile: Modern2023
+
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+
+  subject:
+    organizations:
+      - cert-manager
+
+  commonName: keycloak-dolphin-service
+  dnsNames:
+    - keycloak-dolphin-service.dolphin-ns.svc.cluster.local
+    - keycloak-dolphin-service
+
+  issuerRef:
+    name: dolphin-ca-issuer
+    kind: Issuer

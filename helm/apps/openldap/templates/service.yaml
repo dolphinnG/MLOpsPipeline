@@ -10,9 +10,14 @@ spec:
     {{- include "openldap.labels" . | nindent 4 }}
   ports:
     - protocol: TCP
+      name: ldap
       port: 389 # must be hardcoded for the keycloak realm import json to work
       targetPort: {{ .Values.LDAP_PORT_NUMBER }}
       {{- if eq .Values.service.type "NodePort" }}
       nodePort: {{ .Values.service.nodePort | default 30000 }}
       {{- end }}
+    - protocol: TCP
+      name: ldaps
+      port: 636 # must be hardcoded for the keycloak realm import json to work
+      targetPort: 1636
   type: {{ .Values.service.type }}

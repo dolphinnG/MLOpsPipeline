@@ -11,25 +11,26 @@ spec:
   # be re-reconciled if the Certificate's secretTemplate changes. secretTemplate
   # is also enforced, so relevant label and annotation changes on the Secret by a
   # third party will be overwriten by cert-manager to match the secretTemplate.
-  secretTemplate:
-    annotations:
-      app-annotation: dolphin
-    labels:
-      app-label: dolphin
+  # secretTemplate:
+  #   annotations:
+  #     app-annotation: dolphin
+  #   labels:
+  #     app-label: dolphin
 
-  privateKey:
-    algorithm: RSA
-    encoding: PKCS1
-    size: 2048
+  # privateKey:
+  #   algorithm: RSA
+  #   encoding: PKCS1
+  #   size: 2048
 
-  # keystores allows adding additional output formats. This is an example for reference only.
   keystores:
-    pkcs12:
+    # keystore.jks contains the private key and the certificate
+    # truststore.jks contains the issuer certificate 
+    jks:
       create: true
+      alias: certificate # the default alias of the key in the keystore
       passwordSecretRef: # this must be a sreference to an existing k8s secret
-        name: openldap-dolphin-tls-keystore
+        name: dolphin-jks-keystore-password 
         key: password
-      profile: Modern2023
 
   duration: 2160h # 90d
   renewBefore: 360h # 15d
@@ -38,6 +39,7 @@ spec:
   usages:
     - server auth
     - client auth
+    - digital signature
 
   subject:
     organizations:

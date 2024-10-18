@@ -1,8 +1,1 @@
-cert-manager:
-  installCRDs: true 
-
-trust-manager:
-  crds:
-    enabled: true
-    keep: true
-# only 1 of two above
+jks_keystore_password: lmaohehe
