@@ -1,0 +1,54 @@
+fullnameOverride: kafka-dolphin-service
+
+extraVolumes:
+  - name: bundle-inject
+    configMap:
+      name: dolphin-trusted-ca-bundle
+      items:
+        - key: root-certs.pem
+          path: ca-certificates.crt # must overwrite "/etc/ssl/certs/ca-certificates.crt" on debian
+
+extraVolumeMounts:
+  - name: bundle-inject
+    mountPath: /etc/ssl/certs/
+    readOnly: true
+
+tls: 
+  type: JKS
+  existingSecret: kafka-tls-secret
+  jksKeystoreKey: keystore.jks
+  keystorePassword: lmaohehe
+  jksTruststoreKey: truststore.jks
+  truststorePassword: lmaohehe
+  sslClientAuth: requested
+
+listeners: 
+  client: 
+    name: CLIENT_DOLPHIN
+    protocol: SASL_SSL
+  
+  controller: 
+    name: CONTROLLER_DOLPHIN
+    protocol: SASL_SSL # SASL_SSL, SASL_PLAINTEXT, SSL, PLAINTEXT
+
+  interbroker:
+    name: INTERBROKER_DOLPHIN
+    protocol: SASL_SSL
+
+sasl: 
+  interbroker: 
+    user: kafka-interbroker-user
+    password: kafka-interbroker-password
+  controller: 
+    user: kafka-controller-user
+    password: kafka-controller-password
+  client:
+    users:
+      - user1 
+      - user2
+      - user3
+    passwords: 
+      - password1
+      - password2
+      - password3
+

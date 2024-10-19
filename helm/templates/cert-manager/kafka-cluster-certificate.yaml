@@ -1,0 +1,47 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kafka-hehe 
+spec:
+  secretName: kafka-tls-secret
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+
+  keystores:
+    # keystore.jks contains the private key and the certificate
+    # truststore.jks contains the issuer certificate 
+    jks:
+      create: true
+      alias: certificate # the default alias of the key in the keystore
+      passwordSecretRef: # this must be a reference to an existing k8s secret
+        name: dolphin-jks-keystore-password 
+        key: password
+    #   profile: Modern2023
+
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+
+  subject:
+    organizations:
+      - cert-manager
+
+  commonName: kafka-dolphin-service
+  dnsNames:
+    - kafka-dolphin-service.dolphin-ns.svc.cluster.local
+    - kafka-dolphin-service
+    # - kafka-dolphin-service-controller-0.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
+    # - kafka-dolphin-service-controller-1.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
+    # - kafka-dolphin-service-controller-2.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
+    - '*.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local'
+
+  issuerRef:
+    name: dolphin-ca-issuer
+    kind: Issuer
