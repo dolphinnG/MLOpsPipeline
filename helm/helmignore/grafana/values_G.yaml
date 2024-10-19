@@ -1,0 +1,16 @@
+
+datasources:
+  secretDefinition:
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://lokitest-grafana-loki-gateway:80
+        isDefault: true
+        jsonData:
+          maxLines: 1000
+
+admin:
+  user: admin
+  password: supahakka

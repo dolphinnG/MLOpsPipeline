@@ -1,0 +1,78 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+distributor:
+  ring:
+    kvstore:
+      store: memberlist
+
+ingester:
+  lifecycler:
+    ring:
+      kvstore:
+        store: memberlist
+      replication_factor: 1
+  chunk_idle_period: 5m
+  chunk_retain_period: 30s
+  max_transfer_retries: 0
+
+memberlist:
+  join_members:
+    - loki-memberlist
+
+limits_config:
+  enforce_metric_name: false
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/boltdb-cache
+    cache_ttl: 24h
+    shared_store: filesystem
+  filesystem:
+    directory: /loki/chunks
+
+compactor:
+  working_directory: /loki/boltdb-shipper-compactor
+  shared_store: filesystem
+
+table_manager:
+  retention_deletes_enabled: true
+  retention_period: 168h
+
+query_range:
+  align_queries_with_step: true
+  max_retries: 5
+  split_queries_by_interval: 15m
+  cache_results: true
+  results_cache:
+    cache:
+      enable_fifocache: true
+      fifocache:
+        size: 1024
+        validity: 24h
+
+frontend:
+  log_queries_longer_than: 5s
+  compress_responses: true
+  tail_proxy_url: http://loki-dolphin-gateway:3100 # has nothing to do with promtail
+
+frontend_worker:
+  frontend_address: loki-query-frontend:9095
+  grpc_client_config:
+    max_send_msg_size: 1.048576e+08
+    max_recv_msg_size: 1.048576e+08

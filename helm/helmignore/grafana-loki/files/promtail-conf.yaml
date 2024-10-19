@@ -1,0 +1,35 @@
+clients:
+  - url: http://loki-dolphin-gateway:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: kubernetes-pods
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_label_name]
+        action: replace
+        target_label: job
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: pod
+      - source_labels: [__meta_kubernetes_pod_container_name]
+        action: replace
+        target_label: container
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        action: replace
+        target_label: node
+      - source_labels: [__meta_kubernetes_pod_annotation_promtail_path]
+        action: replace
+        target_label: __path__
+        regex: (.+)
+    pipeline_stages:
+      - docker: {}
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: kubernetes-pods
+          __path__: /var/log/pods/*/*/*.log

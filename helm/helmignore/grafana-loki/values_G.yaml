@@ -1,0 +1,7 @@
+# fullnameOverride: loki-dolphin
+
+# loki: 
+#   configuration: loki-config
+
+# promtail:
+#   existingSecret: promtail-secret

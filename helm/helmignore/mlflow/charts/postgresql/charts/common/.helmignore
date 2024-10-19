@@ -14,12 +14,13 @@
 *.swp
 *.bak
 *.tmp
-*.orig
 *~
 # Various IDEs
 .project
 .idea/
 *.tmproj
 .vscode/
-
-helmignore/
+# img folder
+img/
+# Changelog
+CHANGELOG.md
