@@ -1,0 +1,134 @@
+version: '3.7'
+services:
+  # PostgreSQL database
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mlflowdb
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO server
+  minio:
+    image: minio/minio
+    expose:
+      - "9000"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: "minio_user"
+      MINIO_ROOT_PASSWORD: "minio_password"
+    healthcheck:
+      test: timeout 5s bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 5
+    command: server /data --console-address ":9001"
+
+  # Create a bucket named "bucket" if it doesn't exist
+  minio-create-bucket:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      bash -c "
+      mc alias set minio http://minio:9000 minio_user minio_password &&
+      if ! mc ls minio | grep --quiet bucket; then
+        mc mb minio/bucket
+      else
+        echo 'bucket already exists'
+      fi
+      "
+
+  # MLflow tracking server
+  mlflow:
+    image: bitnami/mlflow:latest
+    volumes:
+      - mlflow-data:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    environment:
+      BACKEND_STORE_URI: postgresql://user:password@postgres/mlflowdb
+      AWS_ACCESS_KEY_ID: minio_user
+      AWS_SECRET_ACCESS_KEY: minio_password
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+    ports:
+      - "5000:5000"
+    entrypoint: mlflow server --backend-store-uri postgresql://user:password@postgres/mlflowdb --default-artifact-root s3://bucket --host 0.0.0.0 --port 5000
+
+  # Spark Master
+  spark-master:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      # - PYSPARK_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
+      # - PYSPARK_DRIVER_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
+      # - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.1,com.amazonaws:aws-java-sdk-bundle:1.11.901
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - spark-master-data:/bitnami/spark
+      - ./:/opt/bitnami/spark/testapp
+
+  # Spark Worker
+  spark-worker:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      # - PYSPARK_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
+      # - PYSPARK_DRIVER_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
+      # - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.1,com.amazonaws:aws-java-sdk-bundle:1.11.901
+    depends_on:
+      - spark-master
+    volumes:
+      - spark-worker-data:/bitnami/spark
+      - ./:/opt/bitnami/spark/testapp
+
+  spark-worker2:
+    image: bitnami/spark:latest
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      # - PYSPARK_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
+      # - PYSPARK_DRIVER_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
+      # - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.1,com.amazonaws:aws-java-sdk-bundle:1.11.901
+    depends_on:
+      - spark-master
+    volumes:
+      - spark-worker-data:/bitnami/spark
+      - ./:/opt/bitnami/spark/testapp
+
+
+volumes:
+  postgres-data:
+  mlflow-data:
+  spark-master-data:
+  spark-worker-data:

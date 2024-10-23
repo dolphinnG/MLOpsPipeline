@@ -1,2 +1,4 @@
 dump/
 .venv/
+__pycache__/
+*.pyc
