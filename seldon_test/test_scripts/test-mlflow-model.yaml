@@ -1,0 +1,15 @@
+apiVersion: mlops.seldon.io/v1alpha1
+kind: Model
+metadata:
+  name: mlflow-iris
+spec:
+  # remember to run    export LOCAL_MODEL_FOLDER=/home/seldon/models
+  storageUri: "/mnt/models/mlflow-iris" # a whole directory containing the model file and metadata files
+  # storageUri: "s3://my-bucket/{run-id}/my-model"
+  requirements:
+  - mlflow
+  memory: 100Ki
+
+
+# seldon model infer mlflow-iris \
+#         '{"inputs": [{"name": "any_name_since_only_1_name_probably", "shape": [1, 4], "datatype": "FP64", "data": [[1, 2, 3, 4]]}]}'

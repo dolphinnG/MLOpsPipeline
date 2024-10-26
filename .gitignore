@@ -2,3 +2,4 @@ dump/
 .venv/
 __pycache__/
 *.pyc
+seldon_test/seldon-core
