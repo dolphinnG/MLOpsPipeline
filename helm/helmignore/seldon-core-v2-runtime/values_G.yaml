@@ -1,0 +1,19 @@
+
+config:
+  kafkaConfig:
+    bootstrap: kafkatest:9092
+    topicPrefix: dolphin_topic
+    consumerGroupIdPrefix: dolphin_group
+    # consumer:
+    #   group.id: seldon
+    #   auto.offset.reset: earliest
+    #   enable.auto.commit: false
+    # producer:
+    #   acks: all
+    #   retries: 3
+    #   linger.ms: 1
+    #   max.in.flight.requests.per.connection: 1
+    #   enable.idempotence: true
+    # streams:
+    #   application.id: seldon
+    #   num.stream.threads: 1
