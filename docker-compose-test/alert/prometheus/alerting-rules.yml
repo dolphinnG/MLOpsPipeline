@@ -1,0 +1,12 @@
+groups:
+  - name: model_drift_alerts
+    rules:
+      - alert: ModelDriftDetected
+        expr: model_drifted_total > 10
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Model Drift Detected ({{ $labels.model }})"
+          description: "Model drift detected for {{ $labels.model }}. The value of model_drifted_total is {{ $value }}."
+          model: "{{ $labels.model }}"

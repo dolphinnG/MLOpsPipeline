@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app4-deployment
+  labels:
+    app: app4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app4
+  template:
+    metadata:
+      labels:
+        app: app4
+    spec:
+      containers:
+      - name: app4-container
+        image: supahakka/app4-test
+        ports:
+        - containerPort: 9991
+        env:
+        - name: OTEL_PYTHON_LOG_LEVEL
+          value: "debug"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "otel-daemon-opentelemetry-collector:4317"
+        - name: OTEL_EXPORTER_OTLP_INSECURE
+          value: "true"
+        - name: OTEL_SERVICE_NAME
+          value: "app4-test"
+        - name: OTEL_METRICS_EXPORTER
+          value: "none"
+        - name: OTEL_TRACES_EXPORTER
+          value: "otlp"
+        - name: OTEL_LOGS_EXPORTER
+          value: "otlp"
+        - name: OTEL_PYTHON_LOG_CORRELATION
+          value: "true"
+        - name: OTEL_PYTHON_LOG_FORMAT
+          value: "%(msg)s [span_id=%(span_id)s]"
+        - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
+          value: "true"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app4-service
+  labels:
+    app: app4
+spec:
+  selector:
+    app: app4
+  ports:
+    - protocol: TCP
+      port: 9991
+      targetPort: 9991
+  type: ClusterIP

@@ -24,7 +24,7 @@ datasources:
       - name: Prometheus
         type: prometheus
         access: proxy
-        url: http://prometheus-dolphin-service:9090
+        url: http://promtest-prometheus-server:80
         isDefault: false
         jsonData:
           httpMethod: POST
