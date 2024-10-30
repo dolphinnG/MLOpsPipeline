@@ -4,7 +4,7 @@ datasources:
   - name: Jaeger
     type: jaeger
     access: proxy
-    url: http://jaeger:16686
+    url: http://jaegertest-collector:16686
     isDefault: false
     
 

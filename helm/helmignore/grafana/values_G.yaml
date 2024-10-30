@@ -3,14 +3,55 @@ datasources:
   secretDefinition:
     apiVersion: 1
     datasources:
+
       - name: Loki
         type: loki
         access: proxy
         url: http://lokitest-grafana-loki-gateway:80
+        editable: true
         isDefault: true
         jsonData:
           maxLines: 1000
+          derivedFields:
+            - datasourceUid: PC9A941E8F2E49454
+              matcherRegex: trace_id
+              name: Trace
+              matcherType: "label"
+              label: trace_id
+              url: "$${__value.raw}"
+              urlDisplayLabel: "View Trace"
+
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-dolphin-service:9090
+        isDefault: false
+        jsonData:
+          httpMethod: POST
+
+      - name: Jaeger
+        type: jaeger
+        access: proxy
+        url: http://jaegertest-query:16686
+        isDefault: false      
+        jsonData:
+          tracesToLogsV2: 
+            customQuery: true
+            datasourceUid: P8E80F9AEF21F6940
+            filterByTraceId: false
+            query: "{service_name=~\".+\"} | span_id=`$${__span.spanId}`" # must use $$ to escape the $
+            
+    #   httpHeaderName1: "Authorization"
+    #   httpHeaderValue1: "Bearer YOUR_ACCESS_TOKEN"        
+      # - name: Alertmanager
+      #   uid: alertmanager
+      #   type: alertmanager
+      #   access: proxy
+      #   orgId: 1
+      #   url: http://prometheustest-alertmanager:9093
+      #   version: 1
+      #   editable: false
 
 admin:
   user: admin
-  password: supahakka
+  password: admin

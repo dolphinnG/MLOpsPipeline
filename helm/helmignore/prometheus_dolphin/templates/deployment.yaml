@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  labels:
+    app: prometheus-dolphin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-dolphin
+  template:
+    metadata:
+      labels:
+        app: prometheus-dolphin
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        ports:
+        - containerPort: 9090
+        command: ["prometheus", --config.file=/etc/prometheus/prometheus.yml , "--web.enable-remote-write-receiver"]  
+
+        volumeMounts:
+        - name: prometheus-config-volume
+          mountPath: /etc/prometheus
+      volumes:
+      - name: prometheus-config-volume
+        configMap:
+          name: prometheus-config

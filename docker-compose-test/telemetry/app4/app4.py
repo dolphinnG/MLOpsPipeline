@@ -33,6 +33,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
+    
     logger.info("Hello World infoooo")
     logger.debug("Hello World debug")
     logger.error("Hello World error")
@@ -45,7 +46,7 @@ def read_item(item_id: int, q: str = None):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=9991)
-    
+
 
 # $env:OTEL_PYTHON_LOG_LEVEL="debug"
 # $env:OTEL_EXPORTER_OTLP_ENDPOINT="127.0.0.1:4317" 

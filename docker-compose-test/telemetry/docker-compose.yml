@@ -55,15 +55,15 @@ services:
       - 55679:55679 # zpages extension
 
 
-  promtail:
-    image: bitnami/promtail:latest
-    ports:
-      - "9080:9080"
-    volumes:
-      - ./promtail-config.yaml:/opt/bitnami/promtail/conf/promtail-config.yaml
-      - ./logs/app1:/var/logs/app1
-      - ./logs/app2:/var/logs/app2
-    command: -config.file=/opt/bitnami/promtail/conf/promtail-config.yaml
+  # promtail:
+  #   image: bitnami/promtail:latest
+  #   ports:
+  #     - "9080:9080"
+  #   volumes:
+  #     - ./promtail-config.yaml:/opt/bitnami/promtail/conf/promtail-config.yaml
+  #     - ./logs/app1:/var/logs/app1
+  #     - ./logs/app2:/var/logs/app2
+  #   command: -config.file=/opt/bitnami/promtail/conf/promtail-config.yaml
 
 volumes:
   grafana_data:

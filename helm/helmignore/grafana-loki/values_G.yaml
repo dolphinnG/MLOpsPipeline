@@ -3,5 +3,6 @@
 # loki: 
 #   configuration: loki-config
 
-# promtail:
+promtail:
+  enabled: false
 #   existingSecret: promtail-secret
