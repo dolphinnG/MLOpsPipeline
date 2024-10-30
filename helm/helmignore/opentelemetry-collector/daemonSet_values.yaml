@@ -1,0 +1,93 @@
+mode: daemonset
+
+image:
+  repository: otel/opentelemetry-collector-contrib
+# command:
+#   name: "otelcol"
+
+presets:
+  # enables the k8sattributesprocessor and adds it to the traces, metrics, and logs pipelines
+  kubernetesAttributes:
+    enabled: true
+    # extractAllPodLabels: true
+    # extractAllPodAnnotations: true
+  # enables the kubeletstatsreceiver and adds it to the metrics pipelines
+  kubeletMetrics:
+    enabled: true
+  # Enables the filelogreceiver and adds it to the logs pipelines
+  logsCollection:
+    enabled: true
+
+
+
+
+service: 
+  enabled: true
+
+config:
+  exporters:
+    debug: {}
+
+    otlp/jaeger-grpc:
+      endpoint: http://jaegertest-collector:4317
+      tls: 
+        insecure: true
+
+    otlphttp: # this must be correct and not arbitrary. the name after the / can be though.
+      endpoint: http://lokitest-grafana-loki-distributor:3100/otlp
+      tls: 
+        insecure: true
+
+    prometheusremotewrite:
+      endpoint: "http://promtest-prometheus-server:80/api/v1/write"
+      tls: 
+        insecure: true
+      # wal: # Enabling the Write-Ahead-Log for the exporter.
+      #   directory: ./prom_rw # The directory to store the WAL in
+      #   buffer_size: 100 # Optional count of elements to be read from the WAL before truncating; default of 300
+      #   truncate_frequency: 45s # Optional frequency for how often the WAL should be truncated. It is a time.ParseDuration; default of 1m
+      # resource_to_telemetry_conversion:
+      #   enabled: true # Convert resource attributes to metric labels
+
+  receivers:
+    kubeletstats:
+      collection_interval: 20s
+      auth_type: "serviceAccount"
+      endpoint: "https://${env:K8S_NODE_NAME}:10250"
+      insecure_skip_verify: true
+
+
+
+  service: 
+    pipelines:
+      logs:
+        exporters:
+          - debug
+          - otlphttp
+        processors:
+          - memory_limiter
+          - batch
+        receivers:
+          - otlp
+      metrics:
+        exporters:
+          - debug
+          - prometheusremotewrite
+        processors:
+          - memory_limiter
+          - batch
+        receivers:
+          - kubeletstats
+          - otlp
+          - prometheus
+      traces:
+        exporters:
+          - debug
+          - otlp/jaeger-grpc
+        processors:
+          - memory_limiter
+          - batch
+        receivers:
+          - otlp
+          - jaeger
+          - zipkin

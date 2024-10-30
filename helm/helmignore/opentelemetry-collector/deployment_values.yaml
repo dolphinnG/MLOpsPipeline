@@ -1,71 +1,32 @@
-mode: daemonset
+mode: deployment
 
 image:
   repository: otel/opentelemetry-collector-contrib
-# command:
-#   name: "otelcol"
+
+# We only want one of these collectors - any more and we'd produce duplicate data
+replicaCount: 1
 
 presets:
-  # enables the k8sattributesprocessor and adds it to the traces, metrics, and logs pipelines
-  kubernetesAttributes:
+  # enables the k8sclusterreceiver and adds it to the metrics pipelines
+  clusterMetrics:
     enabled: true
-  # enables the kubeletstatsreceiver and adds it to the metrics pipelines
-  kubeletMetrics:
+  # enables the k8sobjectsreceiver to collect events only and adds it to the logs pipelines
+  kubernetesEvents:
     enabled: true
-  # Enables the filelogreceiver and adds it to the logs pipelines
-  logsCollection:
-    enabled: true
-
-
-## The chart only includes the loggingexporter by default
-## If you want to send your data somewhere you need to
-## configure an exporter, such as the otlpexporter
-# config:
-# exporters:
-#   otlp:
-#     endpoint: "<SOME BACKEND>"
-# service:
-#   pipelines:
-#     traces:
-#       exporters: [ otlp ]
-#     metrics:
-#       exporters: [ otlp ]
-#     logs:
-#       exporters: [ otlp ]
-
-service: 
-  enabled: true
 
 config:
   exporters:
     debug: {}
 
-    otlp/jaeger-grpc:
-      endpoint: http://jaegertest-collector:4317
-      tls: 
-        insecure: true
+    # otlp/jaeger-grpc:
+    #   endpoint: http://jaegertest-collector:4317
+    #   tls: 
+    #     insecure: true
 
     otlphttp: # this must be correct and not arbitrary. the name after the / can be though.
       endpoint: http://lokitest-grafana-loki-distributor:3100/otlp
       tls: 
         insecure: true
-
-    # prometheus:
-    #   endpoint: "0.0.0.0:9999"
-    #   # tls:
-    #   #   ca_file: "/path/to/ca.pem"
-    #   #   cert_file: "/path/to/cert.pem"
-    #   #   key_file: "/path/to/key.pem"
-    #   # namespace: test-space
-    #   const_labels:
-    #     label1: value1
-    #     # "another label": spaced value
-    #   send_timestamps: true
-    #   metric_expiration: 180m
-    #   enable_open_metrics: true
-    #   add_metric_suffixes: false
-    #   resource_to_telemetry_conversion:
-    #     enabled: true
 
     prometheusremotewrite:
       endpoint: "http://promtest-prometheus-server:80/api/v1/write"
@@ -78,8 +39,6 @@ config:
       # resource_to_telemetry_conversion:
       #   enabled: true # Convert resource attributes to metric labels
 
-  # receivers:
-  #   otlp/notls:
 
 
   service: 
@@ -106,7 +65,7 @@ config:
       traces:
         exporters:
           - debug
-          - otlp/jaeger-grpc
+          # - otlp/jaeger-grpc
         processors:
           - memory_limiter
           - batch
