@@ -1,3 +1,6 @@
+
+#checkout "kind: seldonconfig" in the templates/seldon-v2-components.yaml 
+# for fields to override
 security:
   kafka:
     protocol: PLAINTEXT # SASL_SSL or PLAINTEXT only

@@ -1,0 +1,12 @@
+2024-10-29 18:36:06.477 | INFO     | __main__:log_requests:76 - Request: GET http://127.0.0.1:9997/call_app2
+2024-10-29 18:36:06.479 | INFO     | __main__:call_app2:92 - Calling app2 endpoint
+2024-10-29 18:36:06.495 | INFO     | __main__:call_app2:95 - Response from app2: 200
+2024-10-29 18:36:06.496 | INFO     | __main__:log_requests:78 - Response status: 200
+2024-10-29 18:47:53.542 | INFO     | __main__:log_requests:76 - Request: GET http://127.0.0.1:9997/call_app2
+2024-10-29 18:47:53.544 | INFO     | __main__:call_app2:92 - Calling app2 endpoint
+2024-10-29 18:47:53.553 | INFO     | __main__:call_app2:95 - Response from app2: 200
+2024-10-29 18:47:53.554 | INFO     | __main__:log_requests:78 - Response status: 200
+2024-10-29 20:31:11.077 | INFO     | __main__:log_requests:76 - Request: GET http://127.0.0.1:9997/call_app2
+2024-10-29 20:31:11.077 | INFO     | __main__:call_app2:92 - Calling app2 endpoint
+2024-10-29 20:31:11.086 | INFO     | __main__:call_app2:95 - Response from app2: 200
+2024-10-29 20:31:11.088 | INFO     | __main__:log_requests:78 - Response status: 200

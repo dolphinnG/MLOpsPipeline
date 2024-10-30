@@ -1,0 +1,10 @@
+2024-10-29 17:41:41.055 | INFO     | __main__:log_requests:71 - Request: GET http://127.0.0.1:9997/
+2024-10-29 17:41:41.058 | INFO     | __main__:read_root:80 - Handling root endpoint
+2024-10-29 17:41:41.059 | DEBUG    | __main__:read_root:81 - Debug message
+2024-10-29 17:41:41.060 | INFO     | __main__:log_requests:73 - Response status: 200
+2024-10-29 17:41:41.134 | INFO     | __main__:log_requests:71 - Request: GET http://127.0.0.1:9997/favicon.ico
+2024-10-29 17:41:41.136 | INFO     | __main__:log_requests:73 - Response status: 404
+2024-10-29 17:41:48.272 | INFO     | __main__:log_requests:71 - Request: GET http://127.0.0.1:9997/call_app2
+2024-10-29 17:41:48.273 | INFO     | __main__:call_app2:87 - Calling app2 endpoint
+2024-10-29 17:41:48.592 | INFO     | __main__:call_app2:90 - Response from app2: 200
+2024-10-29 17:41:48.594 | INFO     | __main__:log_requests:73 - Response status: 200

@@ -1,0 +1,4 @@
+2024-10-29 18:32:23.176 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:32:23.178 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:32:23.179 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:32:23.179 | INFO     | __main__:log_requests:74 - Response status: 200

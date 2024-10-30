@@ -1,0 +1,77 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+
+exporters:
+
+  otlphttp: # this must be correct and not arbitrary. the name after the / can be though.
+    endpoint: http://loki:3100/otlp
+    tls: 
+      insecure: true
+
+  prometheus:
+    endpoint: "0.0.0.0:9999"
+    # tls:
+    #   ca_file: "/path/to/ca.pem"
+    #   cert_file: "/path/to/cert.pem"
+    #   key_file: "/path/to/key.pem"
+    # namespace: test-space
+    const_labels:
+      label1: value1
+      # "another label": spaced value
+    send_timestamps: true
+    metric_expiration: 180m
+    enable_open_metrics: true
+    add_metric_suffixes: false
+    resource_to_telemetry_conversion:
+      enabled: true
+
+  # Data sources: traces
+  otlp/jaeger-grpc:
+    endpoint: http://jaeger:4317
+    tls: 
+      insecure: true
+    # tls:
+    #   cert_file: cert.pem
+    #   key_file: cert-key.pem
+
+  otlp/jaeger-http:
+    endpoint: http://jaeger:4318
+    tls:
+      insecure: true
+    # tls:
+    #   cert_file: cert.pem
+    #   key_file: cert-key.pem
+
+  # Data sources: traces, metrics, logs
+  # NOTE: Prior to v0.86.0 use `logging` instead of `debug`
+  debug:
+    verbosity: detailed
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  # extensions: [health_check, pprof, zpages]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/jaeger-grpc, debug]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      # processors: [batch]
+      exporters: [otlphttp, debug]

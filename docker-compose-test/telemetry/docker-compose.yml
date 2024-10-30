@@ -1,0 +1,71 @@
+services:
+  grafana:
+    image: bitnami/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/bitnami/grafana
+      - ./grafana-ds:/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_PATHS_PROVISIONING=/provisioning
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/bitnami/grafana-loki/conf/loki.yaml
+    volumes:
+      - ./loki.yaml:/bitnami/grafana-loki/conf/loki.yaml
+
+  prometheus:
+    image: bitnami/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    # ports:
+    #   - "5775:5775/udp"
+    #   - "6831:6831/udp"
+    #   - "6832:6832/udp"
+    #   - "5778:5778"
+    #   - "16686:16686"
+    #   - "14268:14268"
+    #   - "9411:9411"
+    #   - 43170:4317 # OTLP gRPC receiver
+    #   - 43180:4318 # OTLP http receiver
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+      # - JAEGER_CONF_FILE=/etc/jaeger-config.yaml
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 1888:1888 # pprof extension
+      - 8888:8888 # Prometheus metrics exposed by the Collector
+      - 8889:8889 # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 4317:4317 # OTLP gRPC receiver
+      - 4318:4318 # OTLP http receiver
+      - 55679:55679 # zpages extension
+
+
+  promtail:
+    image: bitnami/promtail:latest
+    ports:
+      - "9080:9080"
+    volumes:
+      - ./promtail-config.yaml:/opt/bitnami/promtail/conf/promtail-config.yaml
+      - ./logs/app1:/var/logs/app1
+      - ./logs/app2:/var/logs/app2
+    command: -config.file=/opt/bitnami/promtail/conf/promtail-config.yaml
+
+volumes:
+  grafana_data:
+  loki_data:
+  prometheus_data:

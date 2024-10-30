@@ -1,0 +1,4 @@
+2024-10-28 22:47:57.432 | INFO     | __main__:log_requests:48 - Request: GET http://host.docker.internal:9999/metrics
+2024-10-28 22:47:57.435 | INFO     | __main__:log_requests:51 - Response status: 200
+2024-10-28 22:48:12.087 | INFO     | __main__:log_requests:48 - Request: GET http://host.docker.internal:9999/metrics
+2024-10-28 22:48:12.088 | INFO     | __main__:log_requests:51 - Response status: 200

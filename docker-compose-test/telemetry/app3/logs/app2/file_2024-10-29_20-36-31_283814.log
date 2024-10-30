@@ -1,0 +1,4 @@
+2024-10-29 20:36:36.304 | INFO     | __main__:log_requests:88 - Request: GET http://127.0.0.1:9997/call_app2
+2024-10-29 20:36:36.306 | INFO     | __main__:call_app2:108 - Calling app2 endpoint
+2024-10-29 20:36:36.322 | INFO     | __main__:call_app2:111 - Response from app2: 200
+2024-10-29 20:36:36.323 | INFO     | __main__:log_requests:90 - Response status: 200

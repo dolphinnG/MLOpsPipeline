@@ -1,0 +1,64 @@
+2024-10-29 18:36:06.489 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:36:06.491 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:36:06.492 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:36:06.493 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:47:53.547 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:47:53.549 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:47:53.550 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:47:53.551 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:03.064 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:03.066 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:03.066 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:03.067 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:03.439 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:03.440 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:03.441 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:03.442 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:03.851 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:03.852 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:03.852 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:03.853 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:04.209 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:04.210 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:04.210 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:04.211 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:04.511 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:04.512 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:04.513 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:04.514 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:51.792 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:51.794 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:51.794 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:51.795 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:52.307 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:52.308 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:52.309 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:52.310 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:52.615 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:52.617 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:52.618 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:52.619 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:52.855 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:52.856 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:52.857 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:52.858 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:53.187 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:53.189 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:53.189 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:53.190 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:53.572 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:53.573 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:53.574 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:53.575 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:53.931 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:53.932 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:53.933 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:53.933 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 18:49:54.288 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 18:49:54.288 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 18:49:54.290 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 18:49:54.291 | INFO     | __main__:log_requests:74 - Response status: 200
+2024-10-29 20:31:11.081 | INFO     | __main__:log_requests:72 - Request: GET http://127.0.0.1:9998/
+2024-10-29 20:31:11.083 | INFO     | __main__:read_root:81 - Handling root endpoint
+2024-10-29 20:31:11.084 | DEBUG    | __main__:read_root:82 - Debug message
+2024-10-29 20:31:11.085 | INFO     | __main__:log_requests:74 - Response status: 200

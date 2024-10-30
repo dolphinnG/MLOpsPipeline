@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s  # How often to scrape targets
+
+# scrape_configs:
+#   - job_name: 'app1'
+#     static_configs:
+#       - targets: ['host.docker.internal:9999']  # Replace with your FastAPI app's host and port
+#       # - labels:
+#       #     metric_job: 'app1'
+
+scrape_configs:
+  - job_name: 'app1'
+    static_configs:
+      - targets: ['otel-collector:9999']  # Replace with your FastAPI app's host and port
+      # - labels:
+      #     metric_job: 'app1'

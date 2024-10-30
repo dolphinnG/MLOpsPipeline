@@ -1,0 +1,25 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+  # - url: http://otel-collector:3500
+
+scrape_configs:
+  - job_name: app1_and_app2
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: app1
+          __path__: /var/logs/app1/*.log
+
+      - targets:
+          - localhost
+        labels:
+          job: app2
+          __path__: /var/logs/app2/*.log
