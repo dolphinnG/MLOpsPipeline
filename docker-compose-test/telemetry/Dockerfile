@@ -8,10 +8,10 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY ./app4 /app
+COPY ./app5 /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir fastapi uvicorn opentelemetry-distro opentelemetry-exporter-otlp
+RUN pip install --no-cache-dir fastapi uvicorn opentelemetry-distro opentelemetry-exporter-otlp requests
 
 # Make port 9991 available to the world outside this container
 EXPOSE 9991
@@ -31,4 +31,4 @@ EXPOSE 9991
 RUN opentelemetry-bootstrap -a install
 
 # Run app.py when the container launches
-CMD ["opentelemetry-instrument", "python", "app4.py"]
+CMD ["opentelemetry-instrument", "python", "app5.py"]
