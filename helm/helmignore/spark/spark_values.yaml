@@ -1,0 +1,10 @@
+master: 
+    automountServiceAccountToken: true
+    extraEnvVarsSecret: my-secret
+  
+worker:  
+    automountServiceAccountToken: true
+    extraEnvVarsSecret: my-secret
+
+serviceAccount: 
+  automountServiceAccountToken: true
