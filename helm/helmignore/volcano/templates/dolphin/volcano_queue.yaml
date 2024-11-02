@@ -1,6 +1,6 @@
 apiVersion: scheduling.volcano.sh/v1beta1
 kind: Queue
 metadata:
-  name: dolphin-queu
+  name: dolphin-queue
 spec:
   weight: 1
