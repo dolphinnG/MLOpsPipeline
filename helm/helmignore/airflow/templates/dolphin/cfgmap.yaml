@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: kube-config-file
+data:
+    config: |
+        {{ .Files.Get "files/newkubeconfig"  | nindent 8 }}

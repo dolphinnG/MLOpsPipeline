@@ -1,0 +1,107 @@
+
+image:
+  registry: docker.io
+  # repository: supahakka/lightairflow
+  repository: supahakka/airflow-dolphin
+  tag: "1"
+  # digest: "sha256:6f7eadda37b3d44275d00b0a7d5b60a277fe488850638873e4b963612217be09"
+dags: 
+  enabled: true
+  repositories:
+    - repository: https://dolphinnG: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@github.com/dolphinnG/airflowdag
+      branch: main
+      name: airflowdag
+auth: 
+  username: admin
+  password: admin
+
+redis: 
+  auth:
+    password: "redispassword"
+
+postgresql: 
+  auth: 
+    password: "postgrespassword"
+
+
+extraVolumeMounts:
+  - name: kube-cert-secret
+    mountPath: /opt/bitnami/airflow/dolphin
+    readOnly: true
+  - name: kube-config-file
+    mountPath: /opt/bitnami/airflow/.kube
+    readOnly: true
+extraVolumes:
+  - name: kube-cert-secret
+    secret:
+      secretName: kube-cert-secret
+  - name: kube-config-file
+    configMap:
+      name: kube-config-file
+
+
+
+
+# extraVolumeMounts:
+#   - name: pipreq-volume
+#     mountPath: /bitnami/python/requirements.txt
+#     subPath: requirements.txt
+# extraVolumes:
+#   - name: pipreq-volume
+#     configMap:
+#       name: pipreq  
+
+# defaultInitContainers: 
+#   createDefaultConfig:
+#     containerSecurityContext: 
+#       enabled: true
+#       runAsUser: 0
+#       runAsGroup: 0
+#       runAsNonRoot: false
+#       privileged: false
+#       allowPrivilegeEscalation: true
+#       readOnlyRootFilesystem: false
+
+web: 
+  automountServiceAccountToken: true
+  # containerSecurityContext:
+  #   runAsUser: 0
+  #   runAsGroup: 0
+  #   runAsNonRoot: false
+  #   privileged: false
+  #   allowPrivilegeEscalation: true
+  #   readOnlyRootFilesystem: false
+
+scheduler: 
+  automountServiceAccountToken: true
+  # containerSecurityContext:
+  #   runAsUser: 0
+  #   runAsGroup: 0
+  #   runAsNonRoot: false
+  #   privileged: false
+  #   allowPrivilegeEscalation: true
+  #   readOnlyRootFilesystem: false
+
+worker:
+  automountServiceAccountToken: true
+  # containerSecurityContext:
+  #   runAsUser: 0
+  #   runAsGroup: 0
+  #   runAsNonRoot: false
+  #   privileged: false
+  #   allowPrivilegeEscalation: true
+  #   readOnlyRootFilesystem: false
+
+# metrics: 
+#   automountServiceAccountToken: true
+
+serviceAccount: 
+  create: true
+  name: airflow-sa
+  automountServiceAccountToken: true
+  rbac:
+    create: true
+    rules: 
+    - apiGroups: [""]
+      resources: ["secrets"]
+      verbs: ["get", "list"]
