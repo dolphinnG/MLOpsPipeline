@@ -1,0 +1,7 @@
+{
+    "name": "testmlflow",
+    "implementation": "mlserver_mlflow.MLflowRuntime",
+    "parameters": {
+        "uri": "."
+    }
+}

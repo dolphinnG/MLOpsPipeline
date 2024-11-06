@@ -1,0 +1,13 @@
+apiVersion: mlops.seldon.io/v1alpha1
+kind: Model
+metadata:
+  name: openaimodel2
+spec:
+  storageUri: "/mnt/models/openai"
+  requirements:
+  - mlflow
+
+# seldon model infer rag-test \
+#   '{"inputs": [{"name": "predict", "shape": [1], "datatype": "BYTES", "data": ["your input string here"]}]}'
+
+# mlflow models serve -m "s3://mlflow/9/984819a6fcea482291aa4cb85f834493/artifacts/model"

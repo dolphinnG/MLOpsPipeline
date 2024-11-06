@@ -1,0 +1,5 @@
+messages:
+- content: Tell me a joke about {animal}.
+  role: user
+model: gpt-3.5-turbo
+task: chat.completions

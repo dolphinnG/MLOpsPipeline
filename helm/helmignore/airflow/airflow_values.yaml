@@ -62,6 +62,10 @@ extraVolumes:
 #       allowPrivilegeEscalation: true
 #       readOnlyRootFilesystem: false
 
+# extraEnvVars: 
+#   - name: KUBECONFIG
+#     value: "/opt/bitnami/airflow/.kubze/config"
+
 web: 
   automountServiceAccountToken: true
   # containerSecurityContext:
