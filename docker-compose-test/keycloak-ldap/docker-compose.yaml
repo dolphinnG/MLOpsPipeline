@@ -1,0 +1,54 @@
+services:
+  postgresql:
+    image: docker.io/bitnami/postgresql:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_USERNAME=bn_keycloak
+      - POSTGRESQL_DATABASE=bitnami_keycloak
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+
+  keycloak:
+    image: bitnami/keycloak:latest
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      # - KEYCLOAK_DATABASE_VENDOR=h2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./realms:/realms
+      - ./kc-init.sh:/docker-entrypoint-initdb.d/kc-init.sh
+    depends_on:
+      - openldap
+      - postgresql
+
+  openldap:
+    image: bitnami/openldap:latest
+    environment:
+      - LDAP_ADMIN_USERNAME=topg
+      - LDAP_ADMIN_PASSWORD=supahakka
+      - LDAP_LDAPS_PORT_NUMBER=636
+      - LDAP_PORT_NUMBER=389
+      - LDAP_ROOT=dc=dolphin,dc=lmao
+      - LDAP_LOGLEVEL=8
+      # - LDAP_TLS_VERIFY_CLIENT=never
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ./ldap-config:/ldifs
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap
+      - PHPLDAPADMIN_HTTPS=false
+    ports:
+      - "6443:443"
+      - 8081:80
+    depends_on:
+      - openldap
+
+volumes:
+  postgresql_data:
