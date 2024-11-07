@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import auth
+from routers import auth, user
 from middlewares.TokenValidationMiddleware import TokenValidationMiddleware
 from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 from utils.constants import USER_SESSION_KEY
@@ -12,6 +12,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include auth router
 app.include_router(auth.router, prefix="/auth")
+app.include_router(user.router, prefix="/users")
 
 # Add middleware
 app.add_middleware(TokenValidationMiddleware)

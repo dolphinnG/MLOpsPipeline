@@ -6,21 +6,21 @@ T = TypeVar('T', bound=BaseModel)
 
 class ICacheService(ABC):
     @abstractmethod
-    def set(self, key, value):
+    async def set(self, key, value):
         pass
 
     @abstractmethod
-    def get(self, key) -> Any:
+    async def get(self, key) -> Any:
         pass
 
     @abstractmethod
-    def set_pydantic_cache(self, key: str, model: BaseModel):
+    async def set_pydantic_cache(self, key: str, model: BaseModel):
         pass
 
     @abstractmethod
-    def get_pydantic_cache(self, key: str, model_class: Type[T]) -> T|None:
+    async def get_pydantic_cache(self, key: str, model_class: Type[T]) -> T|None:
         pass
 
     @abstractmethod
-    def invalidate(self, key: str):
+    async def invalidate(self, key: str):
         pass

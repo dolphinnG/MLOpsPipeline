@@ -11,26 +11,26 @@ class RedisService(ICacheService):
         self.client = redis.StrictRedis(host=host, port=port, db=db, decode_responses=True)
         self.logger = logging.getLogger(__name__)
 
-    def set(self, key, value):
+    async def set(self, key, value):
         try:
             self.client.set(key, value)
         except Exception as e:
             self.logger.error(f"Error setting key {key}: {e}")
 
-    def get(self, key):
+    async def get(self, key):
         try:
             value = self.client.get(key)
             return value
         except Exception as e:
             self.logger.error(f"Error getting key {key}: {e}")
 
-    def set_pydantic_cache(self, key: str, model: BaseModel):
+    async def set_pydantic_cache(self, key: str, model: BaseModel):
         try:
             self.client.set(key, model.model_dump_json())
         except Exception as e:
             self.logger.error(f"Error setting model for key {key}: {e}")
 
-    def get_pydantic_cache(self, key: str, model_class: Type[T]) -> T|None:
+    async def get_pydantic_cache(self, key: str, model_class: Type[T]) -> T|None:
         try:
             value = self.client.get(key)
             if value:
@@ -40,7 +40,7 @@ class RedisService(ICacheService):
             self.logger.error(f"Error getting model for key {key}: {e}")
             return None
 
-    def invalidate(self, key: str):
+    async def invalidate(self, key: str):
         try:
             self.client.delete(key)
         except Exception as e:

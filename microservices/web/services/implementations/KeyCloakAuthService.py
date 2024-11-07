@@ -16,8 +16,8 @@ from keycloak import KeycloakGetError
 from typing import Optional
 from services.interfaces.IAuthService import IAuthService
 
-class AuthService(IAuthService):
-    _instance: Optional["AuthService"] = None
+class KeyCloakAuthService(IAuthService):
+    _instance: Optional["KeyCloakAuthService"] = None
 
     def __init__(
         self,
@@ -25,12 +25,12 @@ class AuthService(IAuthService):
         cache_service: ICacheService,
         configs: Conf
     ):
-        if AuthService._instance is not None:
+        if KeyCloakAuthService._instance is not None:
             raise Exception("This class is a singleton!")
         self.keycloak_openid = keycloak_openid
         self.cache_service = cache_service
         self.configs = configs
-        AuthService._instance = self
+        KeyCloakAuthService._instance = self
 
     @classmethod
     def get_instance(
@@ -38,12 +38,12 @@ class AuthService(IAuthService):
         keycloak_openid: KeycloakOpenID = Depends(get_keycloak_openid),
         cache_service: ICacheService = Depends(get_cache_service),
         configs: Conf = Depends(get_configurations)
-    ) -> "AuthService":
+    ) -> "KeyCloakAuthService":
         if cls._instance is None:
             cls._instance = cls(keycloak_openid, cache_service, configs)
         return cls._instance
 
-    def login(self, response: Response):
+    async def login(self, response: Response):
         state = "".join(random.choices(string.ascii_letters + string.digits, k=16))
         nonce = "".join(random.choices(string.ascii_letters + string.digits, k=16))
         auth_url = self.keycloak_openid.auth_url(
@@ -60,17 +60,17 @@ class AuthService(IAuthService):
             state=state,
             nonce=nonce,
         )
-        self.cache_service.set_pydantic_cache(session_id, user_session)
+        await self.cache_service.set_pydantic_cache(session_id, user_session)
         auth_url += "&code_challenge=" + code_challenge + "&code_challenge_method=S256"
         res = RedirectResponse(url=auth_url)
         res.set_cookie(key=USER_SESSION_KEY, value=session_id)
         return res
 
-    def callback(self, request: Request, code: str, state: str):
+    async def callback(self, request: Request, code: str, state: str):
         session_id = request.cookies.get(USER_SESSION_KEY)
         if not session_id:
             raise HTTPException(status_code=400, detail="Session ID not found")
-        user_session = self.cache_service.get_pydantic_cache(session_id, UserSession)
+        user_session = await self.cache_service.get_pydantic_cache(session_id, UserSession)
         if not user_session:
             raise HTTPException(status_code=400, detail="User session not found")
         if user_session.state != state:
@@ -103,25 +103,25 @@ class AuthService(IAuthService):
         user_session.refresh_token = token_response["refresh_token"]
         user_session.decoded_id_token = decoded_id_token
         user_session.decoded_access_token = decoded_token
-        self.cache_service.set_pydantic_cache(session_id, user_session)
+        await self.cache_service.set_pydantic_cache(session_id, user_session)
         return RedirectResponse(url="/")
 
-    def logout(self, request: Request, response: Response):
+    async def logout(self, request: Request, response: Response):
         session_id = request.cookies.get(USER_SESSION_KEY)
         if session_id:
-            user_session = self.cache_service.get_pydantic_cache(session_id, UserSession)
+            user_session = await self.cache_service.get_pydantic_cache(session_id, UserSession)
             if user_session and user_session.refresh_token:
                 self.keycloak_openid.logout(refresh_token=user_session.refresh_token)
-            self.cache_service.invalidate(session_id)
+            await self.cache_service.invalidate(session_id)
         response = RedirectResponse(url="/")
         response.delete_cookie(USER_SESSION_KEY)
         return response
 
-    def validate_token(self, request: Request):
+    async def validate_token(self, request: Request):
         session_id = request.cookies.get(USER_SESSION_KEY)
         if not session_id:
             raise HTTPException(status_code=401, detail="session_id is missing")
-        user_session = self.cache_service.get_pydantic_cache(session_id, UserSession)
+        user_session = await self.cache_service.get_pydantic_cache(session_id, UserSession)
         if not user_session:
             raise HTTPException(status_code=401, detail="user_session is missing")
         token = user_session.access_token
@@ -137,7 +137,7 @@ class AuthService(IAuthService):
                 new_token_response = self.keycloak_openid.refresh_token(refresh_token)
                 user_session.access_token = new_token_response["access_token"]
                 user_session.refresh_token = new_token_response["refresh_token"]
-                self.cache_service.set_pydantic_cache(session_id, user_session)
+                await self.cache_service.set_pydantic_cache(session_id, user_session)
             except KeycloakGetError:
                 raise HTTPException(status_code=401, detail="Failed to refresh token")
         # return decoded_token

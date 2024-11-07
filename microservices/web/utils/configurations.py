@@ -14,6 +14,10 @@ class Conf(BaseSettings):
     REDIS_PORT: int
     REDIS_DB: int
 
+    LDAP_SERVER_URL: str
+    LDAP_ADMIN_DN: str
+    LDAP_ADMIN_PASSWORD: str
+    # LDAP_PORT: int
     
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", env_prefix=""

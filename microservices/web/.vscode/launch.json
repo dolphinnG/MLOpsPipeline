@@ -22,5 +22,13 @@
             "program": "${file}",
             "console": "integratedTerminal"
         }
+        ,
+        {
+            "name": "Python Debugger: app.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app.py",
+            "console": "integratedTerminal"
+        }
     ]
 }
