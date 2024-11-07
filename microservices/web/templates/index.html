@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login with Keycloak</title>
+    <title>Hello World</title>
 </head>
 <body>
-    <h1>Login with Keycloak</h1>
-    <a href="{{ auth_url }}">Login</a>
+    <h1>Hello World</h1>
+    <button onclick="window.location.href='/auth/login'">Login</button>
+    <button onclick="window.location.href='/auth/logout'">Logout</button>
+
+    <h2>Cookies</h2>
+    <div id="cookies">
+        {% for name, value in cookies.items() %}
+            <p>{{ name }}: {{ value }}</p>
+        {% endfor %}
+    </div>
 </body>
 </html>

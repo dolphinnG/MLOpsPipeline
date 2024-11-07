@@ -5,7 +5,7 @@
   "defaultSignatureAlgorithm" : "RS256",
   "revokeRefreshToken" : false,
   "refreshTokenMaxReuse" : 0,
-  "accessTokenLifespan" : 8640000,
+  "accessTokenLifespan" : 60,
   "accessTokenLifespanForImplicitFlow" : 8640000,
   "ssoSessionIdleTimeout" : 8640000,
   "ssoSessionMaxLifespan" : 360000,
@@ -688,7 +688,7 @@
     "alwaysDisplayInConsole" : false,
     "clientAuthenticatorType" : "client-secret",
     "secret" : "Wpu7QiUMEC97q5mMImOW3sq3sB7iKTmC",
-    "redirectUris" : [ "http://127.0.0.1:8888/callback" ],
+    "redirectUris" : [ "http://127.0.0.1:8888/auth/callback" ],
     "webOrigins" : [ "http://127.0.0.1:8888" ],
     "notBefore" : 0,
     "bearerOnly" : false,
@@ -1280,7 +1280,7 @@
         "lightweight.claim" : "false",
         "access.token.claim" : "true",
         "introspection.token.claim" : "true",
-        "included.custom.audience" : "dolphin_backend_microservices_gang"
+        "included.custom.audience" : "dolphin_client_oidc"
       }
     } ]
   }, {
