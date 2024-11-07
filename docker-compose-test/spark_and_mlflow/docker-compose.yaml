@@ -1,27 +1,28 @@
-version: '3.7'
 services:
+
+  ############## USE THE POSTGRESQL OF THE KEYCLOAK-LDAP DOCKER-COMPOSE ##############
   # PostgreSQL database
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mlflowdb
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # postgres:
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: mlflowdb
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U user"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - shared_network
 
   # MinIO server
   minio:
     image: minio/minio
-    # expose:
-    #   - "9000"
     ports:
       - "9900:9000"
       - "9901:9001"
@@ -34,6 +35,8 @@ services:
       timeout: 10s
       retries: 5
     command: server /data --console-address ":9001"
+    networks:
+      - shared_network
 
   # Create a bucket named "bucket" if it doesn't exist
   minio-create-bucket:
@@ -50,6 +53,8 @@ services:
         echo 'mlflow already exists'
       fi
       "
+    networks:
+      - shared_network
 
   # MLflow tracking server
   mlflow:
@@ -57,18 +62,20 @@ services:
     volumes:
       - mlflow-data:/app
     depends_on:
-      postgres:
-        condition: service_healthy
+      # postgresql:
+      #   condition: service_healthy
       minio:
         condition: service_healthy
     environment:
-      BACKEND_STORE_URI: postgresql://user:password@postgres/mlflowdb
+      # BACKEND_STORE_URI: postgresql://user:password@postgres/mlflowdb
       AWS_ACCESS_KEY_ID: minio_user
       AWS_SECRET_ACCESS_KEY: minio_password
       MLFLOW_S3_ENDPOINT_URL: http://minio:9000
     ports:
       - "5000:5000"
-    entrypoint: mlflow server --backend-store-uri postgresql://user:password@postgres/mlflowdb --default-artifact-root s3://mlflow --host 0.0.0.0 --port 5000
+    entrypoint: mlflow server --backend-store-uri postgresql://bn_keycloak:admin@postgresql/mlflowdb --default-artifact-root s3://mlflow --host 0.0.0.0 --port 5000
+    networks:
+      - shared_network
 
   # Spark Master
   spark-master:
@@ -79,15 +86,14 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-      # - PYSPARK_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
-      # - PYSPARK_DRIVER_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
-      # - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.1,com.amazonaws:aws-java-sdk-bundle:1.11.901
     ports:
       - "880:8080"
       - "7077:7077"
     volumes:
       - spark-master-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
+    networks:
+      - shared_network
 
   # Spark Worker
   spark-worker:
@@ -99,14 +105,13 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-      # - PYSPARK_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
-      # - PYSPARK_DRIVER_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
-      # - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.1,com.amazonaws:aws-java-sdk-bundle:1.11.901
     depends_on:
       - spark-master
     volumes:
       - spark-worker-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
+    networks:
+      - shared_network
 
   spark-worker2:
     image: bitnami/spark:latest
@@ -117,18 +122,20 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-      # - PYSPARK_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
-      # - PYSPARK_DRIVER_PYTHON=/mnt/c/Users/justm/Desktop/pytest/mlflow/myenv/bin/python
-      # - SPARK_JARS_PACKAGES=org.apache.hadoop:hadoop-aws:3.3.1,com.amazonaws:aws-java-sdk-bundle:1.11.901
     depends_on:
       - spark-master
     volumes:
       - spark-worker-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
-
+    networks:
+      - shared_network
 
 volumes:
-  postgres-data:
+  # postgres-data:
   mlflow-data:
   spark-master-data:
   spark-worker-data:
+
+networks:
+  shared_network:
+    external: true

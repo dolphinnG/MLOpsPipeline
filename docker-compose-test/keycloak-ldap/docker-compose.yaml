@@ -4,16 +4,23 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_USERNAME=bn_keycloak
+      - POSTGRESQL_PASSWORD=admin
       - POSTGRESQL_DATABASE=bitnami_keycloak
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
+      - './create_mlflowdb.sql:/docker-entrypoint-initdb.d/create_mlflowdb.sql'
+
+    networks:
+      - shared_network
+    ports:
+      - "5432:5432"
 
   keycloak:
     image: bitnami/keycloak:latest
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
-      # - KEYCLOAK_DATABASE_VENDOR=h2
+      - KEYCLOAK_DATABASE_PASSWORD=admin
     ports:
       - "8080:8080"
     volumes:
@@ -22,6 +29,8 @@ services:
     depends_on:
       - openldap
       - postgresql
+    networks:
+      - shared_network
 
   openldap:
     image: bitnami/openldap:latest
@@ -38,6 +47,8 @@ services:
       - "636:636"
     volumes:
       - ./ldap-config:/ldifs
+    networks:
+      - shared_network
 
   phpldapadmin:
     image: osixia/phpldapadmin:latest
@@ -49,6 +60,8 @@ services:
       - "8081:80"
     depends_on:
       - openldap
+    networks:
+      - shared_network
 
   redis:
     image: bitnami/redis:latest
@@ -58,7 +71,13 @@ services:
       - "6379:6379"
     volumes:
       - 'redis_data:/bitnami/redis'
+    networks:
+      - shared_network
 
 volumes:
   postgresql_data:
   redis_data:
+
+networks:
+  shared_network:
+    external: true
