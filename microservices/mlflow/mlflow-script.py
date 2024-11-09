@@ -9,16 +9,16 @@ import mlflow.sklearn
 
 # Load dataset
 iris = load_iris()
-X = pd.DataFrame(iris.data, columns=iris.feature_names)
-y = pd.Series(iris.target)
+X = pd.DataFrame(iris.data, columns=iris.feature_names) # type: ignore
+y = pd.Series(iris.target) # type: ignore
 
 # Split the data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 
 
-
-mlflow.set_experiment("my_experimzxcent")
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+mlflow.set_experiment("my_experimzxcen2t")
 # Start an MLflow run
 with mlflow.start_run() as run:
     # Train the model
@@ -32,11 +32,11 @@ with mlflow.start_run() as run:
     mlflow.sklearn.log_model(model, "logistic_regression_model", signature=signature)
     
     # Log parameters
-    mlflow.log_param("max_iter", model.max_iter)
+    mlflow.log_param("max_iter", model.max_iter) # type: ignore
     
     # Log metrics
     score = model.score(X_test, y_test)
-    mlflow.log_metric("score", score)
+    mlflow.log_metric("score", score) # type: ignore
     
     # Add tags
     mlflow.set_tag("run_tag_test", "test")

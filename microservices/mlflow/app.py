@@ -1,51 +1,99 @@
-from mlflow import MlflowClient
+from fastapi import FastAPI, Query
+from typing import List, Optional
+from MLFlowService import MLFlowService
 from mlflow.entities.view_type import ViewType
 
-client = MlflowClient(tracking_uri="http://127.0.0.1:5000")
-experiments = client.search_experiments(view_type=ViewType.ACTIVE_ONLY)
-...
-runs = client.search_runs(experiment_ids=["2"])
-...
-registered_models = (
-    client.search_registered_models()
-)  # only has the latest version of each model
-...
-results = client.search_model_versions("name='LogisticRegressionModel'")
-...
+app = FastAPI()
+mlflow_service = MLFlowService()
 
-# Search for all versions of a specific registered model
-model_name = "LogisticRegressionModel"
-model_versions = client.search_model_versions(f"name='{model_name}'")
 
-for version in model_versions:
-    print(
-        f"Version: {version.version}, Stage: {version.current_stage}, Status: {version.status}"
+@app.get("/experiments", tags=["MLflow entities"])
+def get_experiments(
+    view_type: int = Query(ViewType.ALL),
+    max_results: int = 10,
+    page_token: Optional[str] = None,
+):
+    experiments = mlflow_service.get_experiments(
+        view_type=view_type, max_results=max_results, page_token=page_token
     )
+    return {
+        "result": mlflow_service.paged_entities_to_dict(experiments),
+        "page_token": experiments.token,
+    }
 
-    # Get the run ID associated with this model version
-    run_id = version.run_id
 
-    # Fetch the run details
-    run = client.get_run(run_id)
+@app.get("/runs", tags=["MLflow entities"])
+def get_runs(
+    experiment_ids: List[str] = Query(...),
+    filter_string: str = "",
+    run_view_type: int = ViewType.ACTIVE_ONLY,
+    max_results: int = 10,
+    order_by: Optional[List[str]] = Query(None),
+    page_token: Optional[str] = Query(None),
+):
+    runs = mlflow_service.get_runs(
+        experiment_ids=experiment_ids,
+        filter_string=filter_string,
+        run_view_type=run_view_type,
+        max_results=max_results,
+        order_by=order_by,
+        page_token=page_token,
+    )
+    return {
+        "result": mlflow_service.paged_entities_to_dict(runs),
+        "page_token": runs.token,
+    }
 
-    # Get the logged parameters and metrics
-    params = run.data.params
-    metrics = run.data.metrics
 
-    print(f"Parameters: {params}")
-    print(f"Metrics: {metrics}") # only has the last logged value of each metric
-                                # to get all values, use get_metric_history
+@app.get("/registered_models", tags=["MLflow entities"])
+def get_registered_models(
+    filter_string: str = "",
+    max_results: int = 10,
+    order_by: Optional[List[str]] = Query(None),
+    page_token: Optional[str] = None,
+):
+    models = mlflow_service.get_registered_models(
+        filter_string=filter_string,
+        max_results=max_results,
+        order_by=order_by,
+        page_token=page_token,
+    )
+    return {
+        "result": mlflow_service.paged_entities_to_dict(models),
+        "page_token": models.token,
+    }
 
-...
-# lmfao these 2 should have been named update_xxx_description_only
-result = client.update_registered_model(
-    name="LogisticRegressionModel", description="Updated hehehehehe description"
-)
-r2 = client.update_model_version(
-    name="LogisticRegressionModel",
-    version="1",
-    description="Updated zxczxczxcdescription",
-)
-...
-r = client.get_metric_history(run_id="e26b648a8380481d9c98fa341438c154", key="accuracy")
-...
+
+@app.get("/model_versions", tags=["MLflow entities"])
+def get_model_versions(
+    filter_string: str|None = None,
+    max_results: int = 10,
+    order_by: Optional[List[str]] = Query(None),
+    page_token: Optional[str] = None,
+):
+    versions = mlflow_service.get_model_versions(
+        filter_string=filter_string,
+        max_results=max_results,
+        order_by=order_by,
+        page_token=page_token,
+    )
+    return {
+        "result": mlflow_service.paged_entities_to_dict(versions),
+        "page_token": versions.token,
+    }
+
+
+@app.get("/run_details/{run_id}", tags=["MLflow entities"])
+def get_run_details(run_id: str):
+    run = mlflow_service.get_run_details(run_id)
+    return mlflow_service.entity_to_dict(run)
+
+
+@app.get("/metric_history/{run_id}/{key}", tags=["MLflow entities"])
+def get_metric_history(run_id: str, key: str):
+    metrics = mlflow_service.get_metric_history(run_id, key)
+    return mlflow_service.paged_entities_to_dict(metrics)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="127.0.0.1", port=8889, reload=True)
