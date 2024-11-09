@@ -9,7 +9,7 @@ data_ref = np.random.normal(0, 1, (1000, 10))
 data_test = np.random.normal(0.5, 1, (1000, 10))
 
 # Initialize drift detector
-cd = KSDrift(data_ref, p_val=0.05)
+cd = KSDrift(data_ref, p_val=0.05, data_type='tabular')
 
 # Detect drift
 # preds = cd.predict(data_test)
