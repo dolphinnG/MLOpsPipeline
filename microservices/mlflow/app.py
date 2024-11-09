@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, File, UploadFile
 from typing import List, Optional
 from MLFlowService import MLFlowService
 from mlflow.entities.view_type import ViewType
@@ -93,6 +93,12 @@ def get_run_details(run_id: str):
 def get_metric_history(run_id: str, key: str):
     metrics = mlflow_service.get_metric_history(run_id, key)
     return mlflow_service.paged_entities_to_dict(metrics)
+
+@app.post("/uploadfile", tags=["File operations"])
+async def upload_file(file: UploadFile = File(...)):
+    contents = await file.read()
+    # Process the file contents here
+    return {"filename": file.filename, "content_type": file.content_type}
 
 if __name__ == "__main__":
     import uvicorn

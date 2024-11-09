@@ -76,8 +76,8 @@ def main():
     # os.environ['MLFLOW_S3_ENDPOINT_URL'] = f"http://minio:9000"
     # os.environ['AWS_ACCESS_KEY_ID'] = "minio_user"
     # os.environ['AWS_SECRET_ACCESS_KEY'] = "minio_password"
-    mlflow.set_tracking_uri("http://mlflow:5000")
-    mlflow.set_experiment("yyyy")
+    # mlflow.set_tracking_uri("http://mlflow:5000")
+    # mlflow.set_experiment("yyyy")
     with mlflow.start_run():
         mlflow.log_param("model_type", "LogisticRegddression")
         for param, value in model_params.items():

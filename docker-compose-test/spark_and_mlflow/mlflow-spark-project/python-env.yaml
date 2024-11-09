@@ -1,0 +1,14 @@
+# Python version required to run the project.
+python: "3.12"
+# Dependencies required to build packages. This field is optional.
+build_dependencies:
+  - pip
+  - setuptools
+  - wheel==0.37.1
+  - virtualenv
+# Dependencies required to run the project.
+dependencies:
+  - mlflow
+  - pyspark
+  - boto3
+  # - alibi-detect

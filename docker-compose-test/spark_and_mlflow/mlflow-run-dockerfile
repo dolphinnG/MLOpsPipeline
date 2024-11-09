@@ -1,0 +1,88 @@
+# Use the official Python image as the base image
+FROM python:3.12-slim
+
+
+# Set environment variables
+ENV PYENV_ROOT="/root/.pyenv"
+ENV PATH="$PYENV_ROOT/bin:$PATH"
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    llvm \
+    libncurses5-dev \
+    libncursesw5-dev \
+    xz-utils \
+    tk-dev \
+    libffi-dev \
+    liblzma-dev \
+    && apt-get clean
+
+# Install pyenv
+RUN curl https://pyenv.run | bash
+
+# Install Miniconda
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm /tmp/miniconda.sh && \
+    /opt/conda/bin/conda clean --all --yes && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> /root/.bashrc && \
+    echo "conda activate base" >> /root/.bashrc
+
+# Set environment variables for Conda
+ENV PATH="/opt/conda/bin:$PATH"
+
+# Install Apache Spark
+RUN wget https://dlcdn.apache.org/spark/spark-3.5.3/spark-3.5.3-bin-hadoop3.tgz -O spark-3.5.3-bin-hadoop3.tgz && \
+    tar -xvzf spark-3.5.3-bin-hadoop3.tgz && \
+    mv spark-3.5.3-bin-hadoop3 /opt/spark && \
+    rm spark-3.5.3-bin-hadoop3.tgz
+
+# Set environment variables for Spark
+ENV SPARK_HOME="/opt/spark"
+ENV PATH="$SPARK_HOME/bin:$PATH"
+
+# Install Java
+RUN apt-get update && apt-get install -y default-jdk && apt-get clean
+
+# Set JAVA_HOME environment variable
+RUN echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> /root/.bashrc
+
+# Install procps for ps command
+RUN apt-get update && apt-get install -y procps && apt-get clean
+
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+
+# Make the entrypoint script executable
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+RUN pip install mlflow boto3 pyspark virtualenv
+
+
+# Copy your application code to the container
+# COPY . /app
+
+# Set the working directory
+# WORKDIR /app
+
+# Install Python dependencies
+# RUN pip install -r requirements.txt
+
+# Command to run your application
+# CMD ["python", "your_script.py"]
+
+# Expose any ports if necessary
+# EXPOSE 8080
