@@ -1,10 +1,13 @@
 import os
 import mlflow
 import mlflow.spark
+import pandas as pd
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.classification import LogisticRegression
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from mlflow.models import infer_signature, set_signature
+
 # from dummy_class import A
 
 def main():
@@ -59,7 +62,7 @@ def main():
     train_df, test_df = df.randomSplit([0.8, 0.2], seed=42)
 
     # Train a logistic regression model using MLlib
-    lr = LogisticRegression(featuresCol="features", labelCol="Label")
+    lr = LogisticRegression(featuresCol="features", labelCol="Label", maxIter=2)
     lr_model = lr.fit(train_df)
 
     # Make predictions
@@ -69,7 +72,11 @@ def main():
     evaluator = MulticlassClassificationEvaluator(labelCol="Label", predictionCol="prediction", metricName="accuracy")
     accuracy = evaluator.evaluate(predictions)
     print(f"Accuracy: {accuracy}")
-
+    
+    signature = infer_signature(test_df, predictions)
+    print(predictions)
+    # set_signature(model_info.model_uri, signature)    
+    
     # Collect model parameters and metrics to the driver
     model_params = lr_model.extractParamMap()
       
@@ -87,11 +94,40 @@ def main():
         # Load the model back and log it to MLflow
         # lr_model = mlflow.spark.load_model(lr_model)
         # os.environ["DISABLE_MLFLOWDBFS"] = "true"
-        mlflow.spark.log_model(lr_model, "kekekemodel")
+        model_info = mlflow.spark.log_model(lr_model, "kekekemodel", signature=signature, dfs_tmpdir="/opt/bitnami/spark/tmp/")
+        
+        m = mlflow.spark.load_model(model_info.model_uri)
+        # Example data similar to test_df
+        from pyspark.ml.linalg import Vectors
+        data = [("Bob", 45, 0, Vectors.dense([45.0]))]
+        columns = ["Name", "Age", "Label", "features"]
+
+        # Create a Spark DataFrame
+        spark_df = spark.createDataFrame(data, columns)
+
+        # Make predictions
+        predictions = m.transform(spark_df)
+        predictions.show()
+        
+        
+        # # Example data similar to test_df
+        # data = {
+        #     "Name": ["Bob"],
+        #     "Age": [45],
+        #     "Label": [0],
+        #     "features": [[45.0]]
+        # }
+
+        # # Create a pandas DataFrame
+        # pandas_df = pd.DataFrame(data)
+        # r = m.predict(pandas_df)
+        # print(r)
 
 
     # Stop the Spark session
     spark.stop()
+    
+    
 
 
 if __name__ == "__main__":

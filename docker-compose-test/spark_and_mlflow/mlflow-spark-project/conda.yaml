@@ -8,4 +8,5 @@ dependencies:
   - pip:
       - mlflow
       - boto3
+      - pyspark
       # Add other dependencies here

@@ -2,23 +2,23 @@ services:
 
   ############## USE THE POSTGRESQL OF THE KEYCLOAK-LDAP DOCKER-COMPOSE ##############
   # PostgreSQL database
-  # postgres:
-  #   image: postgres:latest
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: mlflowdb
-  #   ports:
-  #     - 5432:5432
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U user"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   networks:
-  #     - shared_network
+  postgresql:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: bn_keycloak
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mlflowdb
+    ports:
+      - 5432:5432
+    # volumes:
+    #   - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shared_network
 
   # MinIO server
   minio:
@@ -62,8 +62,8 @@ services:
     volumes:
       - mlflow-data:/app
     depends_on:
-      # postgresql:
-      #   condition: service_healthy
+      postgresql:
+        condition: service_healthy
       minio:
         condition: service_healthy
     environment:
@@ -86,7 +86,7 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-      - MLFLOW_TRACKING_URI="http://mlflow:5000"
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
       - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       - AWS_ACCESS_KEY_ID=minio_user
       - AWS_SECRET_ACCESS_KEY=minio_password
@@ -96,6 +96,7 @@ services:
     volumes:
       - spark-master-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
+      - spark-shared-data:/opt/bitnami/spark/tmp
     networks:
       - shared_network
 
@@ -110,7 +111,12 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-      - MLFLOW_TRACKING_URI="http://mlflow:5000"
+      - MLFLOW_TRACKING_URI=http://mlflow:5000 
+      # THE ENV-NAME=URL, THE URL MUST NOT BE IN QUOTES,
+      # MEANING NO "http://mlflow:5000" BUT http://mlflow:5000
+      # OTHERWISE THE SPARK WORKER WILL NOT BE ABLE TO CONNECT TO THE MLFLOW SERVER
+      # IT WILL CAUSE EXCEPTION LIKE: PERMISSION DENIED '"HTTP:
+      # AND YOU GET FUCKED @@
       - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       - AWS_ACCESS_KEY_ID=minio_user
       - AWS_SECRET_ACCESS_KEY=minio_password
@@ -119,6 +125,7 @@ services:
     volumes:
       - spark-worker-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
+      - spark-shared-data:/opt/bitnami/spark/tmp
     networks:
       - shared_network
 
@@ -131,7 +138,7 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
-      - MLFLOW_TRACKING_URI="http://mlflow:5000"
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
       - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
       - AWS_ACCESS_KEY_ID=minio_user
       - AWS_SECRET_ACCESS_KEY=minio_password
@@ -140,11 +147,12 @@ services:
     volumes:
       - spark-worker-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
+      - spark-shared-data:/opt/bitnami/spark/tmp
     networks:
       - shared_network
 
   spark-mlflow-run:
-    image: supahakka/mlflow-run:v4
+    image: supahakka/mlflow-run:v5
     environment:
 
       - MLFLOW_TRACKING_URI=http://mlflow:5000
@@ -154,12 +162,14 @@ services:
     depends_on:
       - spark-master
     volumes:
-      - ./:/testapp
+      - ./:/opt/bitnami/spark/testapp
+      - spark-shared-data:/opt/bitnami/spark/tmp
     networks:
       - shared_network
 
 volumes:
   # postgres-data:
+  spark-shared-data:
   mlflow-data:
   spark-master-data:
   spark-worker-data:
