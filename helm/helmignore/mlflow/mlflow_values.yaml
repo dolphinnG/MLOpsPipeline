@@ -1,0 +1,11 @@
+
+minio: 
+  auth: 
+    rootUser: admin
+    rootPassword: admin123
+
+tracking: 
+  auth: 
+    enabled: false
+  service: 
+    type: ClusterIP

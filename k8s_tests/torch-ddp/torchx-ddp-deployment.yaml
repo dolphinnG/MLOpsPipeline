@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: torchx-ddp-deployment-dummy-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: torchx-ddp
+  template:
+    metadata:
+      labels:
+        app: torchx-ddp
+    spec:
+      containers:
+      - name: torchx-ddp-container-dummy-test
+        image: supahakka/launcher:v1
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        volumeMounts:
+        - mountPath: /mnt/host-folder
+          name: host-folder
+      volumes:
+      - name: host-folder
+        hostPath:
+          path: /mnt/host-folder
+          type: Directory

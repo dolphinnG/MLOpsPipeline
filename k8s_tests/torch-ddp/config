@@ -1,0 +1,32 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: /mnt/host-folder/ca.crt
+    extensions:
+    - extension:
+        last-update: Mon, 11 Nov 2024 01:45:53 +07
+        provider: minikube.sigs.k8s.io
+        version: v1.34.0
+      name: cluster_info
+    server: https://kubernetes.default.svc.cluster.local:443
+  name: minikube
+contexts:
+- context:
+    cluster: minikube
+    extensions:
+    - extension:
+        last-update: Mon, 11 Nov 2024 01:45:53 +07
+        provider: minikube.sigs.k8s.io
+        version: v1.34.0
+      name: context_info
+    namespace: dolphin-ns
+    user: minikube
+  name: minikube
+current-context: minikube
+kind: Config
+preferences: {}
+users:
+- name: minikube
+  user:
+    client-certificate: /mnt/host-folder/client.crt
+    client-key: /mnt/host-folder/client.key
