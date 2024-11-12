@@ -1,0 +1,10 @@
+apiVersion: mlops.seldon.io/v1alpha1
+kind: Model
+metadata:
+  name: torch-ddp
+spec:
+  storageUri: "s3://mlflow/1/051edfdd104947a89148ada863aed13a/artifacts/model"
+  requirements:
+  - mlflow
+  memory: 100Ki
+  # secretName: "minio-seldon-secret"

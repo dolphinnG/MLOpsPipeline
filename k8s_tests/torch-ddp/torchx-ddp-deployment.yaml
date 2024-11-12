@@ -15,10 +15,13 @@ spec:
       containers:
       - name: torchx-ddp-container-dummy-test
         image: supahakka/launcher:v1
+        env: 
+        - name: KUBECONFIG
+          value: /mnt/host-folder/config
         resources:
           limits:
-            memory: "2Gi"
-            cpu: "2"
+            memory: "1Gi"
+            cpu: "1"
         volumeMounts:
         - mountPath: /mnt/host-folder
           name: host-folder

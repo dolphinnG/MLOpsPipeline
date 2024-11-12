@@ -53,6 +53,9 @@ def train(rank, world_size):
         device = torch.device('cpu')
         device_ids = None
     
+    # hardcoding device to cpu for testing on non-gpu machines
+    device = torch.device('cpu')
+    device_ids = None
     logger.info(f"Using device: {device}")
     
     # Set up the model, loss function, and optimizer

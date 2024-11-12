@@ -1,9 +1,10 @@
 
-config:
-  kafkaConfig:
-    bootstrap: kafkatest:9092
-    topicPrefix: dolphin_topic
-    consumerGroupIdPrefix: dolphin_group
+# config:
+#   kafkaConfig:
+#     bootstrap: kafkatest:9092
+#     topicPrefix: dolphin_topic
+#     consumerGroupIdPrefix: dolphin_group
+
     # consumer:
     #   group.id: seldon
     #   auto.offset.reset: earliest
@@ -17,3 +18,8 @@ config:
     # streams:
     #   application.id: seldon
     #   num.stream.threads: 1
+config:
+  agentConfig:
+    rclone:
+      configSecrets:
+        - minio-seldon-secret

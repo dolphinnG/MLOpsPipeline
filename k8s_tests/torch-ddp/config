@@ -4,7 +4,7 @@ clusters:
     certificate-authority: /mnt/host-folder/ca.crt
     extensions:
     - extension:
-        last-update: Mon, 11 Nov 2024 01:45:53 +07
+        last-update: Mon, 11 Nov 2024 19:46:37 +07
         provider: minikube.sigs.k8s.io
         version: v1.34.0
       name: cluster_info
@@ -15,7 +15,7 @@ contexts:
     cluster: minikube
     extensions:
     - extension:
-        last-update: Mon, 11 Nov 2024 01:45:53 +07
+        last-update: Mon, 11 Nov 2024 19:46:37 +07
         provider: minikube.sigs.k8s.io
         version: v1.34.0
       name: context_info

@@ -75,7 +75,8 @@ RUN pip install mlflow boto3 pyspark virtualenv
 # WE WANT TO HAVE A SHARED MOUNTED VOLUMES BETWEEN ALL THE SPARK WORKERS AND THE DRIVER
 # SO need to create user with the same uid and username to the spark workers 
 # to run as non-root otherwise dfs_tmpdir will not work and you are fucked
-RUN useradd -u 1001 -m -d /home/dolphinnG dolphinnG
+# RUN useradd -u 1001 -m -d /home/dolphinnG dolphinnG
+RUN useradd -u 1001 -m -d /home/spark spark
 USER 1001
 
 

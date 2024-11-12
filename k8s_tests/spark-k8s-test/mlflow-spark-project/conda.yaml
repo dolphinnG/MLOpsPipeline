@@ -1,0 +1,12 @@
+name: my_mlflow_spark_project
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pyspark
+  - pip:
+      - mlflow
+      - boto3
+      - pyspark
+      # Add other dependencies here

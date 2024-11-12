@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the image and script to run
-IMAGE="supahakka/launcher:v14"
+IMAGE="supahakka/launcher:v15"
 MODULE="ddptest" # --m $MODULE 
 SCRIPT="mlflowrun.py" # --script $SCRIPT
 
