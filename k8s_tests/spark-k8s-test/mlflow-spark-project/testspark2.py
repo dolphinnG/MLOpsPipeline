@@ -20,14 +20,12 @@ def main():
     os.environ['AWS_SECRET_ACCESS_KEY'] = "admin123"
     mlflow.set_tracking_uri("http://mlflowtest-tracking:80")
     
-    mlflow.set_experiment("SPARK-TEST")
+    mlflow.set_experiment("SPARK-TEST-3")
     
     logger.log(logging.INFO, "StartingAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA the spark session")
     
     # A()
     # spark-submit --master spark://spark-master-svc:7077 testspark2.py
-    # spark-submit --master spark://sparktest2-master-svc:7077 testspark2.py
-    
     # spark-submit --master spark://sparktest-master-svc:7077 --executor-cores 1 testspark2.py
     # logging.getLogger("mlflow").setLevel(logging.DEBUG)
 
@@ -77,11 +75,11 @@ def main():
     # LOADING IMMEADIATELY AFTER SAVING THE MODEL SOMETIMES CAUSES AN SPARK ERROR, DONT KNOW WHY
     # BUT THE MODEL IS STILL PROPERLY LOGGED TO MLFLOW AND CAN BE LOADED LATER
     
-    loaded = mlflow.pyfunc.load_model(model_info.model_uri )
-    test_dataset = pd.DataFrame({"features": [[1.0, 2.0]]})
-    # `loaded.predict` accepts `Array[double]` type input column,
-    # and generates `Array[double]` type output column.
-    print(loaded.predict(test_dataset))
+    # loaded = mlflow.pyfunc.load_model(model_info.model_uri )
+    # test_dataset = pd.DataFrame({"features": [[1.0, 2.0]]})
+    # # `loaded.predict` accepts `Array[double]` type input column,
+    # # and generates `Array[double]` type output column.
+    # print(loaded.predict(test_dataset))
     
     
     

@@ -1,11 +1,22 @@
 
 #checkout "kind: seldonconfig" in the templates/seldon-v2-components.yaml 
 # for fields to override
-security:
-  kafka:
-    protocol: PLAINTEXT # SASL_SSL or PLAINTEXT only
+
+# security:
+#   kafka:
+#     protocol: PLAINTEXT # SASL_SSL or PLAINTEXT only
+
     # sasl:
     #   client:
     #     username: user1
     #     secret: kafkatest-user-passwords
     #     passwordPath: client-passwords
+
+
+serverConfig:
+  mlserver:
+    image:
+      pullPolicy: IfNotPresent
+      registry: docker.io
+      repository: supahakka/mlmlserver
+      tag: v4

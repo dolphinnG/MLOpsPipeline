@@ -1,0 +1,5 @@
+pyspark
+torch
+scikit-learn 
+mlflow
+mlserver-mlflow

@@ -1,0 +1,12 @@
+apiVersion: mlops.seldon.io/v1alpha1
+kind: Server
+metadata:
+  name: dolphin-mymlserver
+spec:
+  serverConfig: mlserver
+  extraCapabilities:
+  - lmaohehe
+  podSpec:
+    containers:
+    - image: supahakka/mymlserver:v2
+      name: dolphin-mymlserver
