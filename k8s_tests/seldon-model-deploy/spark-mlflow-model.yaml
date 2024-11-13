@@ -4,7 +4,7 @@ metadata:
   # name: spark-model-datatype-2
   name: model-from-code
 spec:
-  storageUri: "s3://mlflow/6/1971c97952e641309c706c154140674f/artifacts/spark-modelfromcode"
+  storageUri: "s3://mlflow/6/ba827048e024429faddcb54eff3c9eea/artifacts/spark-modelfromcode"
   requirements:
   - mlflow
   memory: 100Ki

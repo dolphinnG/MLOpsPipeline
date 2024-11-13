@@ -32,7 +32,7 @@ curl -v http://seldon-mesh:80/v2/models/model-from-code/infer \
                "name": "features",
                "shape": [1, 2],
                "datatype": "FP64",
-               "data": [2.0, 3.6]
+               "data": [[2.0, 3.6]]
              }
            ]
          }'

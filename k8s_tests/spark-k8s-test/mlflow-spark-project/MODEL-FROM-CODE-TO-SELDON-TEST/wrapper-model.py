@@ -22,13 +22,16 @@ class WrapperModel(PythonModel):
 
         print("MODEL_INPUT: " + str(model_input))
 
-        model_input: InferenceRequest  # MLflow v2 protocol models receives an InferenceRequest in model_input
-        input = model_input.inputs[0]
-        name = input.name
-        data = input.data.root
-        dic = {name: [data]}
-        print("DIC: " + str(dic))
+        # model_input: InferenceRequest  # MLflow v2 protocol models receives an InferenceRequest in model_input
+        # input = model_input.inputs[0]
+        # name = input.name
+        # data = input.data.root
+        # dic = {name: [data]}
+        # print("DIC: " + str(dic))
 
+        dic = model_input
+        dic['features'] = dic['features'].tolist()
+        print("DIC: " + str(dic))
         pandas_df = pd.DataFrame(dic)
         print("PANDAS_DF: " + str(pandas_df))
         
@@ -40,12 +43,20 @@ class WrapperModel(PythonModel):
         
         # NOTE: MLFLOW v2 models return a TensorDict = Dict[str, np.ndarray]
         return {"whateverhere": res[0].values}
+        
 
 
 # Specify which definition in this script represents the model instance
 set_model(WrapperModel())
 
 """
+
+signature:
+  inputs: '[{"name": "features", "type": "tensor", "tensor-spec": {"dtype": "float64",
+    "shape": [1, 2]}}]'
+  outputs: '[{"name": "whateverhere", "type": "tensor", "tensor-spec": {"dtype": "float64",
+    "shape": [1, 2]}}]'
+
 curl -v http://seldon-mesh:80/v2/models/model-from-code/infer \
      -H "Content-Type: application/json" \
      -d '{
@@ -54,7 +65,7 @@ curl -v http://seldon-mesh:80/v2/models/model-from-code/infer \
                "name": "features",
                "shape": [1, 2],
                "datatype": "FP64",
-               "data": [2.0, 3.6]
+               "data": [[2.0, 3.6]]
              }
            ]
          }'
@@ -68,3 +79,16 @@ SELDON SUPPORT FOR MLFLOW IS KINDA WACK LMAO.
 
 NOTE: WE CAN NOW DEPLOY MLFLOW MODEL FROM CODE THIS WAY, MEANING LANGCHAIN, OPENAI LLM, ETC.
 """
+
+# curl -v http://seldon-mesh:80/v2/models/model-from-code/infer \
+#      -H "Content-Type: application/json" \
+#      -d '{
+#            "inputs": [
+#              {
+#                "name": "features",
+#                "shape": [2],
+#                "datatype": "FP64",
+#                "data": [2.0, 3.6]
+#              }
+#            ]
+#          }'
