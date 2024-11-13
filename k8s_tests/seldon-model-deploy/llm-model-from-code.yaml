@@ -1,0 +1,12 @@
+apiVersion: mlops.seldon.io/v1alpha1
+kind: Model
+metadata:
+  # name: spark-model-datatype-2
+  name: llm-model-openai-2
+spec:
+  storageUri: "s3://mlflow/3/82d3892961124a57bcb9ec8d086c5d9d/artifacts/model"
+  requirements:
+  - mlflow
+  memory: 100Ki
+  # secretName: "minio-seldon-secret"
+  

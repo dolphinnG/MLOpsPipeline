@@ -1685,6 +1685,8 @@ spec:
       - mountPath: /mnt/tracing
         name: tracing-config-volume
     - env:
+      - name: OPENAI_API_KEY
+        value: {{ .Values.serverConfig.mlserver.openai.apiKey }}
       - name: MLSERVER_HTTP_PORT
         value: "9000"
       - name: MLSERVER_GRPC_PORT

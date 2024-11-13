@@ -69,9 +69,16 @@ curl -v http://seldon-mesh:80/v2/models/model-from-code/infer \
              }
            ]
          }'
+
 SINCE WE DONT INCLUDE A MODEL SIGNATURE, SELDON WON'T BLOCK THE LOADING OF THE MODEL
 BUT THAT MEANS WE MUST OURSELVES COORDINATE THE USER'S REQUEST AND THE WAY THE WRAPPER MODEL 
-CONVERT THE INPUT INTO THE FORMAT THE WRAPPED (SPARK) MODEL EXPECTS
+CONVERT THE INPUT INTO THE FORMAT THE WRAPPED (SPARK) MODEL EXPECTS (SPARKML VECTOR)
+
+But if we include the correct signature that mlserver can understand, 
+we can use the mlserver codecs to encode/decode the input/output
+basically, avoid any datatype that isn't numpy types, tensor, or primitive types.
+Check out mlflow tensorspec and colspec, and mlserver types for more info.
+
 
 BASICALLY, BY LOADING THE OG MODEL WITH MLFLOW PYFUNC, AND PROVIDING ANOTHER MLFLOW PYFUNC WRAPPER TO 
 BE DEPLOYED TO SELDON, WE CAN NOW DEPLOY ANY TYPE OF MLFLOW MODEL TO SELDON DESPITE THE FACT THAT
@@ -86,9 +93,9 @@ NOTE: WE CAN NOW DEPLOY MLFLOW MODEL FROM CODE THIS WAY, MEANING LANGCHAIN, OPEN
 #            "inputs": [
 #              {
 #                "name": "features",
-#                "shape": [2],
+#                "shape": [1, 2],
 #                "datatype": "FP64",
-#                "data": [2.0, 3.6]
+#                "data": [[2.0, 3.2]]
 #              }
 #            ]
 #          }'
