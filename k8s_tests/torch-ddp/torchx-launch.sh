@@ -16,7 +16,7 @@ torchx run --scheduler kubernetes \
     --m $MODULE \
     --rdzv_backend c10d \
     --rdzv_port 30303 \
-    --j '1x2' \
+    --j '2x2' \
     --env MLFLOW_S3_ENDPOINT_URL=http://mlflowtest-minio:80,MLFLOW_TRACKING_URI=http://mlflowtest-tracking:80,AWS_ACCESS_KEY_ID=admin,AWS_SECRET_ACCESS_KEY=admin123,MLFLOW_EXPERIMENT_NAME=topg \
     # --debug true
     # --max_retries 3 \ volcano does not support retrying

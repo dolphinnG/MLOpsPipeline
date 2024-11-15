@@ -66,6 +66,8 @@ def train(rank, world_size):
     
     # Set up the data loader
     transform = transforms.Compose([transforms.ToTensor()])
+    # YAN LECUN MNIST URL IS DOWN, AND SO ARE ALL THE MIRRORS, THIS DOWNLOAD WILL RETURN 403, 
+    # TODO: CHANGE TO A LOCAL COPY OF THE DATASET FOR THIS DEMO
     dataset = datasets.MNIST('.', train=True, download=True, transform=transform)
     sampler = torch.utils.data.DistributedSampler(dataset, num_replicas=world_size, rank=rank)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, sampler=sampler)
