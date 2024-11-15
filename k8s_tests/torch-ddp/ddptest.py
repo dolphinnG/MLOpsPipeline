@@ -42,7 +42,7 @@ def train(rank, world_size):
     logger.info(f"mlflow s3 endpoint: {os.environ['MLFLOW_S3_ENDPOINT_URL']}")
     logger.info(f"mlflow tracking uri: {os.environ['MLFLOW_TRACKING_URI']}")
     logger.info(f"mlflow aws id: {os.environ['AWS_ACCESS_KEY_ID']}")
-    logger.info(f"mlflow aws secret: {os.environ['AWS_SECRET_ACCESS_KEY']}")
+    # logger.info(f"mlflow aws secret: {os.environ['AWS_SECRET_ACCESS_KEY']}")
     logger.info(f"mlflow experiment: {os.environ['MLFLOW_EXPERIMENT_NAME']}")
         
     # Determine the device to use (GPU or CPU)
@@ -68,7 +68,8 @@ def train(rank, world_size):
     transform = transforms.Compose([transforms.ToTensor()])
     # YAN LECUN MNIST URL IS DOWN, AND SO ARE ALL THE MIRRORS, THIS DOWNLOAD WILL RETURN 403, 
     # TODO: CHANGE TO A LOCAL COPY OF THE DATASET FOR THIS DEMO
-    dataset = datasets.MNIST('.', train=True, download=True, transform=transform)
+    # local means the dataset must be accessible by the the podgroup, and not the launcher
+    dataset = datasets.MNIST('/app', train=True, download=False, transform=transform)
     sampler = torch.utils.data.DistributedSampler(dataset, num_replicas=world_size, rank=rank)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, sampler=sampler)
     

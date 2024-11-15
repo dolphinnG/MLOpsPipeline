@@ -9,3 +9,8 @@ tracking:
     enabled: false
   service: 
     type: ClusterIP
+
+postgresql:
+  auth: 
+    username: bn_mlflow
+    password: bn_mlflow

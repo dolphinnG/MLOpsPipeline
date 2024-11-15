@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir mlflow torchvision torchx[dev] torchx[kubernetes]
 
 # Copy the application code
 COPY . /app
+# COPY ./MNIST /app/MNIST
 
 # Set the entrypoint to keep the container running
 ENTRYPOINT ["tail", "-f", "/dev/null"]
