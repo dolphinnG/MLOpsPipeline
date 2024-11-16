@@ -1,5 +1,5 @@
-pyspark
-torch
-scikit-learn 
-mlflow
-mlserver-mlflow
+# pyspark
+# torch
+# scikit-learn 
+# mlflow
+# mlserver-mlflow

@@ -36,13 +36,13 @@ spec:
         volumeMounts:
         - mountPath: /mnt/host-folder
           name: host-folder
-        # - mountPath: /opt/bitnami/spark/tmp
-        #   name: nfs-volume
+        - mountPath: /opt/bitnami/spark/tmp
+          name: nfs-volume
       volumes:
       - name: host-folder
         hostPath:
           path: /mnt/host-folder
           type: Directory
-      # - name: nfs-volume
-      #   persistentVolumeClaim:
-      #     claimName: nfs-pvc
+      - name: nfs-volume
+        persistentVolumeClaim:
+          claimName: nfs-pvc

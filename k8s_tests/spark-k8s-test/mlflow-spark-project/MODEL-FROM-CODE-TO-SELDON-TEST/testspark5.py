@@ -13,20 +13,19 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 def main():
-    os.environ['MLFLOW_S3_ENDPOINT_URL'] = f"http://mlflowtest-minio:80"
-    os.environ['AWS_ACCESS_KEY_ID'] = "admin"
-    os.environ['AWS_SECRET_ACCESS_KEY'] = "admin123"
-    mlflow.set_tracking_uri("http://mlflowtest-tracking:80")
+    # os.environ['MLFLOW_S3_ENDPOINT_URL'] = f"http://mlflowtest-minio:80"
+    # os.environ['AWS_ACCESS_KEY_ID'] = "admin"
+    # os.environ['AWS_SECRET_ACCESS_KEY'] = "admin123"
+    # mlflow.set_tracking_uri("http://mlflowtest-tracking:80")
     
     mlflow.set_experiment("SPARK-TEST-5")
     
     logger.log(logging.INFO, "Starting the spark session")
-
     # Initialize Spark session
     spark = SparkSession.builder \
-        .appName("gggg wwwww") \
-        .config("spark.driver.host", os.environ.get("POD_IP")) \
+        .appName("Your spark app name here") \
         .getOrCreate()
+        # .config("spark.driver.host", os.environ.get("POD_IP")) \
 
     # Create a pandas DataFrame
     pandas_df = pd.DataFrame({
@@ -41,19 +40,19 @@ def main():
     lor.setPredictionCol("").setProbabilityCol("prediction")
     lor_model = lor.fit(train_df)
 
-    test_df = train_df.select("features")
+    # test_df = train_df.select("features")
     prediction_df = lor_model.transform(train_df)
     prediction_df.printSchema() # prediction result is a vector of probabilities of the label classes summing up to 1
     
-    res = prediction_df.select("prediction")
-    signature = infer_signature(test_df, prediction_df)
+    # res = prediction_df.select("prediction")
+    # signature = infer_signature(test_df, prediction_df)
 
     with mlflow.start_run() as run:
         model_info = mlflow.spark.log_model(
             lor_model,
             "model",
-            # signature=signature,
-            dfs_tmpdir="/opt/bitnami/spark/tmp/"
+            # signature=signature, # don't log the signature
+            dfs_tmpdir="/opt/bitnami/spark/tmp/" # needed
         )
 
     # Stop the Spark session
