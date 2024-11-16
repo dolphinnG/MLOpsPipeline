@@ -6,6 +6,7 @@ import tempfile
 import uuid
 
 class BaseLauncher(ABC):
+    LOG_DONE = "dolphin_done"
     @abstractmethod
     def launch(self, *args, **kwargs) -> str:
         ...
@@ -15,9 +16,9 @@ class BaseLauncher(ABC):
             while True:
                 line = log_file.readline()
                 if line:
-                    if line.strip() == "dolphin_spark_done":
+                    if line.strip() == BaseLauncher.LOG_DONE:
                         break
-                    logging.info(line.strip())
+                    yield line
                 else:
                     time.sleep(1)  # Sleep briefly to avoid busy waiting
 

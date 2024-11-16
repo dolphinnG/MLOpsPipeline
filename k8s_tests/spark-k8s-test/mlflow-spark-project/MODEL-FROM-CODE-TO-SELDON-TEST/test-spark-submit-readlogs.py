@@ -1,10 +1,14 @@
 import os
 import time
-from SparkService import SparkLauncher
+from SparkLauncher import SparkLauncher
 
-log_file_name = '/tmp/spark_job_aa043f59-0b5b-4a3e-ac77-3a072d0e9463.log'
 
-spark_service = SparkLauncher()
+spark_launcher = SparkLauncher()
 
-for line in spark_service.stream_logs(log_file_name):
+log_file_name = spark_launcher.launch(
+    properties_file="dolphin-spark.conf",
+    python_entry_file="testspark5.py"
+)
+
+for line in spark_launcher.stream_logs(log_file_name):
     print(line, end='')

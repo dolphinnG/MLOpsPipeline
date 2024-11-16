@@ -4,8 +4,7 @@ import time
 import threading
 from BaseLauncher import BaseLauncher
 
-class MLFlowService(BaseLauncher):
-    LOG_DONE = "dolphin_mlflow_done\n"
+class MLFlowLauncher(BaseLauncher):
 
     def __init__(self, project_uri, experiment_name):
         self.project_uri = project_uri
@@ -19,9 +18,9 @@ class MLFlowService(BaseLauncher):
             "--experiment-name", self.experiment_name
         ]
 
-        if parameters:
-            for key, value in parameters.items():
-                command.extend([f"--{key}", value])
+        # if parameters:
+        #     for key, value in parameters.items():
+        #         command.extend([f"--{key}", value])
 
         log_file_path = self._generate_log_file_path("mlflow")
         try:
@@ -35,7 +34,7 @@ class MLFlowService(BaseLauncher):
         except subprocess.CalledProcessError as e:
             with open(log_file_path, 'a') as log_file:
                 log_file.write(f"An error occurred while running the MLFlow job: {e}\n")
-                log_file.write(MLFlowService.LOG_DONE)
+                log_file.write(BaseLauncher.LOG_DONE)
         finally:
             return log_file_path
 
@@ -47,4 +46,4 @@ class MLFlowService(BaseLauncher):
             process.wait()
             if process.returncode != 0:
                 log_file.write(f"An error occurred while running the MLFlow job: {process.returncode}\n")
-            log_file.write(MLFlowService.LOG_DONE)
+            log_file.write(BaseLauncher.LOG_DONE)

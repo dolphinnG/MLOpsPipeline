@@ -7,18 +7,17 @@ import threading
 
 
 class SparkLauncher(BaseLauncher):
-    LOG_DONE = "dolphin_spark_done\n"
 
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
 
-    def launch(self, properties_file, file_name):
+    def launch(self, properties_file, python_entry_file):
         log_file_path = self._generate_log_file_path("spark")
         try:
             process = subprocess.Popen([
                 'spark-submit',
                 '--properties-file', properties_file,
-                file_name
+                python_entry_file
             ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
             logging.info("Spark job submitted")
@@ -30,7 +29,7 @@ class SparkLauncher(BaseLauncher):
         except subprocess.CalledProcessError as e:
             with open(log_file_path, 'a') as log_file:
                 log_file.write(f"An error occurred while submitting the Spark job: {e}\n")
-                log_file.write(SparkLauncher.LOG_DONE)
+                log_file.write(BaseLauncher.LOG_DONE)
         finally:
             return log_file_path
 
@@ -42,6 +41,6 @@ class SparkLauncher(BaseLauncher):
             process.wait()
             if process.returncode != 0:
                 log_file.write(f"An error occurred while submitting the Spark job: {process.returncode}\n")
-            log_file.write(SparkLauncher.LOG_DONE)
+            log_file.write(BaseLauncher.LOG_DONE)
 
     # log_stream method removed as it is now inherited from BaseService

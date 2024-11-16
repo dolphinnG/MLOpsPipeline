@@ -4,13 +4,11 @@ from torchx.components.dist import ddp
 import time
 from torchx.runner.api import Stream
 from kubernetes import client, config
-from BaseService import ILauncher
-import os
-import tempfile
+from BaseLauncher import BaseLauncher
 import threading
 
 
-class TorchxLauncher(ILauncher):
+class TorchxLauncher(BaseLauncher):
     def __init__(self, namespace, queue):
         self.namespace = namespace
         self.queue = queue
@@ -43,19 +41,34 @@ class TorchxLauncher(ILauncher):
         )
 
     def _accumulate_logs(self, app_handle, log_file_path, role_name):
+        # logging.info(f"Accumulating lossgs for {role_name}")
         with open(log_file_path, "a") as log_file:
-            for line in self.session.log_lines(
-                app_handle=app_handle,
-                role_name=role_name,
-                k=0,
-                streams=Stream.COMBINED,
-                should_tail=True,
-            ):
-                log_file.write(line)
-                # logging.info(line)
+
+            while True:
+                try:
+                    # logging.info("streaming logs")
+                    log_iter = self.session.log_lines(
+                        app_handle=app_handle,
+                        role_name=role_name,
+                        k=0,
+                        streams=Stream.COMBINED,
+                        should_tail=True
+                        )
+                    for line in log_iter:
+                        log_file.write(line+"\n") 
+                    log_file.write(BaseLauncher.LOG_DONE)
+                    break  
+                except client.ApiException as e:
+                    logging.error(f"Error streaming logs {e}:  -- retrying in 5s")
+                    time.sleep(5)
+       
+                    
+
 
     def launch(self, ddp_component):
         log_file_path = self._generate_log_file_path(ddp_component.roles[0].name)
+        with open(log_file_path, "w") as log_file:
+            log_file.write("")
         try:
             app_handle = self.session.run(
                 ddp_component, scheduler="kubernetes", cfg=self.run_cfg, workspace=""
@@ -70,7 +83,8 @@ class TorchxLauncher(ILauncher):
             )
             log_thread.start()
             # self.stream_logs(log_file_path)
-
+        except Exception as e:
+            logging.error(f"Error launching job: {e}")
         finally:
             # self.session.close()
             return log_file_path
