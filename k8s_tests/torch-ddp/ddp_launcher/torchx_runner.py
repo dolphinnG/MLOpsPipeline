@@ -4,13 +4,13 @@ from torchx.components.dist import ddp
 import time
 from torchx.runner.api import Stream
 import kubernetes
-from TorchXFacade import TorchXFacade
+from TorchXFacade import TorchxLauncher
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 namespace = "dolphin-ns"
 queue = "default"
-torchx_facade = TorchXFacade(namespace, queue)
+torchx_facade = TorchxLauncher(namespace, queue)
 
 ddp_component = torchx_facade.create_ddp_component(
     job_name='lmao',

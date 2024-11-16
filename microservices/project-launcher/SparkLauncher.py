@@ -2,13 +2,11 @@ import logging
 import subprocess
 import time
 import uuid
-from BaseService import ILauncher
-import os
-import tempfile
+from BaseLauncher import BaseLauncher
 import threading
 
 
-class SparkLauncher(ILauncher):
+class SparkLauncher(BaseLauncher):
     LOG_DONE = "dolphin_spark_done\n"
 
     def __init__(self):
