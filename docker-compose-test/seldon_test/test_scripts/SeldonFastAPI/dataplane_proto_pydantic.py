@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional, Dict, Union
 
 class ServerLiveRequestPydantic(BaseModel):
@@ -33,9 +33,9 @@ class ModelMetadataRequestPydantic(BaseModel):
     version: Optional[str] = None
 
 class InferParameterPydantic(BaseModel):
-    bool_param: Optional[bool] = None
-    int64_param: Optional[int] = None
-    string_param: Optional[str] = None
+    bool_param: Union[bool, None] = None
+    int64_param: Union[int, None] = None
+    string_param: Union[str, None] = None
 
 class TensorMetadataPydantic(BaseModel):
     name: str
@@ -63,6 +63,9 @@ class InferRequestedOutputTensorPydantic(BaseModel):
     parameters: Optional[Dict[str, InferParameterPydantic]] = None
 
 class ModelInferRequestPydantic(BaseModel):
+    model_config = ConfigDict(
+        protected_namespaces=('protect_me_', 'also_protect_')
+    )
     model_name: str
     model_version: Optional[str] = None
     id: Optional[str] = None
@@ -79,6 +82,9 @@ class InferOutputTensorPydantic(BaseModel):
     contents: Optional['InferTensorContentsPydantic'] = None
 
 class ModelInferResponsePydantic(BaseModel):
+    model_config = ConfigDict(
+        protected_namespaces=('protect_me_', 'also_protect_')
+    )
     model_name: str
     model_version: str
     id: Optional[str] = None
@@ -112,21 +118,27 @@ class ModelIndexPydantic(BaseModel):
     state: str
     reason: Optional[str] = None
 
-class RepositoryIndexResponsePydantic(BaseModel):
-    models: List[ModelIndexPydantic]
+# class RepositoryIndexResponsePydantic(BaseModel):
+#     models: List[ModelIndexPydantic]
 
-class RepositoryModelLoadRequestPydantic(BaseModel):
-    repository_name: Optional[str] = None
-    model_name: str
-    parameters: Optional[Dict[str, ModelRepositoryParameterPydantic]] = None
+# class RepositoryModelLoadRequestPydantic(BaseModel):
+#     model_config = ConfigDict(
+#         protected_namespaces=('protect_me_', 'also_protect_')
+#     )
+#     repository_name: Optional[str] = None
+#     model_name: str
+#     parameters: Optional[Dict[str, ModelRepositoryParameterPydantic]] = None
 
-class RepositoryModelLoadResponsePydantic(BaseModel):
-    pass
+# class RepositoryModelLoadResponsePydantic(BaseModel):
+#     pass
 
-class RepositoryModelUnloadRequestPydantic(BaseModel):
-    repository_name: Optional[str] = None
-    model_name: str
-    parameters: Optional[Dict[str, ModelRepositoryParameterPydantic]] = None
+# class RepositoryModelUnloadRequestPydantic(BaseModel):
+#     model_config = ConfigDict(
+#         protected_namespaces=('protect_me_', 'also_protect_')
+#     )
+#     repository_name: Optional[str] = None
+#     model_name: str
+#     parameters: Optional[Dict[str, ModelRepositoryParameterPydantic]] = None
 
-class RepositoryModelUnloadResponsePydantic(BaseModel):
-    pass
+# class RepositoryModelUnloadResponsePydantic(BaseModel):
+#     pass

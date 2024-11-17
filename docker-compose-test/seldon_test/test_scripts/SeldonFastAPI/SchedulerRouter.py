@@ -20,7 +20,7 @@ from deps import  get_scheduler_service
 
 logger = logging.getLogger(__name__)
 
-schedulerrouter = APIRouter()
+schedulerrouter = APIRouter(tags=["Scheduler"])
 
 
 @schedulerrouter.post("/load_model")

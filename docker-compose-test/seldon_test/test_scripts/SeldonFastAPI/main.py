@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import logging
 from SchedulerRouter import schedulerrouter
+from InferenceRouter import inferencerouter
 from fastapi.responses import JSONResponse
 from grpc import RpcError
 
@@ -10,6 +11,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 app.include_router(schedulerrouter, prefix="/scheduler")
+app.include_router(inferencerouter, prefix="/inference")
 
 @app.exception_handler(RpcError)
 async def grpc_exception_handler(request, exc: RpcError):
