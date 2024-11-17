@@ -17,18 +17,11 @@ from dataplane_proto_pydantic import (
     ModelMetadataRequestPydantic,
     ModelInferRequestPydantic,
 )
+from BaseSeldonGrpcService import BaseSeldonGrpcService
 
-class InferenceService:
-    def __init__(self, stub: GRPCInferenceServiceStub):
-        self.stub = stub
-
-    def _convert_request_payload(self, pydantic_payload, request_type):
-        json_payload = pydantic_payload.model_dump_json(exclude_defaults=True)
-        request = Parse(json_payload, request_type())
-        return request
-
-    def _process_response(self, response):
-        return json.loads(MessageToJson(response))
+class InferenceService(BaseSeldonGrpcService):
+    # def __init__(self, stub: GRPCInferenceServiceStub):
+    #     self.stub = stub
 
     def model_infer(self, pydantic_payload: ModelInferRequestPydantic, seldon_model_header: str):
         request = self._convert_request_payload(pydantic_payload, ModelInferRequest)

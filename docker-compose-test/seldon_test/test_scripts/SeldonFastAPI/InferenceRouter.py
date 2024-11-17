@@ -9,14 +9,14 @@ from dataplane_proto_pydantic import (
     ModelMetadataRequestPydantic,
     ModelInferRequestPydantic,
 )
-from deps import get_inference_service, get_dataplane_service
+from deps import get_dataplane_service2, get_inference_service2
 
 inferencerouter = APIRouter(tags=["Inference"])
 
 @inferencerouter.post("/server_live")
 def server_live(
     payload: ServerLiveRequestPydantic,
-    dataplane_service: DataPlaneService = Depends(get_dataplane_service),
+    dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
     response = dataplane_service.server_live(payload)
     return response
@@ -24,7 +24,7 @@ def server_live(
 @inferencerouter.post("/server_ready")
 def server_ready(
     payload: ServerReadyRequestPydantic,
-    dataplane_service: DataPlaneService = Depends(get_dataplane_service),
+    dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
     response = dataplane_service.server_ready(payload)
     return response
@@ -32,7 +32,7 @@ def server_ready(
 @inferencerouter.post("/model_ready")
 def model_ready(
     payload: ModelReadyRequestPydantic,
-    dataplane_service: DataPlaneService = Depends(get_dataplane_service),
+    dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
     response = dataplane_service.model_ready(payload)
     return response
@@ -40,7 +40,7 @@ def model_ready(
 @inferencerouter.post("/server_metadata")
 def server_metadata(
     payload: ServerMetadataRequestPydantic,
-    dataplane_service: DataPlaneService = Depends(get_dataplane_service),
+    dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
     response = dataplane_service.server_metadata(payload)
     return response
@@ -48,7 +48,7 @@ def server_metadata(
 @inferencerouter.post("/model_metadata")
 def model_metadata(
     payload: ModelMetadataRequestPydantic,
-    dataplane_service: DataPlaneService = Depends(get_dataplane_service),
+    dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
     response = dataplane_service.model_metadata(payload)
     return response
@@ -56,7 +56,7 @@ def model_metadata(
 @inferencerouter.post("/model_infer")
 def model_infer(
     payload: ModelInferRequestPydantic,
-    inference_service: InferenceService = Depends(get_inference_service),
+    inference_service: InferenceService = Depends(get_inference_service2),
     seldon_model: str = Header()
 ):
     response = inference_service.model_infer(payload, seldon_model)

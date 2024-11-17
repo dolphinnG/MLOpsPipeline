@@ -1,4 +1,3 @@
-
 import json
 from google.protobuf.json_format import Parse, MessageToJson
 from v2_dataplane_pb2_grpc import GRPCInferenceServiceStub
@@ -16,18 +15,11 @@ from dataplane_proto_pydantic import (
     ServerMetadataRequestPydantic,
     ModelMetadataRequestPydantic,
 )
+from BaseSeldonGrpcService import BaseSeldonGrpcService
 
-class DataPlaneService:
-    def __init__(self, stub: GRPCInferenceServiceStub):
-        self.stub = stub
-        
-    def _convert_request_payload(self, pydantic_payload, request_type):
-        json_payload = pydantic_payload.model_dump_json(exclude_defaults=True)
-        request = Parse(json_payload, request_type())
-        return request
-
-    def _process_response(self, response):
-        return json.loads(MessageToJson(response))
+class DataPlaneService(BaseSeldonGrpcService):
+    # def __init__(self, stub: GRPCInferenceServiceStub):
+    #     self.stub = stub
     
     def server_live(self, pydantic_payload: ServerLiveRequestPydantic):
         request = self._convert_request_payload(pydantic_payload, ServerLiveRequest)
