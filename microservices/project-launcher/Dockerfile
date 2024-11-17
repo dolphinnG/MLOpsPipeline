@@ -69,8 +69,7 @@ RUN chmod +x /entrypoint.sh
 # Set the entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
-RUN pip install --no-cache-dir mlflow boto3 pyspark virtualenv
-# RUN pip install --no-cache-dir torchx torchx[kubernetes]
+RUN pip install --no-cache-dir mlflow boto3 pyspark virtualenv torchx torchx[kubernetes] kubernetes
 
 # Create user with UID 1001
 # WE WANT TO HAVE A SHARED MOUNTED VOLUMES BETWEEN ALL THE SPARK WORKERS AND THE DRIVER
@@ -95,3 +94,5 @@ USER 1001
 
 # Expose any ports if necessary
 # EXPOSE 8080
+
+# supahakka/projecc-launcher:v2

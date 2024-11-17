@@ -1,5 +1,5 @@
-seldon model infer iris \
-  '{"inputs": [{"name": "predict", "shape": [3, 5], "datatype": "FP32", "data": [1,2,3,4,5,6,7,8,0,0,0,0,1,2,3] }]}' 
+seldon model infer iris1  \
+  '{"inputs": [{"name": "predict", "shape": [1, 4], "datatype": "FP32", "data": [[1, 2, 3, 4]]}]}'
 
 
 seldon model infer tfsimple1 \
