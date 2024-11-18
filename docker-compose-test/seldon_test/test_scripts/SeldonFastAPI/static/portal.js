@@ -94,6 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const formElement = document.getElementById(formId);
         if (formElement) {
             formElement.style.display = "block";
+            if (formId === "loadPipelineForm") {
+                // Clear additional forms in the Load Pipeline tab
+                document.getElementById("steps").innerHTML = "";
+                document.getElementById("outputSteps").innerHTML = "";
+            }
         } else {
             fetchStatus(services[tabId], document.getElementById("response"));
         }
@@ -153,6 +158,55 @@ document.addEventListener("DOMContentLoaded", function () {
                 };
             } else if (evt.target.id === "stopExperimentForm") {
                 data.name = formData.get("name");
+            } else if (evt.target.id === "loadPipelineForm") {
+                const steps = [];
+                formData.forEach((value, key) => {
+                    const match = key.match(/pipeline\.steps\[(\d+)\]\.(name|tensorMap\[(\d+)\]\.(source|target)|inputs\[(\d+)\])/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        const field = match[2];
+                        if (!steps[index]) {
+                            steps[index] = { inputs: [], tensorMap: {} };
+                        }
+                        if (field.startsWith("tensorMap")) {
+                            const tensorMapIndex = parseInt(match[3]);
+                            const tensorMapField = match[4];
+                            if (!steps[index].tensorMap[tensorMapIndex]) {
+                                steps[index].tensorMap[tensorMapIndex] = {};
+                            }
+                            if (tensorMapField === "source") {
+                                steps[index].tensorMap[tensorMapIndex].source = value;
+                            } else if (tensorMapField === "target") {
+                                steps[index].tensorMap[tensorMapIndex].target = value;
+                            }
+                        } else if (field.startsWith("inputs")) {
+                            const inputIndex = parseInt(match[5]);
+                            steps[index].inputs[inputIndex] = value;
+                        } else {
+                            steps[index][field] = value;
+                        }
+                    }
+                });
+                const outputSteps = [];
+                formData.forEach((value, key) => {
+                    const match = key.match(/pipeline\.output\.steps\[(\d+)\]/);
+                    if (match) {
+                        const index = parseInt(match[1]);
+                        outputSteps[index] = value;
+                    }
+                });
+                data.pipeline = {
+                    name: formData.get("pipeline.name"),
+                    steps: steps.map(step => ({
+                        ...step,
+                        tensorMap: Object.fromEntries(
+                            Object.values(step.tensorMap).map(({ source, target }) => [source, target])
+                        )
+                    })),
+                    output: {
+                        steps: outputSteps
+                    }
+                };
             } else if (evt.target.id === "serverStatusForm") {
                 data.subscriberName = formData.get("subscriberName");
             } else {

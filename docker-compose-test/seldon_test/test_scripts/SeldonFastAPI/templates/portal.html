@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Service Portal</h1>
+        <p>Pipeline Portal<p> <!-- Reduced text -->
     </header>
     <div class="container full-height">
         <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
@@ -83,8 +83,20 @@
                     <button type="submit">Submit</button>
                 </form>
                 <form id="loadPipelineForm" class="tabform" style="display:none;">
-                    <label for="loadPipelineName">Pipeline Name:</label>
-                    <input type="text" id="loadPipelineName" name="pipelineName">
+                    <label for="pipelineName">Pipeline Name:</label>
+                    <input type="text" id="pipelineName" name="pipeline.name">
+                    
+                    <div id="steps">
+                        <!-- Steps will be added dynamically -->
+                    </div>
+                    <button type="button" class="add-step" onclick="addStep()">Add Step</button>
+                    
+                    <div id="outputSteps">
+                        <label for="outputSteps">Output Steps:</label>
+                        <!-- Output steps will be added dynamically -->
+                    </div>
+                    <button type="button" class="add-output-step" onclick="addOutputStep()">Add Output Step</button>
+                    
                     <button type="submit">Submit</button>
                 </form>
                 <form id="unloadPipelineForm" class="tabform" style="display:none;">
@@ -127,6 +139,86 @@
             candidatesDiv.appendChild(candidateLabel);
             candidatesDiv.appendChild(candidateNameInput);
             candidatesDiv.appendChild(candidateWeightInput);
+        }
+
+        function addStep() {
+            const stepsDiv = document.getElementById("steps");
+            const stepCount = stepsDiv.querySelectorAll("div[id^='inputs-']").length + 1; // Correctly calculate the step count
+            const stepContainer = document.createElement("div");
+            stepContainer.className = "step-container";
+            const stepLabel = document.createElement("label");
+            stepLabel.textContent = `Step ${stepCount}:`;
+            const stepNameInput = document.createElement("input");
+            stepNameInput.type = "text";
+            stepNameInput.name = `pipeline.steps[${stepCount - 1}].name`;
+            stepNameInput.placeholder = "Step Name";
+            const tensorMapDiv = document.createElement("div");
+            tensorMapDiv.id = `tensorMap-${stepCount - 1}`;
+            tensorMapDiv.style.marginLeft = "20px"; // Indent tensorMap div
+            const addTensorMapButton = document.createElement("button");
+            addTensorMapButton.type = "button";
+            addTensorMapButton.className = "add-tensor-map";
+            addTensorMapButton.textContent = "Add Tensor Map";
+            addTensorMapButton.onclick = function() { addTensorMap(stepCount - 1); };
+            const inputsDiv = document.createElement("div");
+            inputsDiv.id = `inputs-${stepCount - 1}`;
+            inputsDiv.style.marginLeft = "20px"; // Indent inputs div
+            const addInputButton = document.createElement("button");
+            addInputButton.type = "button";
+            addInputButton.className = "add-input";
+            addInputButton.textContent = "Add Input";
+            addInputButton.onclick = function() { addInput(stepCount - 1); };
+            stepContainer.appendChild(stepLabel);
+            stepContainer.appendChild(stepNameInput);
+            stepContainer.appendChild(tensorMapDiv);
+            stepContainer.appendChild(addTensorMapButton);
+            stepContainer.appendChild(inputsDiv);
+            stepContainer.appendChild(addInputButton);
+            stepsDiv.appendChild(stepContainer);
+        }
+
+        function addTensorMap(stepIndex) {
+            const tensorMapDiv = document.getElementById(`tensorMap-${stepIndex}`);
+            const tensorMapCount = tensorMapDiv.children.length / 3 + 1; // Each tensorMap has 3 elements (label, source input, target input)
+            const tensorMapLabel = document.createElement("label");
+            tensorMapLabel.textContent = `Tensor Map ${tensorMapCount}:`;
+            const sourceInput = document.createElement("input");
+            sourceInput.type = "text";
+            sourceInput.name = `pipeline.steps[${stepIndex}].tensorMap[${tensorMapCount - 1}].source`;
+            sourceInput.placeholder = "Source Tensor";
+            const targetInput = document.createElement("input");
+            targetInput.type = "text";
+            targetInput.name = `pipeline.steps[${stepIndex}].tensorMap[${tensorMapCount - 1}].target`;
+            targetInput.placeholder = "Target Tensor";
+            tensorMapDiv.appendChild(tensorMapLabel);
+            tensorMapDiv.appendChild(sourceInput);
+            tensorMapDiv.appendChild(targetInput);
+        }
+
+        function addInput(stepIndex) {
+            const inputsDiv = document.getElementById(`inputs-${stepIndex}`);
+            const inputCount = inputsDiv.children.length / 2 + 1; // Each input has 2 elements (label, input field)
+            const inputLabel = document.createElement("label");
+            inputLabel.textContent = `Input ${inputCount}:`;
+            const inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.name = `pipeline.steps[${stepIndex}].inputs[${inputCount - 1}]`;
+            inputField.placeholder = "Input";
+            inputsDiv.appendChild(inputLabel);
+            inputsDiv.appendChild(inputField);
+        }
+
+        function addOutputStep() {
+            const outputStepsDiv = document.getElementById("outputSteps");
+            const outputStepCount = outputStepsDiv.querySelectorAll("input").length + 1; // Correctly calculate the output step count
+            const outputStepLabel = document.createElement("label");
+            outputStepLabel.textContent = `Output Step ${outputStepCount}:`;
+            const outputStepInput = document.createElement("input");
+            outputStepInput.type = "text";
+            outputStepInput.name = `pipeline.output.steps[${outputStepCount - 1}]`;
+            outputStepInput.placeholder = "Output Step";
+            outputStepsDiv.appendChild(outputStepLabel);
+            outputStepsDiv.appendChild(outputStepInput);
         }
 
         function fetchStatus(endpoint, responseDiv) {

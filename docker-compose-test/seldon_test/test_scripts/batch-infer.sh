@@ -16,3 +16,5 @@ grpcurl \
     -rpc-header seldon-model:iris2 \
     0.0.0.0:9000 inference.GRPCInferenceService/ModelInfer
 
+seldon pipeline infer testpipeline \
+    '{"inputs":[{"name":"INPUT0","data":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"datatype":"INT32","shape":[1,16]},{"name":"INPUT1","data":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"datatype":"INT32","shape":[1,16]}]}' | jq -M .

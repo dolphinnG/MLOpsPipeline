@@ -135,6 +135,7 @@ header {
     display: flex;
     flex-wrap: wrap;
     border-bottom: 1px solid #ccc;
+    justify-content: center; /* Center align the tabs */
 }
 
 .tablinks {
@@ -171,7 +172,7 @@ footer {
 
 h1 {
     text-align: center;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 #content {
@@ -194,6 +195,9 @@ h1 {
 
 #forms {
     margin-top: 20px; /* Add upper margin for the form div */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content */
 }
 
 /* @media (max-width: 768px) {
@@ -228,6 +232,10 @@ form {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    position: relative; /* Ensure the remove button is positioned relative to the form */
+    box-sizing: border-box; /* Ensure the form fits within its container */
+    width: 80%; /* Change form width to 80% */
+    margin: 20px auto; /* Center align the form */
 }
 
 form label {
@@ -238,7 +246,7 @@ form label {
 
 form input[type="text"],
 form input[type="number"] {
-    width: 100%;
+    width: 90%; /* Change input width to 90% */
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -250,25 +258,25 @@ form button[type="submit"],
 form button[type="button"] {
     background-color: #4CAF50;
     color: white;
-    padding: 10px 20px;
+    padding: 5px 10px; /* Reduce padding to half */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     display: block; /* Ensure the button is displayed as a block element */
-    width: 50%; /* Make the button take half of the width */
-    margin: 10px auto; /* Center the button and add margin to the top */
+    width: 25%; /* Make the button take half of the previous width */
+    margin: 5px auto; /* Reduce margin to half */
 }
 
 form button[type="submit"] {
     background-color: #4CAF50; /* Same color as the header background */
     color: white;
-    padding: 10px 20px;
+    padding: 5px 10px; /* Reduce padding to half */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     display: block; /* Ensure the button is displayed as a block element */
-    width: 25%; /* Make the button take 1/4 of the width */
-    margin: 10px 0; /* Add margin to the top and bottom */
+    width: 12.5%; /* Make the button take half of the previous width */
+    margin: 5px 0; /* Reduce margin to half */
 }
 
 form button[type="submit"]:hover {
@@ -278,13 +286,13 @@ form button[type="submit"]:hover {
 form button[type="button"] {
     background-color: #1E90FF; /* Nice blue color for add candidate button */
     color: white;
-    padding: 10px 20px;
+    padding: 5px 10px; /* Reduce padding to half */
     border: none;
     border-radius: 4px;
     cursor: pointer;
     display: block; /* Ensure the button is displayed as a block element */
-    width: 25%; /* Make the button take 1/4 of the width */
-    margin: 10px 0; /* Add margin to the top and bottom */
+    width: 12.5%; /* Make the button take half of the previous width */
+    margin: 5px 0; /* Reduce margin to half */
 }
 
 form button[type="button"]:hover {
@@ -297,4 +305,42 @@ form button[type="button"].add-candidate {
 
 form button[type="button"].add-candidate:hover {
     background-color: #007bb5;
+}
+
+step-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: relative; /* Ensure the remove button is positioned relative to the step container */
+    box-sizing: border-box; /* Ensure the step container fits within its container */
+    display: flex;
+    flex-direction: column;
+}
+
+.step-container label {
+    margin-left: 20px; /* Indent labels inside step container */
+}
+
+.step-container input {
+    margin-left: 20px; /* Indent inputs inside step container */
+    width: calc(100% - 40px); /* Reduce width to fit within the container */
+}
+
+.step-container .add-tensor-map,
+.step-container .add-input {
+    margin-left: 20px; /* Indent buttons inside step container */
+    width: 12.5%; /* Make the button take half of the previous width */
+    padding: 5px 10px; /* Reduce padding to half */
+    font-size: 14px; /* Same font size as submit button */
+    background-color: #808080; /* Gray color */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.step-container .add-tensor-map:hover,
+.step-container .add-input:hover {
+    background-color: #696969; /* Darker gray on hover */
 }
