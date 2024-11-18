@@ -11,21 +11,21 @@ from dataplane_proto_pydantic import (
 )
 from deps import get_dataplane_service2, get_inference_service2
 
-inferencerouter = APIRouter(tags=["Inference"])
+inferencerouter = APIRouter(tags=["Dataplane"])
 
-@inferencerouter.post("/server_live")
+@inferencerouter.get("/server_live")
 def server_live(
-    payload: ServerLiveRequestPydantic,
     dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
+    payload = ServerLiveRequestPydantic()
     response = dataplane_service.server_live(payload)
     return response
 
-@inferencerouter.post("/server_ready")
+@inferencerouter.get("/server_ready")
 def server_ready(
-    payload: ServerReadyRequestPydantic,
     dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
+    payload = ServerReadyRequestPydantic()
     response = dataplane_service.server_ready(payload)
     return response
 
@@ -37,11 +37,11 @@ def model_ready(
     response = dataplane_service.model_ready(payload)
     return response
 
-@inferencerouter.post("/server_metadata")
+@inferencerouter.get("/server_metadata")
 def server_metadata(
-    payload: ServerMetadataRequestPydantic,
     dataplane_service: DataPlaneService = Depends(get_dataplane_service2),
 ):
+    payload = ServerMetadataRequestPydantic()
     response = dataplane_service.server_metadata(payload)
     return response
 

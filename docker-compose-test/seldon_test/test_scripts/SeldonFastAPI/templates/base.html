@@ -28,6 +28,11 @@
     <footer>
         <p>&copy; 2024 Dolphin Pipeline Portal</p>
     </footer>
-    <script src="/static/portal.js"></script>
+    <script src="/static/sidebar.js"></script>
+    {% if request.path == '/scheduler' %}
+    <script src="/static/scheduler.js"></script>
+    {% elif request.path == '/dataplane' %}
+    <script src="/static/dataplane.js"></script>
+    {% endif %}
 </body>
 </html>

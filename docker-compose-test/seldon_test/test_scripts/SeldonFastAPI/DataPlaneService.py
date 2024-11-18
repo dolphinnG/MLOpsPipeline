@@ -31,7 +31,7 @@ class DataPlaneService(BaseSeldonGrpcService):
         response = self.stub.ServerReady(request)
         return self._process_response(response)
 
-    def model_ready(self, pydantic_payload: ModelReadyRequestPydantic):
+    def model_ready(self, pydantic_payload: ModelReadyRequestPydantic): # iris_1 iris_2 and not iris with version field
         request = self._convert_request_payload(pydantic_payload, ModelReadyRequest)
         response = self.stub.ModelReady(request)
         return self._process_response(response)
@@ -41,7 +41,7 @@ class DataPlaneService(BaseSeldonGrpcService):
         response = self.stub.ServerMetadata(request)
         return self._process_response(response)
 
-    def model_metadata(self, pydantic_payload: ModelMetadataRequestPydantic):
+    def model_metadata(self, pydantic_payload: ModelMetadataRequestPydantic): # iris_1 iris_2 and not iris with version field
         request = self._convert_request_payload(pydantic_payload, ModelMetadataRequest)
         response = self.stub.ModelMetadata(request)
         return self._process_response(response)

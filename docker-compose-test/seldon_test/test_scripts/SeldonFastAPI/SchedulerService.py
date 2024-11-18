@@ -35,7 +35,7 @@ class SchedulerService(BaseSeldonGrpcService):
     #     self.stub = stub
 
     def load_model(self, pydantic_payload: LoadModelRequestPydantic):
-        request = self._convert_request_payload(pydantic_payload, LoadModelRequest)
+        request = self._convert_request_payload(pydantic_payload, LoadModelRequest, False)
         response = self.stub.LoadModel(request)
         return self._process_response(response)
 
