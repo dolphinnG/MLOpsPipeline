@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 import logging
 from SchedulerRouter import schedulerrouter
-from InferenceRouter import inferencerouter
 from fastapi.responses import JSONResponse
 from grpc import RpcError
 
@@ -10,8 +11,18 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/")
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/portal")
+async def read_portal(request: Request):
+    return templates.TemplateResponse("portal.html", {"request": request, "services": ["Scheduler", "Data"]})
+
 app.include_router(schedulerrouter, prefix="/scheduler")
-app.include_router(inferencerouter, prefix="/inference")
 
 @app.exception_handler(RpcError)
 async def grpc_exception_handler(request, exc: RpcError):

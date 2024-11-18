@@ -134,7 +134,7 @@ class ModelReplicaStatusPydantic(BaseModel):
     lastChangeTimestamp: datetime
 
 class ServerStatusRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
     name: Optional[str] = None
 
 class ServerStatusResponsePydantic(BaseModel):
@@ -153,10 +153,10 @@ class ServerReplicaResourcesPydantic(BaseModel):
     overCommitPercentage: int
 
 class ModelSubscriptionRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
 
 class ModelStatusRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
     model: Optional[ModelReferencePydantic] = None # if None, return all models
     allVersions: bool = True
 
@@ -174,7 +174,7 @@ class ServerNotifyResponsePydantic(BaseModel):
     pass
 
 class ServerSubscriptionRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str ="dolphin"
 
 class StartExperimentRequestPydantic(BaseModel):
     experiment: 'ExperimentPydantic'
@@ -218,7 +218,7 @@ class StopExperimentResponsePydantic(BaseModel):
     pass
 
 class ExperimentSubscriptionRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
 
 class ExperimentStatusResponsePydantic(BaseModel):
     experimentName: str
@@ -232,7 +232,7 @@ class LoadPipelineRequestPydantic(BaseModel):
     pipeline: 'PipelinePydantic'
 
 class ExperimentStatusRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
     name: Optional[str] = None
 
 class PipelinePydantic(BaseModel):
@@ -289,12 +289,12 @@ class UnloadPipelineResponsePydantic(BaseModel):
     pass
 
 class PipelineStatusRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
     name: Optional[str] = None
     allVersions: bool = True
 
 class PipelineSubscriptionRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
 
 class PipelineStatusResponsePydantic(BaseModel):
     pipelineName: str
@@ -324,13 +324,13 @@ class PipelineStatusPydantic(str):
     PipelineTerminated = "PipelineTerminated"
 
 class SchedulerStatusRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
 
 class SchedulerStatusResponsePydantic(BaseModel):
     applicationVersion: str
 
 class ControlPlaneSubscriptionRequestPydantic(BaseModel):
-    subscriberName: str
+    subscriberName: str = "dolphin"
 
 class ControlPlaneResponsePydantic(BaseModel):
     pass

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Portal</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Service Portal</h1>
+    </header>
+    <div class="container full-height">
+        <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+        <aside class="sidebar" id="sidebar">
+            <div class="dropdown">
+                <button class="dropbtn">Select Service</button>
+                <div class="dropdown-content">
+                    <button id="schedulerServiceBtn">Scheduler Service</button>
+                    <button id="dataServiceBtn">Data Service</button>
+                </div>
+            </div>
+        </aside>
+        <main class="content" onclick="closeSidebar(event)">
+            <div class="tabs">
+                <button class="tablinks" id="loadModelBtn">Load Model</button>
+                <button class="tablinks" id="unloadModelBtn">Unload Model</button>
+                <button class="tablinks" id="startExperimentBtn">Start Experiment</button>
+                <button class="tablinks" id="stopExperimentBtn">Stop Experiment</button>
+                <button class="tablinks" id="loadPipelineBtn">Load Pipeline</button>
+                <button class="tablinks" id="unloadPipelineBtn">Unload Pipeline</button>
+                <button class="tablinks" id="serverStatusBtn">Server Status</button>
+                <button class="tablinks" id="modelStatusBtn">Model Status</button>
+                <button class="tablinks" id="pipelineStatusBtn">Pipeline Status</button>
+                <button class="tablinks" id="experimentStatusBtn">Experiment Status</button>
+                <button class="tablinks" id="schedulerStatusBtn">Scheduler Status</button>
+            </div>
+            <div id="response"></div>
+            <div id="forms">
+                <form id="loadModelForm" class="tabform" style="display:none;">
+                    <label for="modelName">Model Name:</label>
+                    <input type="text" id="modelName" name="model.meta.name">
+                    
+                    <label for="modelUri">Model URI:</label>
+                    <input type="text" id="modelUri" name="model.modelSpec.uri">
+                    
+                    <label for="requirements">Requirements:</label>
+                    <input type="text" id="requirements" name="model.modelSpec.requirements">
+                    
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="unloadModelForm" class="tabform" style="display:none;">
+                    <label for="unloadModelName">Model Name:</label>
+                    <input type="text" id="unloadModelName" name="model.name">
+                    
+                    <!-- Removed model version field -->
+                    
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="startExperimentForm" class="tabform" style="display:none;">
+                    <label for="experimentName">Experiment Name:</label>
+                    <input type="text" id="experimentName" name="experiment.name">
+                    
+                    <label for="defaultCandidate">Default Candidate:</label>
+                    <input type="text" id="defaultCandidate" name="experiment.default">
+                    
+                    <div id="candidates">
+                        <!-- Candidates will be added dynamically -->
+                    </div>
+                    <button type="button" onclick="addCandidate()">Add Candidate</button>
+                    
+                    <label for="resourceType">Resource Type:</label>
+                    <input type="text" id="resourceType" name="experiment.resourceType" value="MODEL">
+                    
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="stopExperimentForm" class="tabform" style="display:none;">
+                    <label for="stopExperimentName">Experiment Name:</label>
+                    <input type="text" id="stopExperimentName" name="name">
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="loadPipelineForm" class="tabform" style="display:none;">
+                    <label for="loadPipelineName">Pipeline Name:</label>
+                    <input type="text" id="loadPipelineName" name="pipelineName">
+                    <button type="submit">Submit</button>
+                </form>
+                <form id="unloadPipelineForm" class="tabform" style="display:none;">
+                    <label for="unloadPipelineName">Pipeline Name:</label>
+                    <input type="text" id="unloadPipelineName" name="pipelineName">
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2023 Service Portal</p>
+    </footer>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.classList.toggle("show");
+        }
+
+        function closeSidebar(event) {
+            const sidebar = document.getElementById("sidebar");
+            if (!sidebar.contains(event.target) && sidebar.classList.contains("show")) {
+                sidebar.classList.remove("show");
+            }
+        }
+
+        function addCandidate() {
+            const candidatesDiv = document.getElementById("candidates");
+            const candidateCount = candidatesDiv.children.length / 3 + 1; // Each candidate has 3 elements (label, name input, weight input)
+            const candidateLabel = document.createElement("label");
+            candidateLabel.textContent = `Candidate ${candidateCount}:`;
+            const candidateNameInput = document.createElement("input");
+            candidateNameInput.type = "text";
+            candidateNameInput.name = `experiment.candidates[${candidateCount - 1}].name`;
+            candidateNameInput.placeholder = "Name";
+            const candidateWeightInput = document.createElement("input");
+            candidateWeightInput.type = "number";
+            candidateWeightInput.name = `experiment.candidates[${candidateCount - 1}].weight`;
+            candidateWeightInput.placeholder = "Weight";
+            candidatesDiv.appendChild(candidateLabel);
+            candidatesDiv.appendChild(candidateNameInput);
+            candidatesDiv.appendChild(candidateWeightInput);
+        }
+
+        function fetchStatus(endpoint, responseDiv) {
+            fetch(endpoint, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                responseDiv.style.display = "block"; // Show the response div after submission
+            })
+            .catch(error => {
+                responseDiv.innerHTML = `<pre>${error}</pre>`;
+                responseDiv.style.display = "block"; // Show the response div after submission
+            });
+        }
+    </script>
+    <script src="/static/portal.js"></script>
+</body>
+</html>

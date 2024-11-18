@@ -77,46 +77,46 @@ def unload_pipeline(
     return response
 
 
-@schedulerrouter.post("/server_status")
+@schedulerrouter.get("/server_status")
 def server_status(
-    payload: ServerStatusRequestPydantic,
     scheduler_service: SchedulerService = Depends(get_scheduler_service2),
 ):
+    payload = ServerStatusRequestPydantic(subscriberName="dolphin")
     responses = scheduler_service.server_status(payload)
     return responses
 
 
-@schedulerrouter.post("/model_status")
+@schedulerrouter.get("/model_status")
 def model_status(
-    payload: ModelStatusRequestPydantic,
     scheduler_service: SchedulerService = Depends(get_scheduler_service2),
 ):
+    payload = ModelStatusRequestPydantic(subscriberName="dolphin")
     responses = scheduler_service.model_status(payload)
     return responses
 
 
-@schedulerrouter.post("/pipeline_status")
+@schedulerrouter.get("/pipeline_status")
 def pipeline_status(
-    payload: PipelineStatusRequestPydantic,
     scheduler_service: SchedulerService = Depends(get_scheduler_service2),
 ):
+    payload = PipelineStatusRequestPydantic(subscriberName="dolphin")
     responses = scheduler_service.pipeline_status(payload)
     return responses
 
 
-@schedulerrouter.post("/experiment_status")
+@schedulerrouter.get("/experiment_status")
 def experiment_status(
-    payload: ExperimentStatusRequestPydantic,
     scheduler_service: SchedulerService = Depends(get_scheduler_service2),
 ):
+    payload = ExperimentStatusRequestPydantic(subscriberName="dolphin")
     responses = scheduler_service.experiment_status(payload)
     return responses
 
 
-@schedulerrouter.post("/scheduler_status")
+@schedulerrouter.get("/scheduler_status")
 def scheduler_status(
-    payload: SchedulerStatusRequestPydantic,
     scheduler_service: SchedulerService = Depends(get_scheduler_service2),
 ):
+    payload = SchedulerStatusRequestPydantic(subscriberName="dolphin")
     responses = scheduler_service.scheduler_status(payload)
     return responses
