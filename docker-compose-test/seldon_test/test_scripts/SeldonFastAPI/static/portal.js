@@ -23,7 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
-            responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            responseDiv.innerHTML = '';
+            if (Object.keys(data).length === 0) {
+                responseDiv.textContent = "Operation completed, nothing to display.";
+            } else {
+                responseDiv.appendChild(generateHTML(data));
+            }
             responseDiv.style.display = "block"; // Show the response div after submission
             form.style.display = "none"; // Hide the form after submission
         })
@@ -43,13 +48,34 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
-            responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            responseDiv.innerHTML = '';
+            if (Object.keys(data).length === 0) {
+                responseDiv.textContent = "Operation completed, nothing to display.";
+            } else {
+                responseDiv.appendChild(generateHTML(data));
+            }
             responseDiv.style.display = "block"; // Show the response div after submission
         })
         .catch(error => {
             responseDiv.innerHTML = `<pre>${error}</pre>`;
             responseDiv.style.display = "block"; // Show the response div after submission
         });
+    }
+
+    function generateHTML(data) {
+        if (typeof data === 'object' && data !== null) {
+            const ul = document.createElement('ul');
+            for (const key in data) {
+                const li = document.createElement('li');
+                li.textContent = `${key}: `;
+                li.appendChild(generateHTML(data[key]));
+                ul.appendChild(li);
+            }
+            return ul;
+        } else {
+            const textNode = document.createTextNode(data);
+            return textNode;
+        }
     }
 
     function openTab(evt, tabId) {
@@ -62,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const tabforms = document.getElementsByClassName("tabform");
         for (let i = 0; i < tabforms.length; i++) {
             tabforms[i].style.display = "none";
+            tabforms[i].reset(); // Reset the form
         }
         const formId = tabId.replace("Btn", "Form");
         const formElement = document.getElementById(formId);

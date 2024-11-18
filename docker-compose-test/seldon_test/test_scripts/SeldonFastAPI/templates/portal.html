@@ -70,7 +70,10 @@
                     <button type="button" onclick="addCandidate()">Add Candidate</button>
                     
                     <label for="resourceType">Resource Type:</label>
-                    <input type="text" id="resourceType" name="experiment.resourceType" value="MODEL">
+                    <select id="resourceType" name="experiment.resourceType">
+                        <option value="MODEL">MODEL</option>
+                        <option value="PIPELINE">PIPELINE</option>
+                    </select>
                     
                     <button type="submit">Submit</button>
                 </form>
@@ -135,13 +138,34 @@
             })
             .then(response => response.json())
             .then(data => {
-                responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                responseDiv.innerHTML = '';
+                if (Object.keys(data).length === 0) {
+                    responseDiv.textContent = "Operation completed, nothing to display.";
+                } else {
+                    responseDiv.appendChild(generateHTML(data));
+                }
                 responseDiv.style.display = "block"; // Show the response div after submission
             })
             .catch(error => {
                 responseDiv.innerHTML = `<pre>${error}</pre>`;
                 responseDiv.style.display = "block"; // Show the response div after submission
             });
+        }
+
+        function generateHTML(data) {
+            if (typeof data === 'object' && data !== null) {
+                const ul = document.createElement('ul');
+                for (const key in data) {
+                    const li = document.createElement('li');
+                    li.textContent = `${key}: `;
+                    li.appendChild(generateHTML(data[key]));
+                    ul.appendChild(li);
+                }
+                return ul;
+            } else {
+                const textNode = document.createTextNode(data);
+                return textNode;
+            }
         }
     </script>
     <script src="/static/portal.js"></script>
