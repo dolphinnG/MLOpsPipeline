@@ -67,7 +67,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const ul = document.createElement('ul');
             for (const key in data) {
                 const li = document.createElement('li');
-                li.textContent = `${key}: `;
+                if (!/^\d+$/.test(key)) { // Check if the key is not a number
+                    const keySpan = document.createElement('span');
+                    keySpan.style.fontWeight = 'bold';
+                    keySpan.textContent = `${key}: `;
+                    li.appendChild(keySpan);
+                }
                 li.appendChild(generateHTML(data[key]));
                 ul.appendChild(li);
             }

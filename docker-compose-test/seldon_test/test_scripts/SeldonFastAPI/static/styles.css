@@ -9,7 +9,7 @@ body {
 }
 
 header {
-    background-color: #4CAF50;
+    background-color: #000000;
     color: white;
     padding: 5px 0; /* Reduced padding */
     text-align: center;
@@ -20,7 +20,7 @@ header {
     position: fixed;
     left: 10px;
     top: 10px;
-    background-color: #2c3e50; /* Match sidebar color */
+    background-color: #3b4144; /* Match sidebar color */
     color: white;
     border: none;
     cursor: pointer;
@@ -60,18 +60,18 @@ header {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #4CAF50;
+    background-color: #25ca4f; /* Deep blue color */
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .sidebar button:hover {
-    background-color: #45a049;
+    background-color: #1a9138; /* Darker deep blue on hover */
 }
 
 .dropbtn {
-    background-color: #4CAF50;
+    background-color: #474781; /* Deep blue color */
     color: white;
     padding: 16px;
     font-size: 16px;
@@ -116,7 +116,7 @@ header {
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #45a049;
+    background-color: #353548; /* Darker deep blue on hover */
 }
 
 .content {
@@ -256,7 +256,7 @@ form input[type="number"] {
 
 form button[type="submit"],
 form button[type="button"] {
-    background-color: #4CAF50;
+    background-color: #20461f; /* Match header color */
     color: white;
     padding: 5px 10px; /* Reduce padding to half */
     border: none;
@@ -268,7 +268,7 @@ form button[type="button"] {
 }
 
 form button[type="submit"] {
-    background-color: #4CAF50; /* Same color as the header background */
+    background-color: #20461f; /* Same color as the header background */
     color: white;
     padding: 5px 10px; /* Reduce padding to half */
     border: none;
@@ -284,7 +284,7 @@ form button[type="submit"]:hover {
 }
 
 form button[type="button"] {
-    background-color: #1E90FF; /* Nice blue color for add candidate button */
+    background-color: #474781; /* Deep blue color */
     color: white;
     padding: 5px 10px; /* Reduce padding to half */
     border: none;
@@ -296,18 +296,18 @@ form button[type="button"] {
 }
 
 form button[type="button"]:hover {
-    background-color: #1C86EE;
+    background-color: #353548; /* Darker deep blue on hover */
 }
 
 form button[type="button"].add-candidate {
-    background-color: #008CBA;
+    background-color: #474781; /* Deep blue color */
 }
 
 form button[type="button"].add-candidate:hover {
-    background-color: #007bb5;
+    background-color: #353548; /* Darker deep blue on hover */
 }
 
-step-container {
+.step-container {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
@@ -342,5 +342,5 @@ step-container {
 
 .step-container .add-tensor-map:hover,
 .step-container .add-input:hover {
-    background-color: #696969; /* Darker gray on hover */
+    background-color: #353548; /* Darker gray on hover */
 }
