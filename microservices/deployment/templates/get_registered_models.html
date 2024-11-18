@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/mlflow_style.css">
+{% endblock %}
+
+{% block title %}Registered Models{% endblock %}
+
+{% block content %}
+<h1>Registered Models</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Creation Timestamp</th>
+            <th>Last Updated Timestamp</th>
+            <th>Description</th>
+            <th>Latest Versions</th>
+            <th>Tags</th>
+            <th>Aliases</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for model in models %}
+        <tr>
+            <td>{{ model.name }}</td>
+            <td>{{ model.creation_timestamp }}</td>
+            <td>{{ model.last_updated_timestamp }}</td>
+            <td>{{ model.description }}</td>
+            <td>
+                <ul>
+                    {% for version in model.latest_versions %}
+                    <li class="insideCell">
+                        <strong>Run ID:</strong> {{ version.run_id }}<br>
+                        <strong>Source:</strong> {{ version.source }}<br>
+                        <strong>Status:</strong> {{ version.status }}<br>
+                        <strong>Version:</strong> {{ version.version }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for key, value in model.tags.items() %}
+                    <li class="insideCell">{{ key }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for alias, version in model.aliases.items() %}
+                    <li class="insideCell">{{ alias }}: {{ version }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

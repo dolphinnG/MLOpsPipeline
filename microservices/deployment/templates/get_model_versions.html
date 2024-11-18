@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/mlflow_style.css">
+{% endblock %}
+
+{% block title %}Model Versions{% endblock %}
+
+{% block content %}
+<h1>Model Versions</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Creation Timestamp</th>
+            <th>Last Updated Timestamp</th>
+            <th>Description</th>
+            <!-- <th>User ID</th> -->
+            <!-- <th>Current Stage</th> -->
+            <th>Source</th>
+            <th>Run ID</th>
+            <!-- <th>Run Link</th> -->
+            <th>Status</th>
+            <!-- <th>Status Message</th> -->
+            <th>Tags</th>
+            <th>Aliases</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for version in versions %}
+        <tr>
+            <td>{{ version.name }}</td>
+            <td>{{ version.version }}</td>
+            <td>{{ version.creation_timestamp }}</td>
+            <td>{{ version.last_updated_timestamp }}</td>
+            <td>{{ version.description }}</td>
+            <!-- <td>{{ version.user_id }}</td> -->
+            <!-- <td>{{ version.current_stage }}</td> -->
+            <td>{{ version.source }}</td>
+            <td>{{ version.run_id }}</td>
+            <!-- <td>{{ version.run_link }}</td> -->
+            <td>{{ version.status }}</td>
+            <!-- <td>{{ version.status_message }}</td> -->
+            <td>
+                <ul>
+                    {% for key, value in version.tags.items() %}
+                    <li class="insideCell">{{ key }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for alias in version.aliases %}
+                    <li class="insideCell">{{ alias }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

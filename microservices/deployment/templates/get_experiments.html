@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block head %}
+ <link rel="stylesheet" href="/static/css/mlflow_style.css">
+{% endblock %}
+
+{% block title %}Experiments{% endblock %}
+
+{% block content %}
+<h1>Experiments</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Artifact Location</th>
+            <th>Lifecycle Stage</th>
+            <th>Creation Time</th>
+            <th>Last Update Time</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for experiment in experiments %}
+        <tr>
+            <td><a href="experiments/{{ experiment.experiment_id }}/runs">{{ experiment.name }}</a></td>
+            <td>{{ experiment.experiment_id }}</td>
+            <td>{{ experiment.artifact_location }}</td>
+            <td>{{ experiment.lifecycle_stage }}</td>
+            <td>{{ experiment.creation_time }}</td>
+            <td>{{ experiment.last_update_time }}</td>
+            <td>
+                <ul>
+                    {% for key, value in experiment.tags.items() %}
+                    <li class="insideCell">{{ key }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

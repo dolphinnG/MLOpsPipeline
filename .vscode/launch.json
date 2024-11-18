@@ -30,7 +30,7 @@
             "request": "launch",
             "program": "main.py",
             "console": "integratedTerminal",
-            "cwd": "/home/dolphin/Desktop/pipeline/MLOpsPipeline/docker-compose-test/seldon_test/test_scripts/SeldonFastAPI"
+            "cwd": "/home/dolphin/Desktop/pipeline/MLOpsPipeline/microservices/deployment/"
         },
     ]
 }

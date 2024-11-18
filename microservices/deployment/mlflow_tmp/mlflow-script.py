@@ -18,18 +18,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
-mlflow.set_experiment("my_experimzxcen2t")
+mlflow.set_experiment("hohoheheexperiment")
 # Start an MLflow run
 with mlflow.start_run() as run:
     # Train the model
-    model = LogisticRegression(max_iter=200)
+    model = LogisticRegression(max_iter=2)
     model.fit(X_train, y_train)
     
     # Infer the model signature
     signature = infer_signature(X_train, model.predict(X_train))
     
     # Log model with signature
-    mlflow.sklearn.log_model(model, "logistic_regression_model", signature=signature)
+    mlflow.sklearn.log_model(model, "logistic_regression_model_lmao", signature=signature)
     
     # Log parameters
     mlflow.log_param("max_iter", model.max_iter) # type: ignore
@@ -39,21 +39,21 @@ with mlflow.start_run() as run:
     mlflow.log_metric("score", score) # type: ignore
     
     # Add tags
-    mlflow.set_tag("run_tag_test", "test")
+    mlflow.set_tag("run_tag_test", "test2")
 
         # Log the first value of the metric
-    mlflow.log_metric("accuracy", 0.85)
+    mlflow.log_metric("accuracy", 0.82)
     
     # Log the second value of the same metric
-    mlflow.log_metric("accuracy", 0.90)
+    mlflow.log_metric("accuracy", 0.57)
     
     # Log the third value of the same metric
-    mlflow.log_metric("accuracy", 0.88)
+    mlflow.log_metric("accuracy", 0.33)
     
     # Register the model
     mlflow.register_model(
-        model_uri=f"runs:/{run.info.run_id}/logistic_regression_model",
-        name="LogisticRegressionModel",
+        model_uri=f"runs:/{run.info.run_id}/logistic_regression_model_lmao",
+        name="lmaoLogisticRegressionModel",
         tags={"model_registry_tag_Test": "Test"}
     )
     
