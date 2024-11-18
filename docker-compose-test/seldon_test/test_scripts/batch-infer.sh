@@ -1,4 +1,4 @@
-seldon model infer irisreal  \
+seldon model infer iris  \
   '{"inputs": [{"name": "predict", "shape": [1, 4], "datatype": "FP32", "data": [[1, 2, 3, 4]]}]}'
 
 seldon model infer iris2 \

@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Header
+import json
+from fastapi import APIRouter, Body, Depends, Header
 from InferenceService import InferenceService
 from DataPlaneService import DataPlaneService
 from dataplane_proto_pydantic import (
@@ -60,6 +61,17 @@ def model_infer(
     seldon_model: str = Header()
 ):
     response = inference_service.model_infer(payload, seldon_model)
+    return response
+
+@inferencerouter.post("/model_infer_UI")
+def model_infer_UI(
+    payload_jsonstring: str = Body(...),
+    inference_service: InferenceService = Depends(get_inference_service2),
+    seldon_model: str = Header()
+):
+    inference_request_json = json.loads(payload_jsonstring)
+    inference_request_pydantic = ModelInferRequestPydantic(**inference_request_json)
+    response = inference_service.model_infer_parse_raw_output_contents(inference_request_pydantic, seldon_model)
     return response
 
 # @inferencerouter.post("/repository_index")
