@@ -9,9 +9,9 @@ body {
 }
 
 header {
-    background-color: #000000;
+    background-color: #333333; /* Dark gray color */
     color: white;
-    padding: 5px 0; /* Reduced padding */
+    padding: 5px 0;
     text-align: center;
     position: relative;
 }
@@ -111,6 +111,25 @@ header {
     background-color: #f1f1f1;
 }
 
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%; /* Fill the width of the dropdown */
+    background: none;
+    text-align: left;
+    border: 1px solid #ddd; /* Add border */
+    border-radius: 4px; /* Add border radius */
+    margin-bottom: 5px; /* Add margin between buttons */
+    box-sizing: border-box; /* Ensure padding and border are included in the width */
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    border-color: #ccc; /* Change border color on hover */
+}
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
@@ -161,8 +180,8 @@ header {
 }
 
 footer {
-    background-color: #333;
-    color: white;
+    background-color: #d3d3d3; /* Gray color */
+    color: black;
     text-align: center;
     padding: 10px 0;
     position: relative;

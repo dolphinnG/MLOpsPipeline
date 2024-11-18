@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Service Portal{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <p>Pipeline Portal<p>
+    </header>
+    <div class="container full-height">
+        <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+        <aside class="sidebar" id="sidebar">
+            <div class="dropdown">
+                <button class="dropbtn">Deployment Service</button>
+                <div class="dropdown-content">
+                    <a href="/scheduler">Scheduler</a>
+                    <a href="/dataplane">Dataplane</a>
+                </div>
+            </div>
+        </aside>
+        <main class="content" onclick="closeSidebar(event)">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2024 Dolphin Pipeline Portal</p>
+    </footer>
+    <script src="/static/portal.js"></script>
+</body>
+</html>
