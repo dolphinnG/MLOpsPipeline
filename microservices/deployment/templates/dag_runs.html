@@ -9,6 +9,7 @@
 {% if dag_runs.total_entries > 0 %}
 <span>Dag ID: <a href="/airflow/dags/{{dag_runs.dag_runs[0].dag_id}}/details">{{dag_runs.dag_runs[0].dag_id}}</a></span>
 {% endif %}
+<p class="info">Total entries: {{dag_runs.total_entries}}</p>
 <table>
     <thead>
         <tr>
@@ -47,5 +48,5 @@
         {% endfor %}
     </tbody>
 </table>
-<p>Total entries: {{dag_runs.total_entries}}</p>
+
 {% endblock %}
