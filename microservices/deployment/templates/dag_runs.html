@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}DAG Runs{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/airflow_styles.css"> 
+{% endblock %}
+{% block content %}
+<h1>DAG Runs</h1>
+{% if dag_runs.total_entries > 0 %}
+<span>Dag ID: <a href="/airflow/dags/{{dag_runs.dag_runs[0].dag_id}}/details">{{dag_runs.dag_runs[0].dag_id}}</a></span>
+{% endif %}
+<table>
+    <thead>
+        <tr>
+            <!-- <th>DAG ID</th> -->
+            <th>Run ID</th>
+            <th>State</th>
+            <th>Run Type</th>
+            <th>External Trigger</th>
+            <th>Execution Date</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Data Interval Start</th>
+            <th>Data Interval End</th>
+            <th>Last Scheduling Decision</th>
+            <th>Logical Date</th>
+            <!-- <th>Note</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for dag_run in dag_runs.dag_runs %}
+        <tr>
+            <!-- <td>{{ dag_run.dag_id }}</td> -->
+            <td>{{ dag_run.dag_run_id }}</td>
+            <td>{{ dag_run.state }}</td>
+            <td>{{ dag_run.run_type }}</td>
+            <td>{{ dag_run.external_trigger }}</td>
+            <td>{{ dag_run.execution_date }}</td>
+            <td>{{ dag_run.start_date }}</td>
+            <td>{{ dag_run.end_date }}</td>
+            <td>{{ dag_run.data_interval_start }}</td>
+            <td>{{ dag_run.data_interval_end }}</td>
+            <td>{{ dag_run.last_scheduling_decision }}</td>
+            <td>{{ dag_run.logical_date }}</td>
+            <!-- <td>{{ dag_run.note }}</td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>Total entries: {{dag_runs.total_entries}}</p>
+{% endblock %}
