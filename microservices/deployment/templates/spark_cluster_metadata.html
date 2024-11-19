@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Spark Cluster Metadata{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/distributed_jobs.css">
+{% endblock %}
+{% block content %}
+<h1>Spark Cluster Metadata</h1>
+<h2>Cluster Info</h2>
+<table>
+    <tr>
+        <th>Spark Master</th>
+        <td>{{ cluster_status.url }}</td>
+    </tr>
+    <tr>
+        <th>Alive Workers</th>
+        <td>{{ cluster_status.aliveworkers }}</td>
+    </tr>
+    <tr>
+        <th>Total Cores</th>
+        <td>{{ cluster_status.cores }}</td>
+    </tr>
+    <tr>
+        <th>Used Cores</th>
+        <td>{{ cluster_status.coresused }}</td>
+    </tr>
+    <tr>
+        <th>Total Memory</th>
+        <td>{{ cluster_status.memory }}</td>
+    </tr>
+    <tr>
+        <th>Used Memory</th>
+        <td>{{ cluster_status.memoryused }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>{{ cluster_status.status }}</td>
+    </tr>
+</table>
+
+<h2>Workers</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Host</th>
+            <th>Port</th>
+            <!-- <th>Web UI Address</th> -->
+            <th>Cores</th>
+            <th>Used Cores</th>
+            <th>Free Cores</th>
+            <th>Memory</th>
+            <th>Used Memory</th>
+            <th>Free Memory</th>
+            <th>State</th>
+            <th>Last Heartbeat</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for worker in cluster_status.workers %}
+        <tr>
+            <td>{{ worker.id }}</td>
+            <td>{{ worker.host }}</td>
+            <td>{{ worker.port }}</td>
+            <!-- <td><a href="{{ worker.webuiaddress }}">{{ worker.webuiaddress }}</a></td> -->
+            <td>{{ worker.cores }}</td>
+            <td>{{ worker.coresused }}</td>
+            <td>{{ worker.coresfree }}</td>
+            <td>{{ worker.memory }}</td>
+            <td>{{ worker.memoryused }}</td>
+            <td>{{ worker.memoryfree }}</td>
+            <td>{{ worker.state }}</td>
+            <td>{{ worker.lastheartbeat }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Active Applications</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>User</th>
+            <th>Start Time</th>
+            <th>Submit Date</th>
+            <th>State</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in cluster_status.activeapps %}
+        <tr>
+            <td>{{ app.id }}</td>
+            <td>{{ app.name }}</td>
+            <td>{{ app.user }}</td>
+            <td>{{ app.starttime }}</td>
+            <td>{{ app.submitdate }}</td>
+            <td>{{ app.state }}</td>
+            <td>{{ app.duration }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Completed Applications</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <!-- <th>User</th> -->
+            <th>Start Time</th>
+            <th>Submit Date</th>
+            <th>State</th>
+            <th>Duration</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in cluster_status.completedapps %}
+        <tr>
+            <td>{{ app.id }}</td>
+            <td>{{ app.name }}</td>
+            <!-- <td>{{ app.user }}</td> -->
+            <td>{{ app.starttime }}</td>
+            <td>{{ app.submitdate }}</td>
+            <td>{{ app.state }}</td>
+            <td>{{ app.duration }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

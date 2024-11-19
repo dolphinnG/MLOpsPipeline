@@ -4,12 +4,17 @@ import time
 import threading
 from BaseLauncher import BaseLauncher
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 class MLFlowLauncher(BaseLauncher):
 
     def __init__(self, project_uri, experiment_name):
         self.project_uri = project_uri
         self.experiment_name = experiment_name
-        logging.basicConfig(level=logging.INFO)
 
     def launch(self, parameters=None):
         command = [
@@ -25,7 +30,7 @@ class MLFlowLauncher(BaseLauncher):
         log_file_path = self._generate_log_file_path("mlflow")
         try:
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-            logging.info("MLFlow job submitted")
+            logger.info("MLFlow job submitted")
             log_thread = threading.Thread( #check thread
                 target=self._accumulate_logs,
                 args=(process, log_file_path),

@@ -23,4 +23,7 @@ class BaseLauncher(ABC):
                     time.sleep(1)  # Sleep briefly to avoid busy waiting
 
     def _generate_log_file_path(self, prefix="log"):
-        return os.path.join(tempfile.gettempdir(), f"{prefix}_{uuid.uuid4()}.log")
+        log_file_path =  os.path.join(tempfile.gettempdir(), f"{prefix}_{uuid.uuid4()}.log")
+        with open(log_file_path, 'w') as log_file:
+            log_file.write(f"")
+        return log_file_path

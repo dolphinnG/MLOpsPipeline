@@ -5,22 +5,24 @@ import uuid
 from BaseLauncher import BaseLauncher
 import threading
 
-
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 class SparkLauncher(BaseLauncher):
 
-    def __init__(self):
-        logging.basicConfig(level=logging.INFO)
-
-    def launch(self, properties_file, python_entry_file):
+    def launch(self, properties_file, python_entry_file, zip_file : str | None = None):
         log_file_path = self._generate_log_file_path("spark")
         try:
-            process = subprocess.Popen([
-                'spark-submit',
-                '--properties-file', properties_file,
-                python_entry_file
-            ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            command = ['spark-submit', '--properties-file', properties_file]
+            if zip_file:
+                command.extend(['--py-files', zip_file])
+            command.append(python_entry_file)
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
-            logging.info("Spark job submitted")
+            logger.info("Spark job submitted")
             log_thread = threading.Thread( #check if thread is fine
                 target=self._accumulate_logs,
                 args=(process, log_file_path),

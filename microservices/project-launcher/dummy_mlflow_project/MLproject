@@ -1,0 +1,25 @@
+# name: my_mlflow_spark_project
+
+# conda_env: conda.yaml
+
+# entry_points:
+#   main:
+#     parameters:
+#       spark_master: {type: str, default: "spark://spark-master:7077"}
+#     command: "spark-submit --master {spark_master} testsparksubmit.py"
+
+# must set --experiment-name to the name of the experiment you want to use FROM THE CLI OR MLFLOW.RUN()
+# DONT SET IT IN THE TRAINING SCRIPT WITH mlflow.set_experiment()
+
+name: my_mlflow_spark_project
+
+# Define the environment using pyenv and virtualenv
+# python_env: python-env.yaml
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    command: "python mlflow-script.py"
+
+# must set --experiment-name to the name of the experiment you want to use FROM THE CLI OR MLFLOW.RUN()
+# DONT SET IT IN THE TRAINING SCRIPT WITH mlflow.set_experiment()

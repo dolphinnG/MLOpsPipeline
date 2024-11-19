@@ -7,6 +7,7 @@ from InferenceRouter import inferencerouter
 from mlflow_tmp.MLFlowRouter import MLFlowRouter
 from airflow_tmp.routers.dag_router import dag_router
 from airflow_tmp.routers.dag_run_router import dag_run_router
+from launcher_tpm.distributed_jobs_monitor_router import distributed_jobs_monitor_router
 from fastapi.responses import JSONResponse
 from grpc import RpcError
 
@@ -19,7 +20,7 @@ app.include_router(inferencerouter, prefix = "/dataplane")
 app.include_router(MLFlowRouter, prefix="/mlflow")
 app.include_router(dag_router, prefix="/airflow")
 app.include_router(dag_run_router, prefix="/airflow")
-
+app.include_router(distributed_jobs_monitor_router, prefix="/distributed")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 

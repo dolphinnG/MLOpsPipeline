@@ -7,6 +7,11 @@ from mlflow.models import infer_signature
 
 import mlflow.sklearn
 
+from another_file import AnotherClass
+a = AnotherClass()
+print(a.another_method())
+
+
 # Load dataset
 iris = load_iris()
 X = pd.DataFrame(iris.data, columns=iris.feature_names) # type: ignore
@@ -17,9 +22,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
-mlflow.set_experiment("4562432")
-# Start an MLflow run
+# mlflow.set_tracking_uri("http://127.0.0.1:5000")
+# mlflow.set_experiment("lmaohehehelol") 
+# # MUST NOT SET EXPERIMENT IN SCRIPT IF USING MLFLOW LAUNCHER
+# BECAUSE IT WILL CAUSE EXPERIMENT NAME MISMATCH AND HALT THE SCRIPT
+
 with mlflow.start_run() as run:
     # Train the model
     model = LogisticRegression(max_iter=2)
@@ -53,7 +60,7 @@ with mlflow.start_run() as run:
     # Register the model
     mlflow.register_model(
         model_uri=f"runs:/{run.info.run_id}/logistic_regression_model_lmao",
-        name="zzzzzzzLogisdel",
+        name="lmaomodelheerer",
         tags={"model_registry_tag_Test": "Test"}
     )
     

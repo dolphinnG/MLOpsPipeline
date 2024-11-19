@@ -1,6 +1,6 @@
 from MLFlowLauncher import MLFlowLauncher
 # Define the project URI and experiment name
-project_uri = "./mlflow_project_plain_run"
+project_uri = "./dummy_mlflow_project"
 experiment_name = "your_experiment_name"
 
 # Define the parameters for the project (if any)

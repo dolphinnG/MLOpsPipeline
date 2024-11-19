@@ -43,7 +43,6 @@ class TorchxLauncher(BaseLauncher):
     def _accumulate_logs(self, app_handle, log_file_path, role_name):
         # logging.info(f"Accumulating lossgs for {role_name}")
         with open(log_file_path, "a") as log_file:
-
             while True:
                 try:
                     # logging.info("streaming logs")
@@ -67,8 +66,8 @@ class TorchxLauncher(BaseLauncher):
 
     def launch(self, ddp_component):
         log_file_path = self._generate_log_file_path(ddp_component.roles[0].name)
-        with open(log_file_path, "w") as log_file:
-            log_file.write("")
+        # with open(log_file_path, "w") as log_file:
+        #     log_file.write("")
         try:
             app_handle = self.session.run(
                 ddp_component, scheduler="kubernetes", cfg=self.run_cfg, workspace=""
