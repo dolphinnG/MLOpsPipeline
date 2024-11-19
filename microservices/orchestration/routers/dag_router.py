@@ -10,9 +10,9 @@ dag_router = APIRouter(tags=["DAGs"])
 def delete_dag(dag_id: str, facade: AirflowFacade = Depends(get_airflow_facade)):
     return facade.delete_dag(dag_id)
 
-@dag_router.get("/dags/{dag_id}")
-def get_dag(dag_id: str, facade: AirflowFacade = Depends(get_airflow_facade)):
-    return facade.get_dag(dag_id)
+# @dag_router.get("/dags/{dag_id}")
+# def get_dag(dag_id: str, facade: AirflowFacade = Depends(get_airflow_facade)):
+#     return facade.get_dag(dag_id)
 
 @dag_router.get("/dags/{dag_id}/details")
 def get_dag_details(dag_id: str, facade: AirflowFacade = Depends(get_airflow_facade)):
@@ -24,40 +24,46 @@ def get_dag_source(
 ):
     return facade.get_dag_source(file_token)
 
+@dag_router.get("/dag/unpause/{dag_id}")
+def unpause_dag(
+    dag_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
+): 
+    return facade.unpause_dag(dag_id)
+
 @dag_router.get("/dags")
 def get_dags(
     facade: AirflowFacade = Depends(get_airflow_facade),
-    limit: Optional[int] = None,
-    offset: Optional[int] = None,
-    order_by: Optional[str] = None,
-    tags: Optional[List[str]] = None,
-    only_active: Optional[bool] = None,
-    paused: Optional[bool] = None,
-    fields: Optional[List[str]] = None,
-    dag_id_pattern: Optional[str] = None,
+    limit: Optional[int] = 10,
+    offset: Optional[int] = 0,
+    order_by: Optional[str] = "dag_id",
+    # tags: Optional[List[str]] = None,
+    only_active: Optional[bool] = True,
+    # paused: Optional[bool] = False,
+    # fields: Optional[List[str]] = None,
+    # dag_id_pattern: Optional[str] = None,
 ):
     return facade.get_dags(
         limit=limit,
-        offset=offset,
+        offset=offset, # the number of ITEMS to skip
         order_by=order_by,
-        tags=tags,
+        # tags=tags,
         only_active=only_active,
-        paused=paused,
-        fields=fields,
-        dag_id_pattern=dag_id_pattern,
+        # paused=paused,
+        # fields=fields,
+        # dag_id_pattern=dag_id_pattern,
     )
 
-@dag_router.get("/dags/{dag_id}/tasks/{task_id}")
-def get_task(
-    dag_id: str, task_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
-):
-    return facade.get_task(dag_id, task_id)
+# @dag_router.get("/dags/{dag_id}/tasks/{task_id}")
+# def get_task(
+#     dag_id: str, task_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
+# ):
+#     return facade.get_task(dag_id, task_id)
 
 @dag_router.get("/dags/{dag_id}/tasks")
 def get_tasks(
     dag_id: str,
     facade: AirflowFacade = Depends(get_airflow_facade),
-    order_by: Optional[str] = None,
+    order_by: Optional[str] = 'task_id',
 ):
     return facade.get_tasks(dag_id, order_by=order_by)
 

@@ -18,53 +18,53 @@ dag_run_router = APIRouter(tags=["DAG Runs"])
 #     return facade.clear_dag_run(dag_id, dag_run_id, clear_dag_run)
 
 
-@dag_run_router.delete("/dags/{dag_id}/dagRuns/{dag_run_id}")
-def delete_dag_run(
-    dag_id: str, dag_run_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
-):
-    return facade.delete_dag_run(dag_id, dag_run_id)
+# @dag_run_router.delete("/dags/{dag_id}/dagRuns/{dag_run_id}")
+# def delete_dag_run(
+#     dag_id: str, dag_run_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
+# ):
+#     return facade.delete_dag_run(dag_id, dag_run_id)
 
 
-@dag_run_router.get("/dags/{dag_id}/dagRuns/{dag_run_id}")
-def get_dag_run(
-    dag_id: str, dag_run_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
-):
-    return facade.get_dag_run(dag_id, dag_run_id)
+# @dag_run_router.get("/dags/{dag_id}/dagRuns/{dag_run_id}")
+# def get_dag_run(
+#     dag_id: str, dag_run_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
+# ):
+#     return facade.get_dag_run(dag_id, dag_run_id)
 
 
 @dag_run_router.get("/dags/{dag_id}/dagRuns")
 def get_dag_runs(
     dag_id: str,
     facade: AirflowFacade = Depends(get_airflow_facade),
-    limit: Optional[int] = None,
-    offset: Optional[int] = None,
-    execution_date_gte: Optional[str] = None,
-    execution_date_lte: Optional[str] = None,
-    start_date_gte: Optional[str] = None,
-    start_date_lte: Optional[str] = None,
-    end_date_gte: Optional[str] = None,
-    end_date_lte: Optional[str] = None,
-    updated_at_gte: Optional[str] = None,
-    updated_at_lte: Optional[str] = None,
-    state: Optional[List[str]] = None,
-    order_by: Optional[str] = None,
-    fields: Optional[List[str]] = None,
+    limit: Optional[int] = 10,
+    offset: Optional[int] = 0,
+    # execution_date_gte: Optional[str] = None,
+    # execution_date_lte: Optional[str] = None,
+    # start_date_gte: Optional[str] = None,
+    # start_date_lte: Optional[str] = None,
+    # end_date_gte: Optional[str] = None,
+    # end_date_lte: Optional[str] = None,
+    # updated_at_gte: Optional[str] = None,
+    # updated_at_lte: Optional[str] = None,
+    # state: Optional[List[str]] = None,
+    order_by: Optional[str] = 'dag_id',
+    # fields: Optional[List[str]] = None,
 ):
     return facade.get_dag_runs(
         dag_id,
         limit=limit,
         offset=offset,
-        execution_date_gte=execution_date_gte,
-        execution_date_lte=execution_date_lte,
-        start_date_gte=start_date_gte,
-        start_date_lte=start_date_lte,
-        end_date_gte=end_date_gte,
-        end_date_lte=end_date_lte,
-        updated_at_gte=updated_at_gte,
-        updated_at_lte=updated_at_lte,
-        state=state,
+        # execution_date_gte=execution_date_gte,
+        # execution_date_lte=execution_date_lte,
+        # start_date_gte=start_date_gte,
+        # start_date_lte=start_date_lte,
+        # end_date_gte=end_date_gte,
+        # end_date_lte=end_date_lte,
+        # updated_at_gte=updated_at_gte,
+        # updated_at_lte=updated_at_lte,
+        # state=state,
         order_by=order_by,
-        fields=fields,
+        # fields=fields,
     )
 
 

@@ -4,14 +4,14 @@ from services.AirflowService import AirflowFacade
 
 task_instance_router = APIRouter(tags=["Task Instances"])
 
-@task_instance_router.get("/dags/{dag_id}/dagRuns/{dag_run_id}/taskInstances/{task_id}")
-def get_task_instance(
-    dag_id: str,
-    dag_run_id: str,
-    task_id: str,
-    facade: AirflowFacade = Depends(get_airflow_facade),
-):
-    return facade.get_task_instance(dag_id, dag_run_id, task_id)
+# @task_instance_router.get("/dags/{dag_id}/dagRuns/{dag_run_id}/taskInstances/{task_id}")
+# def get_task_instance(
+#     dag_id: str,
+#     dag_run_id: str,
+#     task_id: str,
+#     facade: AirflowFacade = Depends(get_airflow_facade),
+# ):
+#     return facade.get_task_instance(dag_id, dag_run_id, task_id)
 
 @task_instance_router.get("/dags/{dag_id}/dagRuns/{dag_run_id}/taskInstances")
 def get_task_instances(
