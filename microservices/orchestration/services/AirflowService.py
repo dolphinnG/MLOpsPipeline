@@ -70,10 +70,16 @@ class AirflowFacade(metaclass=SingletonMeta):
     def patch_dag(self, dag_id: str, dag: DAG, **kwargs):
         return self.dag_api.patch_dag(dag_id, dag, **kwargs).to_dict()
 
-    def unpause_dag(self, dag_id: str):
-        dag = DAG(is_paused=False)
+    def _set_dag_pause_state(self, dag_id: str, is_paused: bool):
+        dag = DAG(is_paused=is_paused)
         update_mask = ["is_paused"]
         return self.dag_api.patch_dag(dag_id, dag, update_mask=update_mask).to_dict()
+
+    def unpause_dag(self, dag_id: str):
+        return self._set_dag_pause_state(dag_id, False)
+
+    def pause_dag(self, dag_id: str):
+        return self._set_dag_pause_state(dag_id, True)
     
     def get_dag_run(self, dag_id: str, dag_run_id: str, **kwargs):
         return self.dag_run_api.get_dag_run(dag_id, dag_run_id, **kwargs).to_dict()

@@ -30,6 +30,12 @@ def unpause_dag(
 ): 
     return facade.unpause_dag(dag_id)
 
+@dag_router.get("/dag/pause/{dag_id}")
+def pause_dag(
+    dag_id: str, facade: AirflowFacade = Depends(get_airflow_facade)
+): 
+    return facade.pause_dag(dag_id)
+
 @dag_router.get("/dags")
 def get_dags(
     facade: AirflowFacade = Depends(get_airflow_facade),
