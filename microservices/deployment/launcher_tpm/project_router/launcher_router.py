@@ -103,11 +103,13 @@ async def create_project(
     project_repo_url: str = Form(...),
     project_entry_module: str = Form(...),
     experiment_name: str = Form(None),
+    job_name: str = Form(None)
 ):
     project_parameters = {}
     if project_type == "MLFLOW_SINGLE_NODE" and experiment_name:
         project_parameters["experiment_name"] = experiment_name
-
+    elif project_type == "MLFLOW_TORCHDDP":
+        project_parameters["job_name"] = job_name
     new_project = {
         "project_name": project_name,
         "project_type": project_type,

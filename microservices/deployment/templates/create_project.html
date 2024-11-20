@@ -11,7 +11,7 @@
     <input type="text" id="project_name" name="project_name" required>
     
     <label for="project_type"><b>Project Type</b></label>
-    <select id="project_type" name="project_type" required onchange="toggleExperimentName(); toggleEntryModule();">
+    <select id="project_type" name="project_type" required onchange="toggleExperimentName(); toggleEntryModule(); toggleJobName();">
         <option value="" disabled selected>Select Project Type</option>
         <option value="MLFLOW_SINGLE_NODE">MLFLOW_SINGLE_NODE</option>
         <option value="MLFLOW_TORCHDDP">MLFLOW_TORCHDDP</option>
@@ -29,6 +29,11 @@
     <div id="experiment_name_container" style="display: none;">
         <label for="experiment_name"><b>Experiment Name</b></label>
         <input type="text" id="experiment_name" name="experiment_name">
+    </div>
+    
+    <div id="job_name_container" style="display: none;">
+        <label for="job_name"><b>Job Name</b></label>
+        <input type="text" id="job_name" name="job_name">
     </div>
     
     <button type="submit" class="btn">Submit</button>
@@ -60,5 +65,23 @@
             document.getElementById("project_entry_module").required = true;
         }
     }
+
+    function toggleJobName() {
+        const projectType = document.getElementById("project_type").value;
+        const jobNameContainer = document.getElementById("job_name_container");
+        if (projectType === "MLFLOW_TORCHDDP") {
+            jobNameContainer.style.display = "block";
+            document.getElementById("job_name").required = true;
+        } else {
+            jobNameContainer.style.display = "none";
+            document.getElementById("job_name").required = false;
+        }
+    }
+
+    document.getElementById("project_type").addEventListener("change", function() {
+        toggleExperimentName();
+        toggleEntryModule();
+        toggleJobName();
+    });
 </script>
 {% endblock %}

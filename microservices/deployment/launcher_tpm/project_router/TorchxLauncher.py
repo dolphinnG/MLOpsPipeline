@@ -68,8 +68,9 @@ class TorchxLauncher(BaseLauncher):
 
     def launch(self, project: Project) -> str:
         module_name = project.project_entry_module.split(".")[-2]
+        job_name = project.project_parameters['job_name']
         ddp_component = TorchxLauncher.create_ddp_component(
-            job_name='lmao', # add the html form
+            job_name=job_name, # add the html form
             module_name=module_name, # strip the .py
             # image="supahakka/launcher:v21",
             image=project.project_repo_url,
