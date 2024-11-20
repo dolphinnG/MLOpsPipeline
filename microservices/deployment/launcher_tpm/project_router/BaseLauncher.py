@@ -37,3 +37,12 @@ class BaseLauncher(ABC):
         with open(log_file_path, 'w') as log_file:
             log_file.write(f"")
         return log_file_path
+    
+    @abstractmethod
+    def _accumulate_logs(self, *args, **kwargs) -> str:
+        ...
+    
+    def _save_logs(self, *args, **kwargs) -> None:
+        log_file_path =  self._accumulate_logs(*args, **kwargs)
+        self.s3_service.put_log_file(log_file_path.split('/')[-1], log_file_path)
+        

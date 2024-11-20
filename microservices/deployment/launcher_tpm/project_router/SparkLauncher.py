@@ -39,7 +39,7 @@ class SparkLauncher(BaseLauncher):
 
             logger.info("Spark job submitted")
             log_thread = threading.Thread(
-                target=self._accumulate_logs,
+                target=self._save_logs,
                 args=(process, log_file_path),
             )
             log_thread.start()
@@ -59,6 +59,7 @@ class SparkLauncher(BaseLauncher):
             if process.returncode != 0:
                 log_file.write(f"An error occurred while submitting the Spark job: {process.returncode}\n")
             log_file.write(BaseLauncher.LOG_DONE)
+        return log_file_path
 
     # def _git_clone(self, repo_url, repo_dir):
     #     command = ['git', 'clone', repo_url, repo_dir]

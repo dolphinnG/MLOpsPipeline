@@ -60,7 +60,7 @@ dummy_project_data = [ # use redis persistence instead of sql
         "creation_date": datetime.utcnow().strftime("%Y-%m-%d"),
         "project_repo_url": "supahakka/launcher:v21",
         "project_entry_module": "ddptest.py",
-        "project_parameters": {},
+        "project_parameters": {"job_name": "hehejobsname"},
         "project_log_records": ["dummy-log"],
     },
 ]

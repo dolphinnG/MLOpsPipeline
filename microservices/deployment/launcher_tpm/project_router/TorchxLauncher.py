@@ -63,6 +63,7 @@ class TorchxLauncher(BaseLauncher):
                 except client.ApiException as e:
                     logging.error(f"Error streaming logs {e}:  -- retrying in 5s")
                     time.sleep(5)
+        return log_file_path
        
                     
 
@@ -101,7 +102,7 @@ class TorchxLauncher(BaseLauncher):
             logging.info(f"== {ddp_component.roles[0].name} rank 0 logs ==")
 
             log_thread = threading.Thread( #check if thread is fine
-                target=self._accumulate_logs,
+                target=self._save_logs,
                 args=(app_handle, log_file_path, ddp_component.roles[0].name),
             )
             log_thread.start()

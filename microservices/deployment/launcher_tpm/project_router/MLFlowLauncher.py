@@ -37,7 +37,7 @@ class MLFlowLauncher(BaseLauncher):
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
             logger.info("MLFlow job submitted")
             log_thread = threading.Thread( #check thread
-                target=self._accumulate_logs,
+                target=self._save_logs,
                 args=(process, log_file_path),
             )
             log_thread.start()
@@ -57,7 +57,8 @@ class MLFlowLauncher(BaseLauncher):
             if process.returncode != 0:
                 log_file.write(f"An error occurred while running the MLFlow job: {process.returncode}\n")
             log_file.write(BaseLauncher.LOG_DONE)
+        return log_file_path
         # put log file to S3
         # log_file_path is "xxx.log"
-        self.s3_service.put_log_file(log_file_path.split('/')[-1], log_file_path) 
+        # self.s3_service.put_log_file(log_file_path.split('/')[-1], log_file_path) 
         ...
