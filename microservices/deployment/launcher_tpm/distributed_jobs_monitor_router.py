@@ -34,8 +34,8 @@ async def get_volcano_jobs(request: Request):
 async def clear_volcano_jobs(request: Request):
     facade = VolcanoFacade()
     jobs = facade.list_jobs()
-    jobs_json = [job.model_dump() for job in jobs]
-    logging.info(json.dumps(jobs_json, indent=4))
+    # jobs_json = [job.model_dump() for job in jobs]
+    # logging.info("deleting jobs: " + json.dumps(jobs_json, indent=4))
     for job in jobs:
         if job.succeeded or job.failed :
             facade.delete_job(job.name)

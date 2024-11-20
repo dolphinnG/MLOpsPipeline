@@ -25,8 +25,12 @@
         {% for project in projects %}
         <tr id="project-row-{{ project.project_name }}">
             <td>
-                <button class="play-button"
-                    onclick="launchProject('{{ project.project_name }}', '{{ project.project_type }}', '{{ project.creation_date }}', '{{ project.project_repo_url }}', '{{ project.project_entry_module }}', {{ project.project_parameters | safe }})">
+                <button class="play-button" data-project-name="{{ project.project_name }}"
+                        data-project-type="{{ project.project_type }}"
+                        data-creation-date="{{ project.creation_date }}"
+                        data-project-repo-url="{{ project.project_repo_url }}"
+                        data-project-entry-module="{{ project.project_entry_module }}"
+                        data-project-parameters='{{ project.project_parameters | tojson | safe }}'>
                     <i class="fas fa-play"></i>
                 </button>
             </td>
@@ -69,6 +73,22 @@
 
 {% block scripts %}
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.play-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const projectName = button.getAttribute('data-project-name');
+                const projectType = button.getAttribute('data-project-type');
+                const creationDate = button.getAttribute('data-creation-date');
+                const projectRepoUrl = button.getAttribute('data-project-repo-url');
+                const projectEntryModule = button.getAttribute('data-project-entry-module');
+                let zz = button.getAttribute('data-project-parameters')
+                const projectParameters = JSON.parse(zz);
+
+                launchProject(projectName, projectType, creationDate, projectRepoUrl, projectEntryModule, projectParameters);
+            });
+        });
+    });
+
     async function fetchLogStream(logName, projectName) {
         if (logName) {
             try {
@@ -126,9 +146,11 @@
                 showNotification(result.message);
             } else {
                 console.error('Failed to launch project:', response.statusText);
+                showNotification('Failed to launch project.');
             }
         } catch (error) {
             console.error('Error launching project:', error);
+            showNotification('Error launching project.');
         }
     }
 
