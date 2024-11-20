@@ -1,8 +1,11 @@
+import json
+import logging
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 import httpx
+from .VolcanoFacade import VolcanoFacade
 
 distributed_jobs_monitor_router = APIRouter()
 
@@ -18,3 +21,21 @@ async def get_spark_cluster_metadata(request: Request):
 
     return templates.TemplateResponse("spark_cluster_metadata.html", {"request": request, "cluster_status": cluster_status})
 
+
+
+@distributed_jobs_monitor_router.get("/volcano/jobs", response_class=HTMLResponse)
+async def get_volcano_jobs(request: Request):
+    facade = VolcanoFacade()
+    jobs = facade.list_jobs()
+    return templates.TemplateResponse("volcano_jobs.html", {"request": request, "jobs": jobs})
+
+
+@distributed_jobs_monitor_router.get("/volcano/jobs/clear", response_class=HTMLResponse)
+async def clear_volcano_jobs(request: Request):
+    facade = VolcanoFacade()
+    jobs = facade.list_jobs()
+    jobs_json = [job.model_dump() for job in jobs]
+    logging.info(json.dumps(jobs_json, indent=4))
+    for job in jobs:
+        if job.succeeded or job.failed :
+            facade.delete_job(job.name)

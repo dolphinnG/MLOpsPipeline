@@ -4,15 +4,15 @@
 		{
 			"label": "bridge-to-kubernetes.resource",
 			"type": "bridge-to-kubernetes.resource",
-			"resource": "dummy-service",
+			"resource": "bridge-to-k8s-dummy-service",
 			"resourceType": "service",
 			"ports": [
-				6666
+				7777
 			],
 			"targetCluster": "minikube",
 			"targetNamespace": "dolphin-ns",
 			"useKubernetesServiceEnvironmentVariables": false,
-			"targetContainer": "dummy-container"
+			"targetContainer": "bridge-to-k8s-dummy-container"
 		}
 	]
 }

@@ -14,7 +14,7 @@ def get_mlflow_launcher():
 
 @lru_cache
 def get_torchx_launcher():
-    return TorchxLauncher(namespace="default", queue="default", s3_service=get_s3_service())
+    return TorchxLauncher(namespace="dolphin-ns", queue="default", s3_service=get_s3_service())
 
 @lru_cache
 def get_spark_launcher():

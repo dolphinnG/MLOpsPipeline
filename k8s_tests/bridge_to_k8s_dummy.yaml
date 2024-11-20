@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bridge_to_k8s_dummy-service
+  name: bridge-to-k8s-dummy-service
   namespace: dolphin-ns
 spec:
   selector:
-    app: bridge_to_k8s_dummy
+    app: bridge-to-k8s-dummy
   ports:
     - protocol: TCP
       port: 80
@@ -14,31 +14,35 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bridge_to_k8s_dummy-deployment
+  name: bridge-to-k8s-dummy-deployment
   namespace: dolphin-ns
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: bridge_to_k8s_dummy
+      app: bridge-to-k8s-dummy
   template:
     metadata:
       labels:
-        app: bridge_to_k8s_dummy
+        app: bridge-to-k8s-dummy
     spec:
       containers:
-        - name: bridge_to_k8s_dummy-container
+        - name: bridge-to-k8s-dummy-container
           image: nginx
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - mountPath: /etc/ssl/certs/
-              name: ca-roor-certs-bundle
-              readOnly: true
-      volumes:
-        - name: ca-roor-certs-bundle
-          configMap:
-            name: dolphin-trusted-ca-bundle 
-            items:
-            - key: root-certs.pem
-              path: ca-certificates.crt # must overwrite "/etc/ssl/certs/ca-certificates.crt" on debian
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+      #     volumeMounts:
+      #       - mountPath: /etc/ssl/certs/
+      #         name: ca-roor-certs-bundle
+      #         readOnly: true
+      # volumes:
+      #   - name: ca-roor-certs-bundle
+      #     configMap:
+      #       name: dolphin-trusted-ca-bundle 
+      #       items:
+      #       - key: root-certs.pem
+      #         path: ca-certificates.crt # must overwrite "/etc/ssl/certs/ca-certificates.crt" on debian
