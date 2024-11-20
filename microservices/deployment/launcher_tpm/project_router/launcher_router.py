@@ -24,7 +24,6 @@ from .ProjectModel import Project
 
 
 launcherRouter = APIRouter()
-# MLFLOW_SINGLE, MLFLOW_TORCHDDP, MLFLOW_SPARK
 dummy_project_data = [ # use redis persistence instead of sql
     {
         "project_name": "test-mlflow-project-run",
@@ -68,11 +67,6 @@ dummy_project_data = [ # use redis persistence instead of sql
 
 templates = Jinja2Templates(directory="templates")
 
-
-# s3Service = get_s3_service()
-# mlflowLauncher = get_mlflow_launcher()
-# torchxLauncher = get_torchx_launcher()
-# sparkLauncher = get_spark_launcher()
 
 
 @launcherRouter.get("/projects")
@@ -140,9 +134,9 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "minio_password"
 
 
 @launcherRouter.post("/launch")
-async def launch_project(project: Project, launchers=Depends(get_launchers)):
-    launcher:BaseLauncher = launchers.get(project.project_type)
-
+async def launch_project(project: Project, launchers:dict[str, BaseLauncher]=Depends(get_launchers)):
+    launcher = launchers.get(project.project_type)
+    assert launcher is not None, f"Launcher for project type {project.project_type} not found!"
     # if project.project_type == "MLFLOW_SINGLE_NODE":
     #     log_file_path = launcher.launch(project=project)
     # elif project.project_type == "MLFLOW_SPARK":

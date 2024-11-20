@@ -1,6 +1,8 @@
 import logging
 import subprocess
 import uuid
+import zipfile
+import git
 
 from cv2 import log
 from .BaseLauncher import BaseLauncher
@@ -58,14 +60,22 @@ class SparkLauncher(BaseLauncher):
                 log_file.write(f"An error occurred while submitting the Spark job: {process.returncode}\n")
             log_file.write(BaseLauncher.LOG_DONE)
 
+    # def _git_clone(self, repo_url, repo_dir):
+    #     command = ['git', 'clone', repo_url, repo_dir]
+    #     subprocess.run(command, check=True)
+    
     def _git_clone(self, repo_url, repo_dir):
-        command = ['git', 'clone', repo_url, repo_dir]
-        subprocess.run(command, check=True)
+        git.Repo.clone_from(repo_url, repo_dir)
+        # pip install gitpython , still needs git installed on the system
         
     def _zip_project(self, project_dir):
         zip_file = f"{project_dir}.zip"
-        command = ['zip', '-r', zip_file, project_dir]
-        subprocess.run(command, check=True)
+        with zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk(project_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, start=project_dir)
+                    zipf.write(file_path, arcname)
         return zip_file
 
     def launch(self, project:Project):
