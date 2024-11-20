@@ -38,7 +38,7 @@ services:
     networks:
       - shared_network
 
-  # Create a bucket named "bucket" if it doesn't exist
+  # Create buckets named "mlflow" and "project_logs" if they don't exist
   minio-create-bucket:
     image: minio/mc
     depends_on:
@@ -51,6 +51,11 @@ services:
         mc mb minio/mlflow
       else
         echo 'mlflow already exists'
+      fi &&
+      if ! mc ls minio | grep --quiet projectlogs; then
+        mc mb minio/projectlogs
+      else
+        echo 'projectlogs already exists'
       fi
       "
     networks:
