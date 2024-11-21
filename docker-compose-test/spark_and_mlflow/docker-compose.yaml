@@ -20,6 +20,19 @@ services:
     networks:
       - shared_network
 
+  redis-cache:
+    image: docker.io/bitnami/redis:7.4
+    volumes:
+      - 'redis_data:/bitnami'
+    ports:
+      - '6379:6379'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - shared_network
+
+
   # MinIO server
   minio:
     image: minio/minio
@@ -178,6 +191,7 @@ volumes:
   mlflow-data:
   spark-master-data:
   spark-worker-data:
+  redis_data:
 
 networks:
   shared_network:

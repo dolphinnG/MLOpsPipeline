@@ -3,6 +3,7 @@ from .S3Service import S3Service
 from .MLFlowLauncher import MLFlowLauncher
 from .TorchxLauncher import TorchxLauncher
 from .SparkLauncher import SparkLauncher
+from .RedisCacheService import RedisService
 
 @lru_cache
 def get_s3_service():
@@ -19,6 +20,10 @@ def get_torchx_launcher():
 @lru_cache
 def get_spark_launcher():
     return SparkLauncher(s3_service=get_s3_service())
+
+@lru_cache
+def get_redis_service():
+    return RedisService()
 
 @lru_cache
 def get_launchers():

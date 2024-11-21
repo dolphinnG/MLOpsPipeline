@@ -14,6 +14,7 @@ from .deps import (
     get_mlflow_launcher,
     get_torchx_launcher,
     get_spark_launcher,
+    get_redis_service,
 )
 from .BaseLauncher import BaseLauncher
 from .MLFlowLauncher import (
@@ -21,58 +22,62 @@ from .MLFlowLauncher import (
 )
 from .SparkLauncher import SparkLauncher
 from .ProjectModel import Project
-
+from .ICacheService import ICacheService
+from .RedisCacheService import RedisService
 
 launcherRouter = APIRouter()
-dummy_project_data = [ # use redis persistence instead of sql
-    {
-        "project_name": "test-mlflow-project-run",
-        "project_type": "MLFLOW_SINGLE_NODE",
-        "creation_date": datetime(2021, 9, 1).strftime("%Y-%m-%d"),
-        "project_repo_url": "https://github.com/dolphinnG/testmlproject.git",
-        "project_entry_module": "main.py",
-        "project_parameters": {"experiment_name": "test-mlflow-project-run"},
-        "project_log_records": ["run-1", "run-2", "run-3", "dummy-log"],
-    },
-    {
-        "project_name": "test-spark-project",
-        # ADD RANDOMIZED UUID TO ENFORCE project_name UNIQUENESS OTHERWISE LOG VIEW UI MALFUNCTIONS
-        "project_type": "MLFLOW_SPARK",
-        "creation_date": datetime.utcnow().strftime("%Y-%m-%d"),
-        "project_repo_url": "https://github.com/dolphinnG/testsparkproject.git",
-        "project_entry_module": "testspark5.py",
-        "project_parameters": {},
-        "project_log_records": [],
-    },
-    {
-        "project_name": "testsfgyyysadfsdafsadfsdn",
-        # ADD RANDOMIZED UUID TO ENFORCE project_name UNIQUENESS OTHERWISE LOG VIEW UI MALFUNCTIONS
-        "project_type": "MLFLOW_TORCHDDP",
-        "creation_date": datetime.utcnow().strftime("%Y-%m-%d"),
-        "project_repo_url": "sdfasdfasdf",
-        "project_entry_module": "ddptest.py",
-        "project_parameters": {},
-        "project_log_records": [],
-    },
-    {
-        "project_name": "test torch ddp launch",
-        "project_type": "MLFLOW_TORCHDDP",
-        "creation_date": datetime.utcnow().strftime("%Y-%m-%d"),
-        "project_repo_url": "supahakka/launcher:v21",
-        "project_entry_module": "ddptest.py",
-        "project_parameters": {"job_name": "hehejobsname"},
-        "project_log_records": ["dummy-log"],
-    },
+dummy_project_data = [
+    Project(
+        project_name="test-mlflow-project-run",
+        project_type="MLFLOW_SINGLE_NODE",
+        creation_date=datetime(2021, 9, 1).strftime("%Y-%m-%d"),
+        project_repo_url="https://github.com/dolphinnG/testmlproject.git",
+        project_entry_module="main.py",
+        project_parameters={"experiment_name": "test-mlflow-project-run"},
+        project_log_records=["run-1", "run-2", "run-3", "dummy-log"],
+    ),
+    Project(
+        project_name="test-spark-project",
+        project_type="MLFLOW_SPARK",
+        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        project_repo_url="https://github.com/dolphinnG/testsparkproject.git",
+        project_entry_module="testspark5.py",
+        project_parameters={},
+        project_log_records=[],
+    ),
+    Project(
+        project_name="testsfgyyysadfsdafsadfsdn",
+        project_type="MLFLOW_TORCHDDP",
+        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        project_repo_url="sdfasdfasdf",
+        project_entry_module="ddptest.py",
+        project_parameters={},
+        project_log_records=[],
+    ),
+    Project(
+        project_name="test torch ddp launch",
+        project_type="MLFLOW_TORCHDDP",
+        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        project_repo_url="supahakka/launcher:v21",
+        project_entry_module="ddptest.py",
+        project_parameters={"job_name": "hehejobsname"},
+        project_log_records=["dummy-log"],
+    ),
 ]
+
+# redis_cache: ICacheService = Depends(get_redis_service)
 
 templates = Jinja2Templates(directory="templates")
 
-
+@launcherRouter.get("/init")
+async def init_data(request: Request, redis_cache: ICacheService = Depends(get_redis_service)):
+    await redis_cache.set_pydantic_list_cache("dolphin_projects", dummy_project_data)
 
 @launcherRouter.get("/projects")
-async def get_projects(request: Request):
+async def get_projects(request: Request, redis_cache: ICacheService = Depends(get_redis_service)):
+    saved_projects = await redis_cache.get_pydantic_list_cache("dolphin_projects", Project)
     return templates.TemplateResponse(
-        "projects.html", {"request": request, "projects": dummy_project_data}
+        "projects.html", {"request": request, "projects": saved_projects}
     )
 
 
@@ -103,23 +108,36 @@ async def create_project(
     project_repo_url: str = Form(...),
     project_entry_module: str = Form(...),
     experiment_name: str = Form(None),
-    job_name: str = Form(None)
+    job_name: str = Form(None),
+    redis_cache: ICacheService = Depends(get_redis_service)
 ):
     project_parameters = {}
     if project_type == "MLFLOW_SINGLE_NODE" and experiment_name:
         project_parameters["experiment_name"] = experiment_name
     elif project_type == "MLFLOW_TORCHDDP":
         project_parameters["job_name"] = job_name
-    new_project = {
-        "project_name": project_name,
-        "project_type": project_type,
-        "creation_date": datetime.utcnow().strftime("%Y-%m-%d"),
-        "project_repo_url": project_repo_url,
-        "project_entry_module": project_entry_module,
-        "project_parameters": project_parameters,
-        "project_log_records": [],
-    }
-    dummy_project_data.append(new_project)
+    # new_project = {
+    #     "project_name": project_name,
+    #     "project_type": project_type,
+    #     "creation_date": datetime.utcnow().strftime("%Y-%m-%d"),
+    #     "project_repo_url": project_repo_url,
+    #     "project_entry_module": project_entry_module,
+    #     "project_parameters": project_parameters,
+    #     "project_log_records": [],
+    # }
+    new_project = Project(
+        project_name=project_name,
+        project_type=project_type,
+        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        project_repo_url=project_repo_url,
+        project_entry_module=project_entry_module,
+        project_parameters=project_parameters,
+        project_log_records=[],
+    )
+    # dummy_project_data.append(new_project)
+    saved_projects = await redis_cache.get_pydantic_list_cache("dolphin_projects", Project)
+    saved_projects.append(new_project)
+    await redis_cache.set_pydantic_list_cache("dolphin_projects", saved_projects)
     return RedirectResponse(url="/launcher/projects", status_code=303)
 
 
@@ -136,7 +154,7 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "minio_password"
 
 
 @launcherRouter.post("/launch")
-async def launch_project(project: Project, launchers:dict[str, BaseLauncher]=Depends(get_launchers)):
+async def launch_project(project: Project, launchers:dict[str, BaseLauncher]=Depends(get_launchers), redis_cache: ICacheService = Depends(get_redis_service)):
     launcher = launchers.get(project.project_type)
     assert launcher is not None, f"Launcher for project type {project.project_type} not found!"
     # if project.project_type == "MLFLOW_SINGLE_NODE":
@@ -147,9 +165,11 @@ async def launch_project(project: Project, launchers:dict[str, BaseLauncher]=Dep
     
     log_file_path = log_file_path.replace(".log", "")
     extracted_log_name = log_file_path.split("/")[-1]
-    for proj in dummy_project_data:
-        if proj["project_name"] == project.project_name:
-            proj["project_log_records"].append(extracted_log_name)
+    saved_projects = await redis_cache.get_pydantic_list_cache("dolphin_projects", Project)
+    for proj in saved_projects:
+        if proj.project_name == project.project_name:
+            proj.project_log_records.append(extracted_log_name)
             break
+    await redis_cache.set_pydantic_list_cache("dolphin_projects", saved_projects)
     return {"message": f"Project {project.project_name} launched successfully!"}
     # return {"message": "Project type not supported!"}

@@ -1,8 +1,9 @@
+import json
 import redis
 import logging
-from typing import Type, TypeVar
+from typing import Sequence, Type, TypeVar
 from pydantic import BaseModel
-from services.interfaces.ICacheService import ICacheService
+from .ICacheService import ICacheService
 
 T = TypeVar('T', bound=BaseModel)
 
@@ -39,13 +40,32 @@ class RedisService(ICacheService):
         except Exception as e:
             self.logger.error(f"Error getting model for key {key}: {e}")
             return None
-
+    
     async def invalidate(self, key: str):
         try:
             self.client.delete(key)
         except Exception as e:
             self.logger.error(f"Error invalidating key {key}: {e}")
 
+    async def set_pydantic_list_cache(self, key: str, model_list: Sequence[BaseModel]):
+        try:
+            model_dicts = [model.model_dump() for model in model_list]
+            model_list_json = json.dumps(model_dicts)
+            await self.set(key, model_list_json)
+        except Exception as e:
+            self.logger.error(f"Error setting model list for key {key}: {e}")
+            
+    async def get_pydantic_list_cache(self, key: str, model_class: Type[T]) -> list[T]:
+        try:
+            value = await self.get(key)
+            assert isinstance(value, str), "Cached value is not a string"
+            if value:
+                model_dicts = json.loads(value)
+                return [model_class(**model_dict) for model_dict in model_dicts]
+            return []
+        except Exception as e:
+            self.logger.error(f"Error getting model list for key {key}: {e}")
+            return []
 # # Example usage
 # if __name__ == "__main__":
 #     from pydantic import BaseModel
