@@ -70,3 +70,10 @@ async def proxy_to_orchestration(
     orchestration_host = "http://localhost:15001/api/v1"
     res =  await proxy_request(request, httpx_client, orchestration_host, path)
     return res.json()
+
+async def proxy_to_jobs_monitor(
+    request: Request, httpx_client: AsyncClient, path: str
+):
+    jobs_monitor_host = "http://localhost:15002/distributed"
+    res =  await proxy_request(request, httpx_client, jobs_monitor_host, path)
+    return res.json()
