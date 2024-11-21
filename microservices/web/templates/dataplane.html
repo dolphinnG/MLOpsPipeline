@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}DataPlane Portal{% endblock %}
+
+{% block content %}
+<div class="tabs">
+    <button class="tablinks" id="serverLiveBtn">Server Live</button>
+    <button class="tablinks" id="serverReadyBtn">Server Ready</button>
+    <button class="tablinks" id="serverMetadataBtn">Server Metadata</button>
+    <button class="tablinks" id="modelReadyBtn">Model Ready</button>
+    <button class="tablinks" id="modelMetadataBtn">Model Metadata</button>
+    <button class="tablinks" id="modelInferBtn">Model Infer</button>
+</div>
+<div id="response"></div>
+<div id="forms">
+    <form id="modelReadyForm" class="tabform" style="display:none;">
+        <label for="modelReadyName">Model Name:</label>
+        <input type="text" id="modelReadyName" name="model.name">
+        <button type="submit">Submit</button>
+    </form>
+    <form id="modelMetadataForm" class="tabform" style="display:none;">
+        <label for="modelMetadataName">Model Name:</label>
+        <input type="text" id="modelMetadataName" name="model.name">
+        <button type="submit">Submit</button>
+    </form>
+    <form id="modelInferForm" class="tabform" style="display:none;">
+        <label for="seldonModel">Seldon-Model header field:</label>
+        <input type="text" id="seldonModel" name="seldon-model">
+        <label for="modelInferData">Inference Data:</label>
+        <textarea id="modelInferData" name="model.data"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+#project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    text-align: left;
+}
+
+#project-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+#project-table th, #project-table td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+}
+
+#project-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+#project-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+#project-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+#project-table a {
+    text-decoration: none;
+    color: #009879;
+}
+
+#project-table a:hover {
+    color: #005f5f;
+    text-decoration: underline;
+}
+
+#project-table select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-size: 1em;
+    color: #333;
+}
+
+#project-table select:hover {
+    border-color: #009879;
+}
+
+#project-table select:focus {
+    outline: none;
+    border-color: #005f5f;
+    box-shadow: 0 0 5px rgba(0, 95, 95, 0.5);
+}
+
+.play-button {
+    background: none;
+    border: none;
+    color: green;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.play-button:hover {
+    color: darkgreen;
+}
+
+.notification {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #009879; /* Match table header color */
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    right: 30px;
+    top: 30px; /* Stay on the top right */
+    font-size: 17px;
+    transition: visibility 0.5s, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+.notification.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.log-row pre {
+    max-height: 300px; /* Fixed height */
+    overflow-y: scroll; /* Scrollable if content exceeds fixed height */
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+}
+
+#project-table td.log-column {
+    max-width: 150px; /* Fixed width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+}
+
+.form-container input[type=text], .form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px 0;
+    border: none;
+    background: #f1f1f1;
+}
+
+.form-container input[type=text]:focus, .form-container textarea:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.form-container .btn {
+    background-color: #009879;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+}
+
+.form-container .cancel {
+    background-color: red;
+}
+
+.form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+}

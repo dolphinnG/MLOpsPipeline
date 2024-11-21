@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Service Portal{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐬</text></svg>">
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <p>🐬 Pipeline Portal<p>
+    </header>
+    <div class="container full-height">
+        <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
+        <aside class="sidebar" id="sidebar">
+            <div class="dropdown">
+                <button class="dropbtn">Deployment Service</button>
+                <div class="dropdown-content">
+                    <a href="/scheduler">Scheduler</a>
+                    <a href="/dataplane">Dataplane</a>
+                </div>
+            </div>
+            <div class="dropdown new-dropdown">
+                <button class="dropbtn">Model Management Service</button>
+                <div class="dropdown-content">
+                    <a href="/mlflow/experiments">Experiments</a>
+                    <a href="/mlflow/registered_models">Registered Models</a>
+                    <a href="/mlflow/model_versions">Model Versions</a>
+                </div>
+            </div>
+            <div class="dropdown new-dropdown">
+                <button class="dropbtn">DAGs Service</button>
+                <div class="dropdown-content">
+                    <a href="/airflow/dags">DAGs</a>
+                </div>
+            </div>
+            <div class="dropdown new-dropdown">
+                <button class="dropbtn">Distributed Jobs Status</button>
+                <div class="dropdown-content">
+                    <a href="/distributed/spark">Spark Cluster</a>
+                    <a href="/distributed/volcano/jobs">Torch DDP Jobs</a> <!-- New link added here -->
+                </div>
+            </div>
+            <div class="dropdown new-dropdown">
+                <button class="dropbtn">Launcher</button>
+                <div class="dropdown-content">
+                    <a href="/launcher/projects">Projects</a>
+                </div>
+            </div>
+        </aside>
+        <main class="content" onclick="closeSidebar(event)">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <footer>
+        <p>&copy; 2024 🐬</p>
+    </footer>
+    <script src="/static/sidebar.js"></script>
+    {% if request.path == '/scheduler' %}
+    <script src="/static/scheduler.js"></script>
+    {% elif request.path == '/dataplane' %}
+    <script src="/static/dataplane.js"></script>
+    {% endif %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

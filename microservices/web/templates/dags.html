@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}DAGs{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/airflow_styles.css"> 
+{% endblock %}
+{% block content %}
+<h1>DAGs</h1>
+<p class="info">Total Entries: {{ dags.total_entries }}</p>
+<table>
+    <thead>
+        <tr>
+            <th>Trigger</th>
+            <th>Code</th>
+            <!-- <th>DAG Display Name</th> -->
+            <th>DAG ID</th>
+            <th>Description</th>
+            <th>Has Import Errors</th>
+            <th>Is Paused</th>
+            <!-- <th>Is SubDAG</th> -->
+            <th>Last Parsed Time</th>
+            <th>Next DAG Run</th>
+            <th>Schedule Interval</th>
+            <!-- <th>Tags</th> -->
+            <th>Timetable Description</th>
+            <!-- <th>File Token</th> -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for dag in dags.dags %}
+        <tr>
+            <td>
+                <a href="dags/{{ dag.dag_id }}/trigger" class="no-underline" style="width: fit-content;">
+                    <span class="icon-play" style="color: #28a745;"></span>
+                </a>
+            </td>
+            <td>
+                <a href="/airflow/dagSources/{{ dag.file_token }}" class="no-underline" style="width: fit-content;">
+                    <span class="icon-code" style="color: #4e46c5;"></span>
+                </a>
+            </td>
+            <!-- <td>{{ dag.dag_display_name }}</td> -->
+            <td><a href="dags/{{ dag.dag_id }}/details" class="no-underline">{{ dag.dag_id }}</a></td>
+            <td>{{ dag.description }}</td>
+            <td>{{ dag.has_import_errors }}</td>
+            <td>{{ dag.is_paused }}</td>
+            <!-- <td>{{ dag.is_subdag }}</td> -->
+            <td>{{ dag.last_parsed_time }}</td>
+            <td>{{ dag.next_dagrun }}</td>
+            <td>{{ dag.schedule_interval.type }} - {{ dag.schedule_interval.value }}</td>
+            <!-- <td>{% for tag in dag.tags %}{{ tag.name }} {% endfor %}</td> -->
+            <td>{{ dag.timetable_description }}</td>
+            <!-- <td>{{ dag.file_token }}</td> -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="pagination">
+    {% if offset > 0 %}
+        <a href="?offset={{ offset - limit }}&limit={{limit}}">&laquo; Previous</a>
+    {% endif %}
+    {% if offset + 10 < dags.total_entries %}
+        <a href="?offset={{ offset + limit }}&limit={{limit}}">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}

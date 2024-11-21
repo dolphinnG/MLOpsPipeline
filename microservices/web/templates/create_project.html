@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block head %}
+<link rel="stylesheet" href="/static/launcher.css">
+{% endblock %}
+{% block title %}Create Project{% endblock %}
+
+{% block content %}
+<h1>Create New Project</h1>
+<form id="projectForm" class="form-container" method="post" action="/launcher/create_project">
+    <label for="project_name"><b>Project Name</b></label>
+    <input type="text" id="project_name" name="project_name" required>
+    
+    <label for="project_type"><b>Project Type</b></label>
+    <select id="project_type" name="project_type" required onchange="toggleExperimentName(); toggleEntryModule(); toggleJobName();">
+        <option value="" disabled selected>Select Project Type</option>
+        <option value="MLFLOW_SINGLE_NODE">MLFLOW_SINGLE_NODE</option>
+        <option value="MLFLOW_TORCHDDP">MLFLOW_TORCHDDP</option>
+        <option value="MLFLOW_SPARK">MLFLOW_SPARK</option>
+    </select>
+    <br/><br/>
+    <label for="project_repo_url"><b>Git/Docker Repository</b></label>
+    <input type="text" id="project_repo_url" name="project_repo_url" required>
+    
+    <div id="entry_module_container">
+        <label for="project_entry_module"><b>Entry Module</b></label>
+        <input type="text" id="project_entry_module" name="project_entry_module" required>
+    </div>
+    
+    <div id="experiment_name_container" style="display: none;">
+        <label for="experiment_name"><b>Experiment Name</b></label>
+        <input type="text" id="experiment_name" name="experiment_name">
+    </div>
+    
+    <div id="job_name_container" style="display: none;">
+        <label for="job_name"><b>Job Name</b></label>
+        <input type="text" id="job_name" name="job_name">
+    </div>
+    
+    <button type="submit" class="btn">Submit</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toggleExperimentName() {
+        const projectType = document.getElementById("project_type").value;
+        const experimentNameContainer = document.getElementById("experiment_name_container");
+        if (projectType === "MLFLOW_SINGLE_NODE") {
+            experimentNameContainer.style.display = "block";
+            document.getElementById("experiment_name").required = true;
+        } else {
+            experimentNameContainer.style.display = "none";
+            document.getElementById("experiment_name").required = false;
+        }
+    }
+
+    function toggleEntryModule() {
+        const projectType = document.getElementById("project_type").value;
+        const entryModuleContainer = document.getElementById("entry_module_container");
+        if (projectType === "MLFLOW_SINGLE_NODE") {
+            entryModuleContainer.style.display = "none";
+            document.getElementById("project_entry_module").required = false;
+        } else {
+            entryModuleContainer.style.display = "block";
+            document.getElementById("project_entry_module").required = true;
+        }
+    }
+
+    function toggleJobName() {
+        const projectType = document.getElementById("project_type").value;
+        const jobNameContainer = document.getElementById("job_name_container");
+        if (projectType === "MLFLOW_TORCHDDP") {
+            jobNameContainer.style.display = "block";
+            document.getElementById("job_name").required = true;
+        } else {
+            jobNameContainer.style.display = "none";
+            document.getElementById("job_name").required = false;
+        }
+    }
+
+    document.getElementById("project_type").addEventListener("change", function() {
+        toggleExperimentName();
+        toggleEntryModule();
+        toggleJobName();
+    });
+</script>
+{% endblock %}

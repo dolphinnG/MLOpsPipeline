@@ -1,5 +1,6 @@
 from calendar import c
 from fastapi.templating import Jinja2Templates
+import httpx
 from keycloak import KeycloakOpenID
 from functools import lru_cache
 from services.implementations.LDAPService import LDAPService
@@ -43,4 +44,8 @@ async def get_ldap_service() -> IUserService:
     admin_password = configs.LDAP_ADMIN_PASSWORD
     
     return LDAPService(ldap_server, admin_dn, admin_password)
+
+@lru_cache
+def get_httpx_async_client():
+    return httpx.AsyncClient()
 

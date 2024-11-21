@@ -1,0 +1,76 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #009879;
+    color: white;
+}
+
+table tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.info {
+    font-size: 16px;
+    color: #ffffff;
+    margin: 10px 0;
+    background-color: #000000;
+    width: fit-content;
+    padding: 5px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    width: auto;
+    border: 1px solid black;
+}
+
+.btn:hover {
+    background-color: #f1f1f1;
+    color: black;
+    border-color: black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.icon-code::before {
+    content: "\f121"; /* FontAwesome code icon */
+    font-family: FontAwesome;
+    margin-right: 5px;
+}
+
+.icon-play::before {
+    content: "\f04b"; /* FontAwesome play icon */
+    font-family: FontAwesome;
+    margin-right: 5px;
+}
+
+.no-underline {
+    text-decoration: none;
+}
