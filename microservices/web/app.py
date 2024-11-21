@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import auth, user, mlflow, dag, dag_run, monitor
+from routers import auth, user, mlflow, dag, dag_run, monitor, launch
 from middlewares.TokenValidationMiddleware import TokenValidationMiddleware
 from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 
@@ -18,6 +18,7 @@ app.include_router(mlflow.router, prefix="/mlflow")
 app.include_router(dag.router, prefix="/airflow")
 app.include_router(dag_run.router, prefix="/airflow")
 app.include_router(monitor.router, prefix="/distributed")
+app.include_router(launch.router, prefix="/launcher")
 
 # Add middleware
 app.add_middleware(TokenValidationMiddleware)

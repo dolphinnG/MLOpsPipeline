@@ -3,7 +3,7 @@ import redis
 import logging
 from typing import Sequence, Type, TypeVar
 from pydantic import BaseModel
-from services.interfaces.ICacheService import ICacheService
+from .ICacheService import ICacheService
 
 T = TypeVar('T', bound=BaseModel)
 
