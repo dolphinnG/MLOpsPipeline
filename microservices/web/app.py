@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import auth, user, mlflow
+from routers import auth, user, mlflow, dag, dag_run
 from middlewares.TokenValidationMiddleware import TokenValidationMiddleware
 from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 
@@ -11,10 +11,12 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Include auth router
+# Include router
 app.include_router(auth.router, prefix="/auth")
 app.include_router(user.router, prefix="/users")
 app.include_router(mlflow.router, prefix="/mlflow")
+app.include_router(dag.router, prefix="/airflow")
+app.include_router(dag_run.router, prefix="/airflow")
 
 # Add middleware
 app.add_middleware(TokenValidationMiddleware)

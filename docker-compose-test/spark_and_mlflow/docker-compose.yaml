@@ -25,7 +25,7 @@ services:
     volumes:
       - 'redis_data:/bitnami'
     ports:
-      - '6379:6379'
+      - '6376:6379'
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes

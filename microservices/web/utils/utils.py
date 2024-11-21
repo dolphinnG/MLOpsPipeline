@@ -63,3 +63,10 @@ async def proxy_to_model_management(
     model_management_host = "http://localhost:15000/mlflow"
     res =  await proxy_request(request, httpx_client, model_management_host, path)
     return res.json()
+
+async def proxy_to_orchestration(
+    request: Request, httpx_client: AsyncClient, path: str
+):
+    orchestration_host = "http://localhost:15001/api/v1"
+    res =  await proxy_request(request, httpx_client, orchestration_host, path)
+    return res.json()

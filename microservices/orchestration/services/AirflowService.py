@@ -1,28 +1,7 @@
 from typing import Any
 import airflow_client.client as client
 from airflow_client.client.api import dag_api, dag_run_api, task_instance_api
-from airflow_client.client.model.clear_dag_run import ClearDagRun
 from airflow_client.client.model.dag import DAG
-from airflow_client.client.model.list_dag_runs_form import ListDagRunsForm
-from airflow_client.client.model.update_dag_run_state import UpdateDagRunState
-from airflow_client.client.model.update_task_instance import UpdateTaskInstance
-from airflow_client.client.model.dag_run import DAGRun
-from airflow_client.client.model.dag_run_collection import DAGRunCollection
-from airflow_client.client.model.dataset_event_collection import DatasetEventCollection
-from airflow_client.client.model.task import Task
-from airflow_client.client.model.task_collection import TaskCollection
-from airflow_client.client.model.task_instance_reference import TaskInstanceReference
-from airflow_client.client.model.task_instance import TaskInstance
-from airflow_client.client.model.task_instance_collection import TaskInstanceCollection
-from airflow_client.client.model.task_instance_dependency_collection import (
-    TaskInstanceDependencyCollection,
-)
-from airflow_client.client.model.list_task_instance_form import ListTaskInstanceForm
-from airflow_client.client.model.inline_response200 import InlineResponse200
-from airflow_client.client.model.dag_collection import DAGCollection
-from airflow_client.client.model.dag_detail import DAGDetail
-from airflow_client.client.model.set_dag_run_note import SetDagRunNote
-from airflow_client.client.model.set_task_instance_note import SetTaskInstanceNote
 
 
 class SingletonMeta(type):
@@ -45,6 +24,8 @@ class AirflowFacade(metaclass=SingletonMeta):
         self.dag_api = dag_api.DAGApi(self._api_client)
         self.dag_run_api = dag_run_api.DAGRunApi(self._api_client)
         self.task_instance_api = task_instance_api.TaskInstanceApi(self._api_client)
+        
+
 
     def delete_dag(self, dag_id: str):
         return self.dag_api.delete_dag(dag_id) # returns none
