@@ -3,13 +3,22 @@ import redis
 import logging
 from typing import Sequence, Type, TypeVar
 from pydantic import BaseModel
-from .ICacheService import ICacheService
+from services.ICacheService import ICacheService
 
-T = TypeVar('T', bound=BaseModel)
+T = TypeVar("T", bound=BaseModel)
+
 
 class RedisService(ICacheService):
-    def __init__(self, host='localhost', port=6379, db=0):
-        self.client = redis.StrictRedis(host=host, port=port, db=db, decode_responses=True)
+    def __init__(self, host, port, db, password, ssl_ca_certs, ssl):
+        self.client = redis.StrictRedis(
+            host=host,
+            port=port,
+            db=db,
+            decode_responses=True,
+            password=password,
+            ssl_ca_certs=ssl_ca_certs,
+            ssl=ssl
+        )
         self.logger = logging.getLogger(__name__)
 
     async def set(self, key, value):
@@ -31,16 +40,16 @@ class RedisService(ICacheService):
         except Exception as e:
             self.logger.error(f"Error setting model for key {key}: {e}")
 
-    async def get_pydantic_cache(self, key: str, model_class: Type[T]) -> T|None:
+    async def get_pydantic_cache(self, key: str, model_class: Type[T]) -> T | None:
         try:
             value = self.client.get(key)
             if value:
-                return model_class.model_validate_json(value) # type: ignore
+                return model_class.model_validate_json(value)  # type: ignore
             return None
         except Exception as e:
             self.logger.error(f"Error getting model for key {key}: {e}")
             return None
-    
+
     async def invalidate(self, key: str):
         try:
             self.client.delete(key)
@@ -54,7 +63,7 @@ class RedisService(ICacheService):
             await self.set(key, model_list_json)
         except Exception as e:
             self.logger.error(f"Error setting model list for key {key}: {e}")
-            
+
     async def get_pydantic_list_cache(self, key: str, model_class: Type[T]) -> list[T]:
         try:
             value = await self.get(key)
@@ -66,6 +75,8 @@ class RedisService(ICacheService):
         except Exception as e:
             self.logger.error(f"Error getting model list for key {key}: {e}")
             return []
+
+
 # # Example usage
 # if __name__ == "__main__":
 #     from pydantic import BaseModel

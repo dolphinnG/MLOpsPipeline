@@ -1,4 +1,3 @@
-from calendar import c
 from fastapi.templating import Jinja2Templates
 import httpx
 from keycloak import KeycloakOpenID
@@ -14,38 +13,48 @@ from utils.configurations import Conf
 def get_configurations() -> Conf:
     return Conf()  # type: ignore
 
+configs = get_configurations()
+
 # Dependency function to get the templates object
 @lru_cache
 def get_templates():
     return Jinja2Templates(directory="templates")
 
+
 @lru_cache
 def get_keycloak_openid():
-    configs = get_configurations()
     return KeycloakOpenID(
-    server_url=configs.KEYCLOAK_SERVER_URL,
-    realm_name=configs.KEYCLOAK_REALM_NAME,
-    client_id=configs.KEYCLOAK_CLIENT_ID,
-    client_secret_key=configs.KEYCLOAK_CLIENT_SECRET,
-)
+        server_url=configs.KEYCLOAK_SERVER_URL,
+        realm_name=configs.KEYCLOAK_REALM_NAME,
+        client_id=configs.KEYCLOAK_CLIENT_ID,
+        client_secret_key=configs.KEYCLOAK_CLIENT_SECRET,
+        verify=configs.ROOT_CA_CERT_PATH,  # type: ignore # wack typehint lmao
+    )
+
 
 # Dependency function to get the cache service
 @lru_cache
 def get_cache_service() -> ICacheService:
-    configs = get_configurations()
     return RedisService(
-    configs.REDIS_HOST, configs.REDIS_PORT, configs.REDIS_DB
-)
+        configs.REDIS_HOST,
+        configs.REDIS_PORT,
+        configs.REDIS_DB,
+        configs.REDIS_PASSWORD,
+        configs.ROOT_CA_CERT_PATH,
+        True,
+    )
+
 
 async def get_ldap_service() -> IUserService:
-    configs = get_configurations()
     ldap_server = configs.LDAP_SERVER_URL
     admin_dn = configs.LDAP_ADMIN_DN
     admin_password = configs.LDAP_ADMIN_PASSWORD
-    
-    return LDAPService(ldap_server, admin_dn, admin_password)
+
+    return LDAPService(ldap_server, admin_dn, admin_password, configs.ROOT_CA_CERT_PATH)
+
 
 @lru_cache
 def get_httpx_async_client():
-    return httpx.AsyncClient(follow_redirects=True, timeout=100.0, verify="dolphin.rootCA.crt")
-
+    return httpx.AsyncClient(
+        follow_redirects=True, timeout=100.0, verify=configs.ROOT_CA_CERT_PATH
+    )

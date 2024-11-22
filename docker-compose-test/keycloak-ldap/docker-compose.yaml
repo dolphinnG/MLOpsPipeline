@@ -21,9 +21,19 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KEYCLOAK_DATABASE_PASSWORD=admin
+      
+      - KEYCLOAK_SPI_TRUSTSTORE_FILE=/certs/truststore.jks
+      - KEYCLOAK_SPI_TRUSTSTORE_PASSWORD=lmaohehe
+
+      - KEYCLOAK_ENABLE_HTTPS=true
+      - KEYCLOAK_HTTPS_USE_PEM=true  # need this shit!
+      - KEYCLOAK_HTTPS_CERTIFICATE_FILE=/certs/dolphin.rootCA.crt
+      - KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE=/certs/dolphin.rootCA.key
     ports:
-      - "18080:8080"
+      # - "18080:8080"
+      - "18443:8443"
     volumes:
+      - ./certs:/certs
       - ./realms:/realms
       - ./kc-init.sh:/docker-entrypoint-initdb.d/kc-init.sh
     depends_on:
@@ -37,15 +47,23 @@ services:
     environment:
       - LDAP_ADMIN_USERNAME=topg
       - LDAP_ADMIN_PASSWORD=supahakka
-      - LDAP_LDAPS_PORT_NUMBER=636
       - LDAP_PORT_NUMBER=389
       - LDAP_ROOT=dc=dolphin,dc=lmao
-      - LDAP_LOGLEVEL=8
+      # - LDAP_LOGLEVEL=-1
+
+      - LDAP_ENABLE_TLS=yes
+      - LDAP_REQUIRE_TLS=yes
+      # - LDAP_LDAPS_PORT_NUMBER=1636
+      - LDAP_TLS_CERT_FILE=/opt/bitnami/openldap/certs/openldap.crt  # need to chmod and need not cert and ca be diff
+      - LDAP_TLS_KEY_FILE=/opt/bitnami/openldap/certs/openldap.key
+      - LDAP_TLS_CA_FILE=/opt/bitnami/openldap/certs/dolphin.rootCA.crt
+      - BITNAMI_DEBUG=true
       # - LDAP_TLS_VERIFY_CLIENT=never
     ports:
-      - "389:389"
-      - "636:636"
+      # - "389:389"
+      - "636:1636" # keycloak can't use starttls ports that aren't 636
     volumes:
+      - ./certs:/opt/bitnami/openldap/certs
       - ./ldap-config:/ldifs
     networks:
       - shared_network
@@ -66,11 +84,18 @@ services:
   redis:
     image: bitnami/redis:latest
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      # - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PASSWORD=dolphin_redis_password
+      - REDIS_TLS_CERT_FILE=/certs/dolphin.rootCA.crt
+      - REDIS_TLS_KEY_FILE=/certs/dolphin.rootCA.key
+      - REDIS_TLS_CA_FILE=/certs/dolphin.rootCA.crt
+      - REDIS_TLS_ENABLED=yes
+      - REDIS_TLS_AUTH_CLIENTS=no
     ports:
       - "6379:6379"
     volumes:
       - 'redis_data:/bitnami/redis'
+      - ./certs:/certs
     networks:
       - shared_network
 

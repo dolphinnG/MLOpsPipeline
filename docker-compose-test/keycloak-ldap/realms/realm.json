@@ -5,7 +5,7 @@
   "defaultSignatureAlgorithm" : "RS256",
   "revokeRefreshToken" : false,
   "refreshTokenMaxReuse" : 0,
-  "accessTokenLifespan" : 60,
+  "accessTokenLifespan" : 1800,
   "accessTokenLifespanForImplicitFlow" : 8640000,
   "ssoSessionIdleTimeout" : 8640000,
   "ssoSessionMaxLifespan" : 360000,
@@ -1719,7 +1719,7 @@
       "config" : {
         "pagination" : [ "false" ],
         "fullSyncPeriod" : [ "-1" ],
-        "startTls" : [ "false" ],
+        "startTls" : [ "true" ],
         "usersDn" : [ "ou=mlOpsPipeline,dc=dolphin,dc=lmao" ],
         "connectionPooling" : [ "false" ],
         "cachePolicy" : [ "DEFAULT" ],

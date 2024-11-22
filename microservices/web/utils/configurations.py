@@ -13,7 +13,8 @@ class Conf(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_DB: int
-
+    REDIS_PASSWORD: str
+    
     LDAP_SERVER_URL: str
     LDAP_ADMIN_DN: str
     LDAP_ADMIN_PASSWORD: str
@@ -25,6 +26,8 @@ class Conf(BaseSettings):
     LAUNCHER_HOST: str
     SCHEDULER_HOST: str
     DATAPLANE_HOST: str
+    
+    ROOT_CA_CERT_PATH: str
     
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", env_prefix=""

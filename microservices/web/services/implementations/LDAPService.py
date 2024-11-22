@@ -1,4 +1,13 @@
-from ldap3 import Server, Connection, ALL, MODIFY_ADD, MODIFY_REPLACE, MODIFY_DELETE
+import ssl
+from ldap3 import (
+    Server,
+    Connection,
+    ALL,
+    MODIFY_ADD,
+    MODIFY_REPLACE,
+    MODIFY_DELETE,
+    Tls,
+)
 from services.interfaces.IUserService import IUserService
 from models.userModel import UserCreate, UserUpdate
 from utils import constants, utils
@@ -6,11 +15,19 @@ from utils import constants, utils
 
 class LDAPService(IUserService):
 
-    def __init__(self, ldap_server, admin_dn, admin_password):
+    def __init__(self, ldap_server, admin_dn, admin_password, ssl_ca_certs):
         self.ldap_server = ldap_server
         self.admin_dn = admin_dn
         self.admin_password = admin_password
-        self.server = Server(self.ldap_server, get_info=ALL)
+        tls = Tls(
+            # local_private_key_file="client_private_key.pem",
+            # local_certificate_file="client_cert.pem",
+            validate=ssl.CERT_REQUIRED,
+            # version=ssl.PROTOCOL_TLSv1,
+            ca_certs_file=ssl_ca_certs,
+        )
+
+        self.server = Server(self.ldap_server, get_info=ALL, use_ssl=True, tls=tls)
 
     def create_conn(self):
         return LDAPService.LDAPConn(self.server, self.admin_dn, self.admin_password)

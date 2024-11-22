@@ -23,8 +23,8 @@ spec:
             - secretRef:
                 name: {{include "openldap.secrets" .}}
           env: 
-            - name: LDAP_TLS_VERIFY_CLIENT
-              value: "never"
+            # - name: LDAP_TLS_VERIFY_CLIENT
+            #   value: "never"
             # - name: LDAP_LOGLEVEL
             #   value: "8"
           # env:

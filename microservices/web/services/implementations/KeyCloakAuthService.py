@@ -69,7 +69,8 @@ class KeyCloakAuthService(IAuthService):
         return res
         
     async def callback(self, request: Request, code: str, state: str):
-        session_id = request.cookies.get(USER_SESSION_KEY)
+        session_id = request.cookies.get(USER_SESSION_KEY) 
+        # reminder: 127.0.0.1 and localhost are different domains, so cookies are not shared lmfaoo
         if not session_id:
             raise HTTPException(status_code=400, detail="Session ID not found")
         user_session = await self.cache_service.get_pydantic_cache(session_id, UserSession)
