@@ -107,3 +107,13 @@ async def proxy_stream_to_launcher(
     jobs_monitor_host = "http://localhost:15003/launcher"
     stream = await proxy_text_stream(request, httpx_client, jobs_monitor_host, path)
     return stream
+
+async def proxy_to_scheduler(request: Request, httpx_client: AsyncClient, path: str):
+    scheduler_host = "http://localhost:15004/scheduler"
+    res = await proxy_request(request, httpx_client, scheduler_host, path)
+    return res.json()
+
+async def proxy_to_dataplane(request: Request, httpx_client: AsyncClient, path: str):
+    dataplane_host = "http://localhost:15004/dataplane"
+    res = await proxy_request(request, httpx_client, dataplane_host, path)
+    return res.json()

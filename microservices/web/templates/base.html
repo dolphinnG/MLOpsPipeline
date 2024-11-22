@@ -18,14 +18,14 @@
         <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>
         <aside class="sidebar" id="sidebar">
             <div class="dropdown">
-                <button class="dropbtn">Deployment Service</button>
+                <button class="dropbtn">Deployment</button>
                 <div class="dropdown-content">
                     <a href="/scheduler">Scheduler</a>
                     <a href="/dataplane">Dataplane</a>
                 </div>
             </div>
             <div class="dropdown new-dropdown">
-                <button class="dropbtn">Model Management Service</button>
+                <button class="dropbtn">Model Management</button>
                 <div class="dropdown-content">
                     <a href="/mlflow/experiments">Experiments</a>
                     <a href="/mlflow/registered_models">Registered Models</a>
@@ -59,12 +59,10 @@
     <footer>
         <p>&copy; 2024 🐬</p>
     </footer>
+
     <script src="/static/sidebar.js"></script>
-    {% if request.path == '/scheduler' %}
-    <script src="/static/scheduler.js"></script>
-    {% elif request.path == '/dataplane' %}
-    <script src="/static/dataplane.js"></script>
-    {% endif %}
+
+
     {% block scripts %}{% endblock %}
 </body>
 </html>
