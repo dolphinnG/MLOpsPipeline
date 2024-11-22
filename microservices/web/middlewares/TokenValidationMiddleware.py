@@ -1,4 +1,7 @@
+import logging
+from venv import logger
 from fastapi import Request, HTTPException, Response
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.base import RequestResponseEndpoint
@@ -14,6 +17,8 @@ from fastapi import Depends
 
 templates = Jinja2Templates(directory="templates")
 
+logger = logging.getLogger(__name__)
+
 
 class TokenValidationMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):
@@ -23,7 +28,16 @@ class TokenValidationMiddleware(BaseHTTPMiddleware):
         )
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
-        if request.url.path.startswith("/protected"):
-            await self.auth_service.validate_token(request)
+        if not request.url.path.startswith(
+            ("/auth", "/static", "/docs", "/openapi.json", "/favicon.ico")
+        ):
+            if request.url.path != "/":
+                try:
+                    await self.auth_service.validate_token(request)
+                except (
+                    Exception
+                ) as e:  # mostly httpxception but aint nobydy got time for that
+                    logger.error(f"Error validating token: {e}")
+                    return RedirectResponse("/auth/login")
         response = await call_next(request)
         return response
