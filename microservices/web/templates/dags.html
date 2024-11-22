@@ -3,6 +3,20 @@
 {% block title %}DAGs{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="/static/airflow_styles.css"> 
+<script>
+function togglePause(dagId, isPaused) {
+    const action = isPaused ? 'pause' : 'unpause';
+    fetch(`/airflow/dag/${action}/${dagId}`)
+        .then(response => {
+            if (response.ok) {
+                //location.reload();
+                console.info('Successfully toggled pause state');
+            } else {
+                alert('Failed to toggle pause state');
+            }
+        });
+}
+</script>
 {% endblock %}
 {% block content %}
 <h1>DAGs</h1>
@@ -16,7 +30,7 @@
             <th>DAG ID</th>
             <th>Description</th>
             <th>Has Import Errors</th>
-            <th>Is Paused</th>
+            <th>Is Unpaused</th>
             <!-- <th>Is SubDAG</th> -->
             <th>Last Parsed Time</th>
             <th>Next DAG Run</th>
@@ -43,7 +57,12 @@
             <td><a href="dags/{{ dag.dag_id }}/details" class="no-underline">{{ dag.dag_id }}</a></td>
             <td>{{ dag.description }}</td>
             <td>{{ dag.has_import_errors }}</td>
-            <td>{{ dag.is_paused }}</td>
+            <td>
+                <label class="switch">
+                    <input type="checkbox" onclick="togglePause('{{ dag.dag_id }}', !this.checked)" {% if not dag.is_paused %}checked{% endif %}>
+                    <span class="slider round"></span>
+                </label>
+            </td>
             <!-- <td>{{ dag.is_subdag }}</td> -->
             <td>{{ dag.last_parsed_time }}</td>
             <td>{{ dag.next_dagrun }}</td>

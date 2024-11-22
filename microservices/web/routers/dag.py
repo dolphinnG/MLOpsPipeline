@@ -1,5 +1,5 @@
 import json
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Form
 from httpx import AsyncClient, get
 from utils.utils import proxy_to_orchestration
 from dependencies.deps import get_httpx_async_client
@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="templates")
 # Add custom filter to Jinja2 templates
-templates.env.filters['load_json'] = json.loads
+templates.env.filters["load_json"] = json.loads
 
 router = APIRouter(tags=["DAGs"])
 
@@ -50,14 +50,24 @@ async def get_dag_source(
     )
 
 
-# @dag_router.get("/dag/unpause/{dag_id}")
-# def unpause_dag(dag_id: str):
-#     return facade.unpause_dag(dag_id)
+@router.get("/dag/unpause/{dag_id}")
+async def unpause_dag(
+    dag_id: str,
+    request: Request,
+    httpx_client: AsyncClient = Depends(get_httpx_async_client),
+):
+    path = f"dag/unpause/{dag_id}"
+    return await proxy_to_orchestration(request, httpx_client, path)
 
 
-# @dag_router.get("/dag/pause/{dag_id}")
-# def pause_dag(dag_id: str):
-#     return facade.pause_dag(dag_id)
+@router.get("/dag/pause/{dag_id}")
+async def pause_dag(
+    dag_id: str,
+    request: Request,
+    httpx_client: AsyncClient = Depends(get_httpx_async_client),
+):
+    path = f"dag/pause/{dag_id}"
+    return await proxy_to_orchestration(request, httpx_client, path)
 
 
 @router.get("/dags")
@@ -72,7 +82,13 @@ async def get_dags(
     path = "dags"
     res = await proxy_to_orchestration(request, httpx_client, path)
     return templates.TemplateResponse(
-        "dags.html", {"request": request, "dags": res['dags'], "offset": res['offset'], "limit": res['limit']}
+        "dags.html",
+        {
+            "request": request,
+            "dags": res["dags"],
+            "offset": res["offset"],
+            "limit": res["limit"],
+        },
     )
 
 
