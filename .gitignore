@@ -3,5 +3,6 @@ dump/
 __pycache__/
 *.pyc
 seldon_test/seldon-core
-tele_helm/
+# tele_helm/
 wslvenv/
+pytest-integration-test/*
