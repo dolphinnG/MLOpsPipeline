@@ -67,8 +67,6 @@ class KeyCloakAuthService(IAuthService):
         res.set_cookie(key=USER_SESSION_KEY, value=session_id)
         
         return res
-    
-
         
     async def callback(self, request: Request, code: str, state: str):
         session_id = request.cookies.get(USER_SESSION_KEY)

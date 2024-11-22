@@ -13,9 +13,6 @@ class BaseLauncher(ABC):
     def __init__(self, s3_service: S3Service) -> None:
         self.s3_service = s3_service
     
-    # @abstractmethod
-    # def launch(self, *args, **kwargs) -> str:
-    #     ...
     @abstractmethod
     def launch(self, project:Project) -> str:
         ...

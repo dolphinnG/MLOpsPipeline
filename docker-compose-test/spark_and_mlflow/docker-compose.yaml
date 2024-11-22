@@ -2,35 +2,36 @@ services:
 
   ############## USE THE POSTGRESQL OF THE KEYCLOAK-LDAP DOCKER-COMPOSE ##############
   # PostgreSQL database
-  postgresql:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: bn_keycloak
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: mlflowdb
-    ports:
-      - 5432:5432
-    # volumes:
-    #   - postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - shared_network
+  # postgresql:
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_USER: bn_keycloak
+  #     POSTGRES_PASSWORD: admin
+  #     POSTGRES_DB: mlflowdb
+  #   ports:
+  #     - 5432:5432
+  #   # volumes:
+  #   #   - postgres-data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U user"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - shared_network
 
-  redis-cache:
-    image: docker.io/bitnami/redis:7.4
-    volumes:
-      - 'redis_data:/bitnami'
-    ports:
-      - '6376:6379'
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
-    networks:
-      - shared_network
+  ###################### USE THE REDIS OF THEKEYCLOAK-LDAP DOCKER-COMPOSE ######################
+  # redis-cache:
+  #   image: docker.io/bitnami/redis:7.4
+  #   volumes:
+  #     - 'redis_data:/bitnami'
+  #   ports:
+  #     - '6376:6379'
+  #   environment:
+  #     # ALLOW_EMPTY_PASSWORD is recommended only for development.
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #   networks:
+  #     - shared_network
 
 
   # MinIO server
@@ -80,8 +81,8 @@ services:
     volumes:
       - mlflow-data:/app
     depends_on:
-      postgresql:
-        condition: service_healthy
+      # postgresql:
+      #   condition: service_healthy
       minio:
         condition: service_healthy
     environment:

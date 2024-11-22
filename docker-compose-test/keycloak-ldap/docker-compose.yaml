@@ -22,7 +22,7 @@ services:
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KEYCLOAK_DATABASE_PASSWORD=admin
     ports:
-      - "8080:8080"
+      - "18080:8080"
     volumes:
       - ./realms:/realms
       - ./kc-init.sh:/docker-entrypoint-initdb.d/kc-init.sh
@@ -50,18 +50,18 @@ services:
     networks:
       - shared_network
 
-  phpldapadmin:
-    image: osixia/phpldapadmin:latest
-    environment:
-      - PHPLDAPADMIN_LDAP_HOSTS=openldap
-      - PHPLDAPADMIN_HTTPS=false
-    ports:
-      - "6443:443"
-      - "8081:80"
-    depends_on:
-      - openldap
-    networks:
-      - shared_network
+  # phpldapadmin:
+  #   image: osixia/phpldapadmin:latest
+  #   environment:
+  #     - PHPLDAPADMIN_LDAP_HOSTS=openldap
+  #     - PHPLDAPADMIN_HTTPS=false
+  #   ports:
+  #     - "6443:443"
+  #     - "8081:80"
+  #   depends_on:
+  #     - openldap
+  #   networks:
+  #     - shared_network
 
   redis:
     image: bitnami/redis:latest

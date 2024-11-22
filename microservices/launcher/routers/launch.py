@@ -10,49 +10,49 @@ from models.ProjectModel import Project
 from services.ICacheService import ICacheService
 
 router = APIRouter()
-dummy_project_data = [
-    Project(
-        project_name="test-mlflow-project-run",
-        project_type="MLFLOW_SINGLE_NODE",
-        creation_date=datetime(2021, 9, 1).strftime("%Y-%m-%d"),
-        project_repo_url="https://github.com/dolphinnG/testmlproject.git",
-        project_entry_module="main.py",
-        project_parameters={"experiment_name": "test-mlflow-project-run"},
-        project_log_records=["run-1", "run-2", "run-3", "dummy-log"],
-    ),
-    Project(
-        project_name="test-spark-project",
-        project_type="MLFLOW_SPARK",
-        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
-        project_repo_url="https://github.com/dolphinnG/testsparkproject.git",
-        project_entry_module="testspark5.py",
-        project_parameters={},
-        project_log_records=[],
-    ),
-    Project(
-        project_name="testsfgyyysadfsdafsadfsdn",
-        project_type="MLFLOW_TORCHDDP",
-        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
-        project_repo_url="sdfasdfasdf",
-        project_entry_module="ddptest.py",
-        project_parameters={},
-        project_log_records=[],
-    ),
-    Project(
-        project_name="test torch ddp launch",
-        project_type="MLFLOW_TORCHDDP",
-        creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
-        project_repo_url="supahakka/launcher:v21",
-        project_entry_module="ddptest.py",
-        project_parameters={"job_name": "hehejobsname"},
-        project_log_records=["dummy-log"],
-    ),
-]
+# dummy_project_data = [
+#     Project(
+#         project_name="test-mlflow-project-run",
+#         project_type="MLFLOW_SINGLE_NODE",
+#         creation_date=datetime(2021, 9, 1).strftime("%Y-%m-%d"),
+#         project_repo_url="https://github.com/dolphinnG/testmlproject.git",
+#         project_entry_module="main.py",
+#         project_parameters={"experiment_name": "test-mlflow-project-run"},
+#         project_log_records=["run-1", "run-2", "run-3", "dummy-log"],
+#     ),
+#     Project(
+#         project_name="test-spark-project",
+#         project_type="MLFLOW_SPARK",
+#         creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+#         project_repo_url="https://github.com/dolphinnG/testsparkproject.git",
+#         project_entry_module="testspark5.py",
+#         project_parameters={},
+#         project_log_records=[],
+#     ),
+#     Project(
+#         project_name="testsfgyyysadfsdafsadfsdn",
+#         project_type="MLFLOW_TORCHDDP",
+#         creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+#         project_repo_url="sdfasdfasdf",
+#         project_entry_module="ddptest.py",
+#         project_parameters={},
+#         project_log_records=[],
+#     ),
+#     Project(
+#         project_name="test torch ddp launch",
+#         project_type="MLFLOW_TORCHDDP",
+#         creation_date=datetime.utcnow().strftime("%Y-%m-%d"),
+#         project_repo_url="supahakka/launcher:v21",
+#         project_entry_module="ddptest.py",
+#         project_parameters={"job_name": "hehejobsname"},
+#         project_log_records=["dummy-log"],
+#     ),
+# ]
 
 
-@router.get("/init")
-async def init_data(request: Request, redis_cache: ICacheService = Depends(get_redis_service)):
-    await redis_cache.set_pydantic_list_cache("dolphin_projects", dummy_project_data)
+# @router.get("/init")
+# async def init_data(request: Request, redis_cache: ICacheService = Depends(get_redis_service)):
+#     await redis_cache.set_pydantic_list_cache("dolphin_projects", dummy_project_data)
 
 @router.get("/projects")
 async def get_projects(request: Request, redis_cache: ICacheService = Depends(get_redis_service)):

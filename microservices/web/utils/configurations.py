@@ -19,6 +19,13 @@ class Conf(BaseSettings):
     LDAP_ADMIN_PASSWORD: str
     # LDAP_PORT: int
     
+    MODEL_MANAGEMENT_HOST: str
+    ORCHESTRATION_HOST: str
+    JOBS_MONITOR_HOST: str
+    LAUNCHER_HOST: str
+    SCHEDULER_HOST: str
+    DATAPLANE_HOST: str
+    
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", env_prefix=""
     )

@@ -8,8 +8,10 @@ from kubernetes import client
 from models.ProjectModel import Project
 from .BaseLauncher import BaseLauncher
 import threading
+from dependencies.deps import get_configs
 
 
+settings = get_configs()
 class TorchxLauncher(BaseLauncher):
     def __init__(self, namespace, queue, s3_service):
         self.namespace = namespace
@@ -80,11 +82,11 @@ class TorchxLauncher(BaseLauncher):
             # rdzv_port=30303,
             j="2x1",
             env={ # .env this shit
-                "MLFLOW_S3_ENDPOINT_URL": "http://mlflowtest-minio:80",
-                "MLFLOW_TRACKING_URI": "http://mlflowtest-tracking:80",
-                "AWS_ACCESS_KEY_ID": "admin",
-                "AWS_SECRET_ACCESS_KEY": "admin123",
-                "MLFLOW_EXPERIMENT_NAME": "topg" # TODO: had better set in the script
+                "MLFLOW_S3_ENDPOINT_URL": settings.MLFLOW_S3_ENDPOINT_URL,
+                "MLFLOW_TRACKING_URI": settings.MLFLOW_TRACKING_URI,
+                "AWS_ACCESS_KEY_ID": settings.AWS_ACCESS_KEY_ID,
+                "AWS_SECRET_ACCESS_KEY": settings.AWS_SECRET_ACCESS_KEY,
+                # "MLFLOW_EXPERIMENT_NAME": "topg" # had better set in the script
             }
         )
         return self._launch(ddp_component)

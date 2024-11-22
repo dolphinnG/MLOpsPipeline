@@ -6,11 +6,7 @@ from .BaseLauncher import BaseLauncher
 from .S3Service import S3Service
 from models.ProjectModel import Project
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+
 logger = logging.getLogger(__name__)
 
 class MLFlowLauncher(BaseLauncher):

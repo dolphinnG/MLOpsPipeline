@@ -11,9 +11,14 @@ logging.basicConfig(
 )
 
 class VolcanoFacade:
-    def list_jobs(self, namespace='dolphin-ns') -> List[VolcanoJob]:
+    
+    def __init__(self, namespace, queue):
+        self.namespace = namespace
+        self.queue = queue
+    
+    def list_jobs(self) -> List[VolcanoJob]:
         try:
-            result = subprocess.run(['vcctl', 'job', 'list', '-n', namespace], capture_output=True, text=True, check=True)
+            result = subprocess.run(['vcctl', 'job', 'list', '-n', self.namespace], capture_output=True, text=True, check=True)
             output = result.stdout
             jobs = []
             for line in output.splitlines():
@@ -41,9 +46,9 @@ class VolcanoFacade:
             logging.error(f"Error occurred while calling vcctl: {e}")
             return []
 
-    def delete_job(self, job_name, namespace='dolphin-ns'):
+    def delete_job(self, job_name):
         try:
-            subprocess.run(['vcctl', 'job', 'delete', '-N', job_name, '-n', namespace], check=True)
+            subprocess.run(['vcctl', 'job', 'delete', '-N', job_name, '-n', self.namespace], check=True)
             logging.info(f"Job {job_name} deleted successfully.")
         except subprocess.CalledProcessError as e:
             logging.error(f"Error occurred while deleting job {job_name}: {e}")

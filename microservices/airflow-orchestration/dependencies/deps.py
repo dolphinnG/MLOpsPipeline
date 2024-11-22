@@ -1,7 +1,14 @@
-
 from functools import lru_cache
 from services.AirflowService import AirflowFacade
+from utils.configurations import Conf
+
+settings = Conf()  # type: ignore
+
 
 @lru_cache
 def get_airflow_facade() -> AirflowFacade:
-    return AirflowFacade(host="http://localhost:8080/api/v1", username="user", password="bitnami")
+    return AirflowFacade(
+        host=settings.AIRFLOW_API_ENDPOINT,
+        username=settings.AIRFLOW_API_USER,
+        password=settings.AIRFLOW_API_PASSWORD,
+    )

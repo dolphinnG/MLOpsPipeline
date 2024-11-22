@@ -1,19 +1,13 @@
 import logging
 from venv import logger
-from fastapi import Request, HTTPException, Response
+from fastapi import Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.base import RequestResponseEndpoint
-from keycloak import KeycloakGetError, KeycloakOpenID
 from services.interfaces.IAuthService import IAuthService
-from utils.constants import USER_SESSION_KEY
-from models.userSession import UserSession
-from services.interfaces.ICacheService import ICacheService
 from dependencies.deps import get_configurations, get_keycloak_openid, get_cache_service
-from starlette.exceptions import HTTPException as StarletteHTTPException
 from services.implementations.KeyCloakAuthService import KeyCloakAuthService
-from fastapi import Depends
 
 templates = Jinja2Templates(directory="templates")
 

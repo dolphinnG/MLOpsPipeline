@@ -11,14 +11,8 @@ import os
 import shutil
 from models.ProjectModel import Project
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+
 logger = logging.getLogger(__name__)
-
-
 
 class SparkLauncher(BaseLauncher):
 
@@ -97,7 +91,7 @@ class SparkLauncher(BaseLauncher):
                 break
 
         if not entry_file_path:
-            raise FileNotFoundError("testspark5.py not found in the cloned repository")
+            raise FileNotFoundError(f"{entry_module} not found in the cloned repository")
 
         # Zip the project
         zip_file_path = self._zip_project(tmp_git_dir)

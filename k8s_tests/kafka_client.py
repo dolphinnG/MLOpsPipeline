@@ -22,7 +22,6 @@ def produce_message(broker, topic, message, sasl_username, sasl_password):
 
 
 
-# Example usage
 if __name__ == "__main__":
     broker = 'localhost:9092'
     topic = 'test_topic'

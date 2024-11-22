@@ -8,7 +8,7 @@ from services.DataPlaneService import DataPlaneService
 from grpcStub.scheduler_pb2_grpc import SchedulerStub
 from grpcStub.v2_dataplane_pb2_grpc import GRPCInferenceServiceStub
 from services.BaseSeldonGrpcService import BaseSeldonGrpcService
-
+from utils.configurations import Conf
 
 
 T = TypeVar('T', bound=BaseSeldonGrpcService)
@@ -21,6 +21,7 @@ def get_service(service_class: Type[T], stub_class: Type, address: str) -> Calla
         return service_class(stub)
     return _get_service
 
-get_scheduler_service2 = get_service(SchedulerService, SchedulerStub, "localhost:9004")
-get_inference_service2 = get_service(InferenceService, GRPCInferenceServiceStub, "0.0.0.0:9000")
-get_dataplane_service2 = get_service(DataPlaneService, GRPCInferenceServiceStub, "0.0.0.0:8081")
+settings = Conf() # type: ignore
+get_scheduler_service2 = get_service(SchedulerService, SchedulerStub, settings.SELDON_SCHEDULER_GRPC_ENDPOINT)
+get_inference_service2 = get_service(InferenceService, GRPCInferenceServiceStub, settings.SELDON_INFERENCE_GRPC_ENDPOINT)
+get_dataplane_service2 = get_service(DataPlaneService, GRPCInferenceServiceStub, settings.SELDON_DATAPLANE_GRPC_ENDPOINT)

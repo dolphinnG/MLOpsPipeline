@@ -1,37 +1,40 @@
 
 
 services:
-  postgresql:
-    image: docker.io/bitnami/postgresql:17
-    # volumes:
-    #   - 'postgresql_data:/bitnami/postgresql'
-    environment:
-      - POSTGRESQL_DATABASE=bitnami_airflow
-      - POSTGRESQL_USERNAME=bn_airflow
-      - POSTGRESQL_PASSWORD=bitnami1
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
 
-    networks:
-      - shared_network
+  ############## USE THE POSTGRESQL OF THE KEYCLOAK-LDAP DOCKER-COMPOSE ##############
+  # postgresql:
+  #   image: docker.io/bitnami/postgresql:17
+  #   # volumes:
+  #   #   - 'postgresql_data:/bitnami/postgresql'
+  #   environment:
+  #     - POSTGRESQL_DATABASE=bitnami_airflow
+  #     - POSTGRESQL_USERNAME=bn_keycloak
+  #     - POSTGRESQL_PASSWORD=admin
+  #     # ALLOW_EMPTY_PASSWORD is recommended only for development.
+  #     - ALLOW_EMPTY_PASSWORD=yes
 
-  redis:
-    image: docker.io/bitnami/redis:7.4
-    # volumes:
-    #   - 'redis_data:/bitnami'
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
-    networks:
-      - shared_network
+  #   networks:
+  #     - shared_network
+
+  ###################### USE THE REDIS OF THEKEYCLOAK-LDAP DOCKER-COMPOSE ######################
+  # redis:
+  #   image: docker.io/bitnami/redis:7.4
+  #   # volumes:
+  #   #   - 'redis_data:/bitnami'
+  #   environment:
+  #     # ALLOW_EMPTY_PASSWORD is recommended only for development.
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #   networks:
+  #     - shared_network
 
   airflow-scheduler:
     image: docker.io/bitnami/airflow:2
     environment:
       - AIRFLOW_COMPONENT_TYPE=scheduler
       - AIRFLOW_DATABASE_NAME=bitnami_airflow
-      - AIRFLOW_DATABASE_USERNAME=bn_airflow
-      - AIRFLOW_DATABASE_PASSWORD=bitnami1
+      - AIRFLOW_DATABASE_USERNAME=bn_keycloak
+      - AIRFLOW_DATABASE_PASSWORD=admin
       - AIRFLOW_EXECUTOR=CeleryExecutor
       - AIRFLOW_WEBSERVER_HOST=airflow
     networks:
@@ -42,8 +45,8 @@ services:
     environment:
       - AIRFLOW_COMPONENT_TYPE=worker
       - AIRFLOW_DATABASE_NAME=bitnami_airflow
-      - AIRFLOW_DATABASE_USERNAME=bn_airflow
-      - AIRFLOW_DATABASE_PASSWORD=bitnami1
+      - AIRFLOW_DATABASE_USERNAME=bn_keycloak
+      - AIRFLOW_DATABASE_PASSWORD=admin
       - AIRFLOW_EXECUTOR=CeleryExecutor
       - AIRFLOW_WEBSERVER_HOST=airflow
     networks:
@@ -53,13 +56,13 @@ services:
     image: docker.io/bitnami/airflow:2
     environment:
       - AIRFLOW_DATABASE_NAME=bitnami_airflow
-      - AIRFLOW_DATABASE_USERNAME=bn_airflow
-      - AIRFLOW_DATABASE_PASSWORD=bitnami1
+      - AIRFLOW_DATABASE_USERNAME=bn_keycloak
+      - AIRFLOW_DATABASE_PASSWORD=admin
       - AIRFLOW_EXECUTOR=CeleryExecutor
       - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
 
     ports:
-      - '8080:8080'
+      - '28080:8080'
     networks:
       - shared_network
 
@@ -69,3 +72,4 @@ services:
 
 networks:
   shared_network:
+    external: true

@@ -48,35 +48,6 @@ async def proxy_request(
     # Return the response from the target microservice
     return response
 
-
-async def proxy_to_model_management(
-    request: Request, httpx_client: AsyncClient, path: str
-):
-    model_management_host = "http://localhost:15000/mlflow"
-    res = await proxy_request(request, httpx_client, model_management_host, path)
-    return res.json()
-
-
-async def proxy_to_orchestration(
-    request: Request, httpx_client: AsyncClient, path: str
-):
-    orchestration_host = "http://localhost:15001/api/v1"
-    res = await proxy_request(request, httpx_client, orchestration_host, path)
-    return res.json()
-
-
-async def proxy_to_jobs_monitor(request: Request, httpx_client: AsyncClient, path: str):
-    jobs_monitor_host = "http://localhost:15002/distributed"
-    res = await proxy_request(request, httpx_client, jobs_monitor_host, path)
-    return res.json()
-
-
-async def proxy_to_launcher(request: Request, httpx_client: AsyncClient, path: str):
-    jobs_monitor_host = "http://localhost:15003/launcher"
-    res = await proxy_request(request, httpx_client, jobs_monitor_host, path)
-    return res.json()
-
-
 async def proxy_text_stream(
     request: Request, httpx_client: AsyncClient, microservice: str, path: str
 ):
@@ -101,19 +72,49 @@ async def proxy_text_stream(
     return StreamingResponse(stream_content(), media_type="text/plain")
 
 
+from utils.configurations import Conf
+settings = Conf() # type: ignore
+
+async def proxy_to_model_management(
+    request: Request, httpx_client: AsyncClient, path: str
+):
+    model_management_host = settings.MODEL_MANAGEMENT_HOST
+    res = await proxy_request(request, httpx_client, model_management_host, path)
+    return res.json()
+
+
+async def proxy_to_orchestration(
+    request: Request, httpx_client: AsyncClient, path: str
+):
+    orchestration_host = settings.ORCHESTRATION_HOST
+    res = await proxy_request(request, httpx_client, orchestration_host, path)
+    return res.json()
+
+
+async def proxy_to_jobs_monitor(request: Request, httpx_client: AsyncClient, path: str):
+    jobs_monitor_host = settings.JOBS_MONITOR_HOST
+    res = await proxy_request(request, httpx_client, jobs_monitor_host, path)
+    return res.json()
+
+
+async def proxy_to_launcher(request: Request, httpx_client: AsyncClient, path: str):
+    launcher_host = settings.LAUNCHER_HOST
+    res = await proxy_request(request, httpx_client, launcher_host, path)
+    return res.json()
+
 async def proxy_stream_to_launcher(
     request: Request, httpx_client: AsyncClient, path: str
 ):
-    jobs_monitor_host = "http://localhost:15003/launcher"
-    stream = await proxy_text_stream(request, httpx_client, jobs_monitor_host, path)
+    launcher_host = settings.LAUNCHER_HOST
+    stream = await proxy_text_stream(request, httpx_client, launcher_host, path)
     return stream
 
 async def proxy_to_scheduler(request: Request, httpx_client: AsyncClient, path: str):
-    scheduler_host = "http://localhost:15004/scheduler"
+    scheduler_host = settings.SCHEDULER_HOST
     res = await proxy_request(request, httpx_client, scheduler_host, path)
     return res.json()
 
 async def proxy_to_dataplane(request: Request, httpx_client: AsyncClient, path: str):
-    dataplane_host = "http://localhost:15004/dataplane"
+    dataplane_host = settings.DATAPLANE_HOST
     res = await proxy_request(request, httpx_client, dataplane_host, path)
     return res.json()

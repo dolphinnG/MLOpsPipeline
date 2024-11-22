@@ -5,39 +5,71 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python main.py with Kubernetes",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "main.py",
-            "console": "integratedTerminal",
-            "cwd": "/home/dolphin/Desktop/pipeline/MLOpsPipeline/microservices/deployment/",
-            "preLaunchTask": "bridge-to-kubernetes.resource",
-            "env": {
-                "GRPC_DNS_RESOLVER": "native"
-            }
-        },
-        {
-            "name": "Python Debugger: Current File",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Python main.py",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "main.py",
-            "console": "integratedTerminal",
-            "cwd": "/home/dolphin/Desktop/pipeline/MLOpsPipeline/microservices/deployment/"
-        },
-        {
-            "name": "Python web microservice",
+            "name": "web",
             "type": "debugpy",
             "request": "launch",
             "program": "app.py",
             "console": "integratedTerminal",
-            "cwd": "/home/dolphin/Desktop/pipeline/MLOpsPipeline/microservices/web/"
+            "consoleName": "web",
+            "python": "${workspaceFolder}/microservices/web/.venv/bin/python",
+            "cwd": "${workspaceFolder}/microservices/web"
+        },
+        {
+            "name": "launcher",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "consoleName": "launcher",
+            "python": "${workspaceFolder}/microservices/launcher/.venv/bin/python",
+            "cwd": "${workspaceFolder}/microservices/launcher"
+        },
+        {
+            "name": "model-management",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "consoleName": "mode-management",
+            "python": "${workspaceFolder}/microservices/model-management/.venv/bin/python",
+            "cwd": "${workspaceFolder}/microservices/model-management"
+        },
+        {
+            "name": "jobs-monitor",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "consoleName": "jobs-monitor",
+            "python": "${workspaceFolder}/microservices/jobs-monitor/.venv/bin/python",
+            "cwd": "${workspaceFolder}/microservices/jobs-monitor"
+        },
+        {
+            "name": "deployment",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "consoleName": "deployment",
+            "python": "${workspaceFolder}/microservices/deployment/.venv/bin/python",
+            "cwd": "${workspaceFolder}/microservices/deployment"
+        },
+        {
+            "name": "airflow-orchestration",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "app.py",
+            "console": "integratedTerminal",
+            "consoleName": "airflow-orchestration",
+            "python": "${workspaceFolder}/microservices/airflow-orchestration/.venv/bin/python",
+            "cwd": "${workspaceFolder}/microservices/airflow-orchestration"
+        }
+
+    ],
+    "compounds": [
+        {
+            "name": "ALL MICROSERVICES",
+            "configurations": ["web", "launcher", "model-management", "jobs-monitor", "deployment", "airflow-orchestration"]
         }
     ]
 }
