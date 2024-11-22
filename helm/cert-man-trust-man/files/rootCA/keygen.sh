@@ -1,6 +1,6 @@
 # CA
-openssl genpkey -algorithm RSA -out crts/dolphin.rootCA.key -pkeyopt rsa_keygen_bits:2048
-openssl req -x509 -new -nodes -key crts/dolphin.rootCA.key -sha256 -days 3650 -out crts/dolphin.rootCA.crt -config ca.cnf -extensions v3_ca
+openssl genpkey -algorithm RSA -out dolphin.rootCA.key -pkeyopt rsa_keygen_bits:2048
+openssl req -x509 -new -nodes -key dolphin.rootCA.key -sha256 -days 3650 -out dolphin.rootCA.crt -config ca.cnf -extensions v3_ca
 
 
 

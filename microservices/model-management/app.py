@@ -17,4 +17,4 @@ app.include_router(mlflow.router, prefix="/mlflow")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run('app:app', host="localhost", port=15000, reload=True)
+    uvicorn.run('app:app', host="localhost", port=15000, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key")

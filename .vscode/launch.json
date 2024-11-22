@@ -70,6 +70,10 @@
         {
             "name": "ALL MICROSERVICES",
             "configurations": ["web", "launcher", "model-management", "jobs-monitor", "deployment", "airflow-orchestration"]
+        },
+        {
+            "name": "WEB AND AIRFLOW TO TEST SSL",
+            "configurations": ["web", "airflow-orchestration"]
         }
     ]
 }

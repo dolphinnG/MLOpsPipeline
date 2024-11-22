@@ -10,10 +10,11 @@ app = FastAPI()
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
+
 
 # Exception handler
 @app.exception_handler(Exception)
@@ -24,6 +25,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"message": "Operation failed", "details": str(exc)},
     )
 
+
 # Include routers in the FastAPI app
 app.include_router(dag_router, prefix="/api/v1")
 app.include_router(dag_run_router, prefix="/api/v1")
@@ -32,7 +34,7 @@ app.include_router(task_instance_router, prefix="/api/v1")
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("app:app", host="localhost", port=15001, reload=True)
+    uvicorn.run("app:app", host="localhost", port=15001, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key")
 
 # configuration = client.Configuration(host="http://localhost:8080/api/v1", username="user", password="bitnami")
 

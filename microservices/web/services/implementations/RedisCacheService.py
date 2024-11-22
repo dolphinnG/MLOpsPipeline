@@ -58,8 +58,8 @@ class RedisService(ICacheService):
     async def get_pydantic_list_cache(self, key: str, model_class: Type[T]) -> list[T]:
         try:
             value = await self.get(key)
-            assert isinstance(value, str), "Cached value is not a string"
             if value:
+                assert isinstance(value, str), "Cached value is not a string"
                 model_dicts = json.loads(value)
                 return [model_class(**model_dict) for model_dict in model_dicts]
             return []

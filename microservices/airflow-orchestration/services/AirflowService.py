@@ -15,7 +15,6 @@ class SingletonMeta(type):
 
 class AirflowFacade(metaclass=SingletonMeta):
     # need to enable basic auth for api authentication first in the airflow webserver
-    # https://airflow.apache.org/docs/apache-airflow-providers-fab/stable/auth-manager/api-authentication.html
     def __init__(self, host: str, username: str, password: str):
         configuration = client.Configuration(
             host=host, username=username, password=password

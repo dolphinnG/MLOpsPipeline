@@ -14,9 +14,16 @@ CN = dolphin.lmao
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints = critical,CA:true
-keyUsage = critical,keyCertSign,cRLSign
+keyUsage = critical,keyCertSign,cRLSign, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth, clientAuth
+subjectAltName = @alt_names
 
 [ v3_req ]
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-extendedKeyUsage = serverAuth
+extendedKeyUsage = serverAuth, clientAuth
+subjectAltName = @alt_names
 
+[ alt_names ]
+DNS.1 = dolphin.lmao
+DNS.2 = localhost
+IP.1 = 127.0.0.1

@@ -62,4 +62,4 @@ async def profile(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="127.0.0.1", port=14999, reload=True)
+    uvicorn.run("app:app", host="127.0.0.1", port=14999, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key") # TODO: set workers

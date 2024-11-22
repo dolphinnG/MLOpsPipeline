@@ -47,5 +47,5 @@ async def get_ldap_service() -> IUserService:
 
 @lru_cache
 def get_httpx_async_client():
-    return httpx.AsyncClient(follow_redirects=True, timeout=100.0)
+    return httpx.AsyncClient(follow_redirects=True, timeout=100.0, verify="dolphin.rootCA.crt")
 
