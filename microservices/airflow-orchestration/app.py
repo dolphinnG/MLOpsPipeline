@@ -8,7 +8,11 @@ from routers.task_instance_router import task_instance_router
 app = FastAPI()
 
 # Set up logging
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 logger = logging.getLogger(__name__)
 
 # Exception handler

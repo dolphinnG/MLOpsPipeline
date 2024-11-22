@@ -1,4 +1,5 @@
 import json
+import logging
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,6 +8,12 @@ from middlewares.TokenValidationMiddleware import TokenValidationMiddleware
 from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 
 from utils.constants import USER_SESSION_KEY, USER_DATA_KEY
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
