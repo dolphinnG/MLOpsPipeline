@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Create User{% endblock %}
+
+{% block content %}
+<h1>Create User</h1>
+<div class="container">
+    <form id="createUserForm">
+        <label for="cn">Common Name (CN):</label>
+        <input type="text" id="cn" name="cn" required>
+
+        <label for="sn">Surname (SN):</label>
+        <input type="text" id="sn" name="sn" required>
+
+        <label for="uid">User ID (UID):</label>
+        <input type="text" id="uid" name="uid" required>
+
+        <label for="mail">Email:</label>
+        <input type="email" id="mail" name="mail" required>
+        
+        <br/><br/>
+        <label for="userPassword">Password:</label>
+        <input type="password" id="userPassword" name="userPassword" required>
+        <br/><br/>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title">
+
+        <label for="l">Location:</label>
+        <input type="text" id="l" name="l">
+
+        <label for="telephoneNumber">Telephone Number:</label>
+        <input type="text" id="telephoneNumber" name="telephoneNumber">
+
+        <label for="group">Group:</label>
+        <select id="group" name="group" required>
+            <option value="MLOpsEngineer">MLOps Engineer</option>
+            <option value="DataScientist">Data Scientist</option>
+            <option value="Viewer">Viewer</option>
+        </select>
+        <br/>
+        <button type="submit">Create User</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('createUserForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch('/users/action/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+        window.location.href = '/';
+    } else {
+        const errorData = await response.json();
+        console.error('Error: ' + errorData.detail);
+    }
+});
+</script>
+{% endblock %}

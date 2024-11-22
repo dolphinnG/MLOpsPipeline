@@ -244,8 +244,6 @@ ul li {
     border-radius: 5px; /* Rounded corners */
 }
 
-
-
 form {
     background-color: #fff;
     padding: 20px;
@@ -363,5 +361,53 @@ form button[type="button"].add-candidate:hover {
 .step-container .add-tensor-map:hover,
 .step-container .add-input:hover {
     background-color: #353548; /* Darker gray on hover */
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    /* background-color: black; */
+    border: 2px solid #4CAF50; /* Add green border */
+}
+
+.button:hover {
+    background-color: #3e8e41;
+    border-color: #3e8e41; /* Change border color on hover */
+}
+
+.button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.profile-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.profile-container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.profile-data p {
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0;
+}
+
+.profile-data p strong {
+    color: #000;
 }
 

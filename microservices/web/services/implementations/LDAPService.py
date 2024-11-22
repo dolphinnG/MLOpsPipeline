@@ -36,7 +36,7 @@ class LDAPService(IUserService):
 
         async def add_user(self, user: UserCreate):
             user_dn = f"uid={user.uid},{constants.LDAP_USERS_BASE_DN}"
-            user_attributes = user.model_dump()
+            user_attributes = user.model_dump(exclude={"group"})
             self.conn.add(user_dn, attributes=user_attributes)
             return self.conn.result
 
@@ -55,10 +55,10 @@ class LDAPService(IUserService):
             self.conn.delete(user_dn)
             return self.conn.result
 
-        async def add_user_to_group(self, user_dn: str, group_dn: str):
-            user_dn = f"uid={user_dn},{constants.LDAP_USERS_BASE_DN}"
-            group_dn = f"cn={group_dn},{constants.LDAP_USERS_BASE_DN}"
-            self.conn.modify(group_dn, {"member": [(MODIFY_ADD, [user_dn])]})
+        async def add_user_to_group(self, uid: str, group_name: str):
+            uid = f"uid={uid},{constants.LDAP_USERS_BASE_DN}"
+            group_name = f"cn={group_name},{constants.LDAP_GROUPS_BASE_DN}"
+            self.conn.modify(group_name, {"member": [(MODIFY_ADD, [uid])]})
             return self.conn.result
 
         async def remove_user_from_group(self, user_dn: str, group_dn: str):

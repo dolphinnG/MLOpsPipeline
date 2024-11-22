@@ -12,7 +12,21 @@
 </head>
 <body>
     <header>
-        <p>🐬 Pipeline Portal<p>
+        <p><a href="/" style="color: inherit; text-decoration: none;">🐬 Pipeline Portal</a></p>
+        <nav style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+            {% if request.cookies.user_data %}
+                {% set user_data = request.cookies.user_data | load_json %}
+                {% if 'ldapGroup' in user_data and 'MLOpsEngineer' in user_data.ldapGroup %}
+                    <a href="/users/create" class="button"><i class="fas fa-plus"></i></a>
+                {% endif %}
+            {% endif %}
+            {% if request.cookies.user_session_id %}
+                <a href="/profile" class="button"><i class="fas fa-user"></i></a>
+                <a href="/auth/logout" class="button">Logout</a>
+            {% else %}
+                <a href="/auth/login" class="button">Login</a>
+            {% endif %}
+        </nav>
     </header>
     <div class="container full-height">
         <button class="toggle-sidebar" onclick="toggleSidebar()">☰</button>

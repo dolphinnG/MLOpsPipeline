@@ -14,7 +14,8 @@ router = APIRouter()
 async def login(
     request: Request,
     response: Response,
-    auth_service: IAuthService = Depends(KeyCloakAuthService.get_instance)
+    auth_service: IAuthService = Depends(KeyCloakAuthService.get_instance),
+    templates: Jinja2Templates = Depends(get_templates)
 ):
     return await auth_service.login(response)
 
@@ -31,6 +32,8 @@ async def callback(
 async def logout(
     request: Request,
     response: Response,
-    auth_service: IAuthService = Depends(KeyCloakAuthService.get_instance)
+    auth_service: IAuthService = Depends(KeyCloakAuthService.get_instance),
+    templates: Jinja2Templates = Depends(get_templates)
 ):
     return await auth_service.logout(request, response)
+    

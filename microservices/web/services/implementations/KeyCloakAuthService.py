@@ -1,9 +1,10 @@
+import json
 from keycloak import KeycloakOpenID
 from services.interfaces.ICacheService import ICacheService
 from utils.configurations import Conf
 from utils.utils import generate_code_verifier, generate_code_challenge
 from models.userSession import UserSession
-from utils.constants import USER_SESSION_KEY
+from utils.constants import USER_SESSION_KEY, USER_DATA_KEY
 import uuid
 import random
 import string
@@ -64,8 +65,11 @@ class KeyCloakAuthService(IAuthService):
         auth_url += "&code_challenge=" + code_challenge + "&code_challenge_method=S256"
         res = RedirectResponse(url=auth_url)
         res.set_cookie(key=USER_SESSION_KEY, value=session_id)
+        
         return res
+    
 
+        
     async def callback(self, request: Request, code: str, state: str):
         session_id = request.cookies.get(USER_SESSION_KEY)
         if not session_id:
@@ -104,7 +108,10 @@ class KeyCloakAuthService(IAuthService):
         user_session.decoded_id_token = decoded_id_token
         user_session.decoded_access_token = decoded_token
         await self.cache_service.set_pydantic_cache(session_id, user_session)
-        return RedirectResponse(url="/")
+        response = RedirectResponse(url="/")
+        response = await self._populate_cookie_with_user_data(decoded_token, response)
+        return response
+
 
     async def logout(self, request: Request, response: Response):
         session_id = request.cookies.get(USER_SESSION_KEY)
@@ -115,6 +122,7 @@ class KeyCloakAuthService(IAuthService):
             await self.cache_service.invalidate(session_id)
         response = RedirectResponse(url="/")
         response.delete_cookie(USER_SESSION_KEY)
+        response.delete_cookie(USER_DATA_KEY)
         return response
 
     async def validate_token(self, request: Request):
@@ -141,3 +149,19 @@ class KeyCloakAuthService(IAuthService):
             except KeycloakGetError:
                 raise HTTPException(status_code=401, detail="Failed to refresh token")
         # return decoded_token
+        
+    async def _populate_cookie_with_user_data(self, decoded_access_token, response):
+        user_data = {
+            "ldapGroup": decoded_access_token.get("ldapGroup", []),
+            "phone": decoded_access_token.get("phone", ""),
+            "name": decoded_access_token.get("name", ""),
+            "location": decoded_access_token.get("location", ""),
+            "preferred_username": decoded_access_token.get("preferred_username", ""),
+            "title": decoded_access_token.get("title", ""),
+            "given_name": decoded_access_token.get("given_name", ""),
+            "family_name": decoded_access_token.get("family_name", ""),
+            "email": decoded_access_token.get("email", "")
+        }
+        user_data_json = json.dumps(user_data)
+        response.set_cookie(key=USER_DATA_KEY, value=user_data_json)
+        return response

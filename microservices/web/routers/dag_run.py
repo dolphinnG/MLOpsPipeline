@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -9,6 +10,8 @@ from utils.utils import proxy_to_orchestration
 router = APIRouter(tags=["DAG Runs"])
 
 templates = Jinja2Templates(directory="templates")
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 # @dag_run_router.post("/dags/{dag_id}/dagRuns/{dag_run_id}/clear")
 # def clear_dag_run(

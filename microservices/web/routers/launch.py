@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
@@ -8,7 +9,8 @@ import httpx
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 @router.get("/projects")
 async def get_projects(

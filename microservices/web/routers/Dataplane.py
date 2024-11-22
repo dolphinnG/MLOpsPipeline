@@ -7,6 +7,8 @@ from utils.utils import proxy_to_dataplane, proxy_to_scheduler
 
 router = APIRouter(tags=["Dataplane"])
 templates = Jinja2Templates(directory="templates")
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 @router.get("/")
 async def read_dataplane(request: Request):

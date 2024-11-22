@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, Request
 import logging
 
@@ -10,6 +11,8 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["Scheduler"])
 templates = Jinja2Templates(directory="templates")
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 @router.get("/")
 async def read_scheduler(request: Request):

@@ -10,8 +10,10 @@ class UserBase(BaseModel):
     title: Optional[str] = None
     l: Optional[str] = None
     telephoneNumber: Optional[str] = None
+    # group: str
 
 class UserCreate(UserBase):
+    group: str
     objectClass: list = ['inetOrgPerson']
 
 class UserUpdate(BaseModel):

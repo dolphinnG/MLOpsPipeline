@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, Request
 from httpx import AsyncClient, get
 from utils.utils import proxy_to_orchestration
@@ -7,6 +8,8 @@ from typing import List, Optional
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="templates")
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 router = APIRouter(tags=["DAGs"])
 

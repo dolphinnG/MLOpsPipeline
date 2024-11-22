@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -8,7 +9,8 @@ from dependencies.deps import get_httpx_async_client
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 @router.get("/spark")
 async def get_spark_cluster_metadata(

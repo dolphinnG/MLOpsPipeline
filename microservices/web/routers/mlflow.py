@@ -9,6 +9,8 @@ from dependencies.deps import get_httpx_async_client
 from utils.utils import proxy_to_model_management
 
 templates = Jinja2Templates(directory="templates")
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
 router = APIRouter(tags=["MLflow entities"])
 

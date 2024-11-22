@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+import json
+from fastapi import APIRouter, Body, Depends, HTTPException, Request
+from fastapi.templating import Jinja2Templates
 from services.implementations.LDAPService import LDAPService
 from services.interfaces.IUserService import IUserService
 from models.userModel import UserCreate, UserRead, UserUpdate
@@ -7,8 +9,13 @@ from dependencies.deps import get_ldap_service
 
 router = APIRouter()
 
+templates = Jinja2Templates(directory="templates")
+# Add custom filter to Jinja2 templates
+templates.env.filters['load_json'] = json.loads
 
-
+@router.get("/create")
+async def create_user_form(request: Request):
+    return templates.TemplateResponse("create_user.html", {"request": request})
 
 @router.post("/action/", response_model=dict)
 async def create_user(user: UserCreate, ldap_service: IUserService = Depends(get_ldap_service)):
@@ -16,6 +23,9 @@ async def create_user(user: UserCreate, ldap_service: IUserService = Depends(get
         result = await conn.add_user(user)
         if result['description'] != 'success':
             raise HTTPException(status_code=400, detail="Failed to create user")
+        result = await conn.add_user_to_group(user.uid, user.group)
+        if result['description'] != 'success':
+            raise HTTPException(status_code=400, detail="Failed to add user to group")
         return {"message": "User created successfully"}
 
 @router.put("/action/{user_dn}", response_model=dict)

@@ -4,3 +4,5 @@
 
 
 /opt/bitnami/keycloak/bin/kc.sh import --file /realms/realm.json
+
+# ldapsearch -H ldap://localhost -D "cn=topg,dc=dolphin,dc=lmao" -w supahakka -b "dc=dolphin,dc=lmao" "(objectClass=inetOrgPerson)"
