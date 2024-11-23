@@ -20,8 +20,8 @@ spec:
         key: password
     #   profile: Modern2023
 
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
+  duration: 9760h
+  renewBefore: 8760h 
 
   isCA: false
   usages:

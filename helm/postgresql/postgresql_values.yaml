@@ -1,3 +1,5 @@
+fullnameOverride: postgresqltest
+
 primary: 
   initdb: 
     user: postgres
@@ -9,16 +11,23 @@ primary:
         GRANT ALL PRIVILEGES ON DATABASE bitnami_keycloak TO bn_keycloak;
         \c bitnami_keycloak
         GRANT ALL PRIVILEGES ON SCHEMA public TO bn_keycloak;
+
+        CREATE DATABASE mlflow;
+        CREATE USER mlflow_db_user WITH PASSWORD 'mlflow_db_password';
+        GRANT ALL PRIVILEGES ON DATABASE mlflow TO mlflow_db_user;
+        \c mlflow
+        GRANT ALL PRIVILEGES ON SCHEMA public TO mlflow_db_user;
+
+        CREATE DATABASE mlflow_auth;
+        GRANT ALL PRIVILEGES ON DATABASE mlflow_auth TO mlflow_db_user;
+        \c mlflow_auth
+        GRANT ALL PRIVILEGES ON SCHEMA public TO mlflow_db_user;
   persistence: 
     enabled: false
 
 image: 
   debug: true
 
-
-
-
 auth:
   enablePostgresUser: true
   postgresPassword: adminpassword
-

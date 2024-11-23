@@ -1,10 +1,10 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: openldap-hehe 
+  name: mlflow-hehe 
 spec:
   # Secret names are always required.
-  secretName: openldap-tls-secret
+  secretName: mlflow-tls-secret
 
   # secretTemplate is optional. If set, these annotations and labels will be
   # copied to the Secret named example-com-tls. These labels and annotations will
@@ -33,7 +33,7 @@ spec:
   #       key: password
 
   duration: 9760h 
-  renewBefore: 8760h 
+  renewBefore: 8760h # 365d
 
   isCA: false
   usages:
@@ -49,7 +49,7 @@ spec:
   # need for it in your environment, use dnsNames exclusively to avoid issues with commonName.
   # Usually, commonName is used to give human-readable names to CA certificates and can be avoided for
   # other certificates.
-  commonName: openldap-dolphin-service
+  commonName: mlflow-dolphin-service
 
   # The literalSubject field is exclusive with subject and commonName. It allows
   # specifying the subject directly as a string. This is useful for when the order
@@ -59,9 +59,9 @@ spec:
   # literalSubject: "O=jetstack, CN=example.com, 2.5.4.42=John, 2.5.4.4=Doe"
 
   # At least one of commonName (possibly through literalSubject), dnsNames, uris, emailAddresses, ipAddresses or otherNames is required.
-  dnsNames:
-    - openldap-dolphin-service.dolphin-ns.svc.cluster.local
-    - openldap-dolphin-service
+  dnsNames: # must match the fullNameOverride
+    - mlflow-dolphin-service.dolphin-ns.svc.cluster.local
+    - mlflow-dolphin-service
 #   uris:
 #     - spiffe://cluster.local/ns/sandbox/sa/example
 #   emailAddresses:

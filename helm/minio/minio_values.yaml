@@ -1,0 +1,11 @@
+fullnameOverride: miniotest
+
+mode: standalone
+auth: 
+  rootUser: admin_minio
+  rootPassword: admin_minio
+
+defaultBuckets: "mlflow,projectlogs"
+
+persistence: 
+  enabled: false

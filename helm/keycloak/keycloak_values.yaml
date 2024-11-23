@@ -60,6 +60,11 @@ spi:
   truststorePassword: lmaohehe
   truststoreFilename: truststore.jks
 
+
+
+
+
+
 # extraStartupArgs: >-
 #   --spi-truststore-file-file=/test/tls/truststore.jks
 #   --spi-truststore-file-password=lmaohehe

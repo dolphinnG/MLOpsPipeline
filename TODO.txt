@@ -6,4 +6,8 @@ THAT MEANS THE base IMAGE FOR TORCHDDP, SPARK, AND LAUNCHER IMAGES NEED TO BE IN
 
 -----
 
+REMOVE MLFLOW_S3_ENDPOINT_URL AND RELATED ACCESS_KEY/SECRET/AWS_CA_BUNDLE ENVS ON CLIENT
 
+------
+
+add to env the s3 bucker for logs file "projectlogs" in launcher microservices, minio helm should sync the name 

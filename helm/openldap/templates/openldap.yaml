@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "bitnami/openldap:latest"
+          image: "bitnami/openldap:2.6.8-debian-12-r13"
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:

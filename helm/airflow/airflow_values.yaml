@@ -24,20 +24,23 @@ postgresql:
     password: "postgrespassword"
 
 
-extraVolumeMounts:
-  - name: kube-cert-secret
-    mountPath: /opt/bitnami/airflow/dolphin
-    readOnly: true
-  - name: kube-config-file
-    mountPath: /opt/bitnami/airflow/.kube
-    readOnly: true
-extraVolumes:
-  - name: kube-cert-secret
-    secret:
-      secretName: kube-cert-secret
-  - name: kube-config-file
-    configMap:
-      name: kube-config-file
+# not running torchx on dag, so this isn't needed, but even if it was, 
+# should use the kubeconfig generation script from serviceAccount that
+# i wrote rather than mounting the config from host to pod
+# extraVolumeMounts:
+#   - name: kube-cert-secret
+#     mountPath: /opt/bitnami/airflow/dolphin
+#     readOnly: true
+#   - name: kube-config-file
+#     mountPath: /opt/bitnami/airflow/.kube
+#     readOnly: true
+# extraVolumes:
+#   - name: kube-cert-secret
+#     secret:
+#       secretName: kube-cert-secret
+#   - name: kube-config-file
+#     configMap:
+#       name: kube-config-file
 
 
 
@@ -99,13 +102,13 @@ worker:
 # metrics: 
 #   automountServiceAccountToken: true
 
-serviceAccount: 
-  create: true
-  name: airflow-sa
-  automountServiceAccountToken: true
-  rbac:
-    create: true
-    rules: 
-    - apiGroups: [""]
-      resources: ["secrets"]
-      verbs: ["get", "list"]
+# serviceAccount: 
+#   create: true
+#   name: airflow-sa
+#   automountServiceAccountToken: true
+#   rbac:
+#     create: true
+#     rules: 
+#     - apiGroups: [""]
+#       resources: ["secrets"]
+#       verbs: ["get", "list"]
