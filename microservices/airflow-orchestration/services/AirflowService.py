@@ -15,9 +15,9 @@ class SingletonMeta(type):
 
 class AirflowFacade(metaclass=SingletonMeta):
     # need to enable basic auth for api authentication first in the airflow webserver
-    def __init__(self, host: str, username: str, password: str):
+    def __init__(self, host: str, username: str, password: str, ssl_ca_cert):
         configuration = client.Configuration(
-            host=host, username=username, password=password
+            host=host, username=username, password=password, ssl_ca_cert=ssl_ca_cert
         )
         self._api_client = client.ApiClient(configuration)
         self.dag_api = dag_api.DAGApi(self._api_client)
