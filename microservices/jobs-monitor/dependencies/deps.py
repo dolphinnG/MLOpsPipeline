@@ -17,4 +17,4 @@ def get_volcano_service():
 
 @lru_cache
 def get_httpx_async_client():
-    return httpx.AsyncClient(follow_redirects=True)
+    return httpx.AsyncClient(follow_redirects=True, verify=settings.ROOT_CA_CERT_PATH)

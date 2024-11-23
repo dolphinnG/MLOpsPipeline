@@ -3,16 +3,26 @@ import logging
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import auth, user, mlflow, dag, dag_run, monitor, launch, Scheduler, Dataplane
+from routers import (
+    auth,
+    user,
+    mlflow,
+    dag,
+    dag_run,
+    monitor,
+    launch,
+    Scheduler,
+    Dataplane,
+)
 from middlewares.TokenValidationMiddleware import TokenValidationMiddleware
 from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
-
+from dependencies.deps import get_configurations
 from utils.constants import USER_SESSION_KEY, USER_DATA_KEY
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 app = FastAPI()
@@ -20,7 +30,7 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Add custom filter to Jinja2 templates
-templates.env.filters['load_json'] = json.loads
+templates.env.filters["load_json"] = json.loads
 
 # Include router
 app.include_router(auth.router, prefix="/auth")
@@ -37,10 +47,14 @@ app.include_router(Dataplane.router, prefix="/dataplane")
 app.add_middleware(TokenValidationMiddleware)
 app.add_middleware(ExceptionHandlingMiddleware)
 
+
 @app.get("/")
 async def read_root(request: Request):
     cookies = request.cookies
-    return templates.TemplateResponse("index.html", {"request": request, "cookies": cookies})
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "cookies": cookies}
+    )
+
 
 @app.get("/protected")
 async def protected(request: Request):
@@ -49,17 +63,31 @@ async def protected(request: Request):
         "protected.html", {"request": request, "user_session": user_session}
     )
 
+
 @app.get("/profile")
 async def profile(request: Request):
     user_data = request.cookies.get(USER_DATA_KEY)
     assert user_data is not None, "User data not found in cookies"
     user_data_dict = json.loads(user_data)
-    return templates.TemplateResponse("profile.html", {"request": request, "user_data_dict": user_data_dict})
+    return templates.TemplateResponse(
+        "profile.html", {"request": request, "user_data_dict": user_data_dict}
+    )
+
 
 # @app.get("/dag")
 # async def dag(request: Request):
 #     return templates.TemplateResponse("dag.html", {"request": request})
 
+settings = get_configurations()
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="127.0.0.1", port=14999, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key") # TODO: set workers
+
+    uvicorn.run(
+        "app:app",
+        host="127.0.0.1",
+        port=14999,
+        reload=True,
+        ssl_certfile=settings.SERVER_CERT_PATH,
+        ssl_keyfile=settings.SERVER_KEY_PATH,
+    )  # TODO: set workers

@@ -1,14 +1,17 @@
 import logging
-from fastapi import FastAPI, Request, HTTPException, Depends
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI
 from routers import mlflow
+from dependencies.deps import get_settings
+from utils.utils import set_env
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
+
+set_env()
+settings = get_settings()
 
 app = FastAPI()
 app.include_router(mlflow.router, prefix="/mlflow")
@@ -17,4 +20,4 @@ app.include_router(mlflow.router, prefix="/mlflow")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run('app:app', host="localhost", port=15000, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key")
+    uvicorn.run('app:app', host="localhost", port=15000, reload=True, ssl_certfile=settings.SERVER_CERT_PATH, ssl_keyfile=settings.SERVER_KEY_PATH)

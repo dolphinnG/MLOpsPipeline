@@ -35,7 +35,7 @@ services:
 
 
   # MinIO server
-  minio:
+  dolphin.lmao:  # THIS IS MINIO, TEMPORARY CHANGE NAME TO PASS SSL CERT VERIFICATION 
     image: minio/minio
     ports:
       - "9900:9000"
@@ -48,51 +48,73 @@ services:
       interval: 1s
       timeout: 10s
       retries: 5
-    command: server /data --console-address ":9001"
+    command: server /data --console-address ":9001" --certs-dir /certs
     networks:
       - shared_network
+    volumes:
+      - ./certs/minio-certs:/certs # THIS shit needs hardcoded private.key and public.crt lmao
 
   # Create buckets named "mlflow" and "project_logs" if they don't exist
   minio-create-bucket:
     image: minio/mc
     depends_on:
-      minio:
+      dolphin.lmao:
         condition: service_healthy
+        # --INSECURE TO DISABLE SSL VERIFICATION, BECAUSE THE CERT ALT NAMES DON'T INCLUDE minio, 
+        # AND I DONT WANT TO REGENERATE THE CERTS JUST FOR TESTING
     entrypoint: >
       bash -c "
-      mc alias set minio http://minio:9000 minio_user minio_password &&
-      if ! mc ls minio | grep --quiet mlflow; then
-        mc mb minio/mlflow
+      mc alias set minio https://dolphin.lmao:9000 minio_user minio_password --insecure &&
+      if ! mc ls minio --insecure | grep --quiet mlflow; then
+        mc mb minio/mlflow --insecure
       else
         echo 'mlflow already exists'
       fi &&
-      if ! mc ls minio | grep --quiet projectlogs; then
-        mc mb minio/projectlogs
+      if ! mc ls minio --insecure | grep --quiet projectlogs; then
+        mc mb minio/projectlogs --insecure
       else
         echo 'projectlogs already exists'
       fi
       "
     networks:
       - shared_network
+    volumes:
+      - ./certs/minio-certs:/certs
 
   # MLflow tracking server
   mlflow:
     image: bitnami/mlflow:latest
     volumes:
       - mlflow-data:/app
+      - ./certs:/certs
     depends_on:
       # postgresql:
       #   condition: service_healthy
-      minio:
+      dolphin.lmao:
         condition: service_healthy
     environment:
       # BACKEND_STORE_URI: postgresql://user:password@postgres/mlflowdb
       AWS_ACCESS_KEY_ID: minio_user
       AWS_SECRET_ACCESS_KEY: minio_password
-      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+      MLFLOW_S3_ENDPOINT_URL: https://dolphin.lmao:9000
+      AWS_CA_BUNDLE: /certs/dolphin.rootCA.crt
+      # ONLY MLFLOW TRACKING SERVER NEEDS THE ABOVE. ANY OTHER CLIENTS DONT
+      
+      # MLFLOW_TRACKING_USERNAME: "lmao" # these are for clients
+      # MLFLOW_TRACKING_PASSWORD: "hehe" # these are for clients
+      # DEFAULT CREDENTIALS FOR MLFLOW SERVER ARE admin:password, and can't be changed from config, must be through other means
+      MLFLOW_TRACKING_INSECURE_TLS: false # these are for clients
+      # MLFLOW_TRACKING_SERVER_CERT_PATH: /certs/dolphin.rootCA.crt  # these are for clients
+      # MLFLOW_TRACKING_CLIENT_CERT_PATH: /certs/dolphin.rootCA.key # these are for clients
+      BITNAMI_DEBUG: true
+
     ports:
       - "5000:5000"
-    entrypoint: mlflow server --backend-store-uri postgresql://bn_keycloak:admin@postgresql/mlflowdb --default-artifact-root s3://mlflow --host 0.0.0.0 --port 5000
+    # entrypoint: mlflow server --backend-store-uri postgresql://bn_keycloak:admin@postgresql/mlflowdb --default-artifact-root s3://mlflow --host 0.0.0.0 --port 
+    # With this setting, MLflow server works as a proxy for accessing remote artifacts
+    entrypoint: mlflow server --app-name basic-auth --backend-store-uri postgresql://bn_keycloak:admin@postgresql/mlflowdb --artifacts-destination s3://mlflow --host 0.0.0.0 --port 5000
+
+    
     networks:
       - shared_network
 
@@ -104,15 +126,30 @@ services:
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
       - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=minio_user
-      - AWS_SECRET_ACCESS_KEY=minio_password
+      # - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      # - AWS_ACCESS_KEY_ID=minio_user
+      # - AWS_SECRET_ACCESS_KEY=minio_password
+      # - AWS_CA_BUNDLE=/certs/dolphin.rootCA.crt
+
+      # IT SEEMS THESE SSL SETTINGS ARE FOR THE SPARK UI, NOT FOR SPARK PROCESSES' COMMUNICATION
+      # THAT WOULD BE RPC_AUTHENTICATION AND RPC_ENCRYPTION, LET'S RESEARCH THAT AT A LATER TIME
+      - SPARK_SSL_ENABLED=yes
+      - SPARK_SSL_KEYSTORE_FILE=/certs/keystore.jks
+      - SPARK_SSL_KEYSTORE_PASSWORD=lmaohehe
+      - SPARK_SSL_KEY_PASSWORD=lmaohehe
+      - SPARK_SSL_TRUSTSTORE_FILE=/certs/truststore.jks
+      - SPARK_SSL_TRUSTSTORE_PASSWORD=lmaohehe
+      - SPARK_WEBUI_SSL_PORT=20443
+      - SPARK_SSL_NEED_CLIENT_AUTH=no
+      - SPARK_METRICS_ENABLED=true  # check out the metrics at https://localhost:20443/metrics/
+
     ports:
-      - "880:8080"
+      - 20443:20443
+      # - "880:8080"
       - "7077:7077"
     volumes:
+      - ./certs:/certs
       - spark-master-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
       - spark-shared-data:/opt/bitnami/spark/tmp
@@ -136,12 +173,26 @@ services:
       # OTHERWISE THE SPARK WORKER WILL NOT BE ABLE TO CONNECT TO THE MLFLOW SERVER
       # IT WILL CAUSE EXCEPTION LIKE: PERMISSION DENIED '"HTTP:
       # AND YOU GET FUCKED @@
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=minio_user
-      - AWS_SECRET_ACCESS_KEY=minio_password
+
+      # - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      # - AWS_ACCESS_KEY_ID=minio_user
+      # - AWS_SECRET_ACCESS_KEY=minio_password
+      # - AWS_CA_BUNDLE=/certs/dolphin.rootCA.crt
+
+      - SPARK_SSL_ENABLED=yes
+      - SPARK_SSL_KEYSTORE_FILE=/certs/keystore.jks
+      - SPARK_SSL_KEYSTORE_PASSWORD=lmaohehe
+      - SPARK_SSL_KEY_PASSWORD=lmaohehe
+      - SPARK_SSL_TRUSTSTORE_FILE=/certs/truststore.jks
+      - SPARK_SSL_TRUSTSTORE_PASSWORD=lmaohehe
+      - SPARK_WEBUI_SSL_PORT=20443
+      - SPARK_SSL_NEED_CLIENT_AUTH=no
+      - SPARK_METRICS_ENABLED=true
+
     depends_on:
       - spark-master
     volumes:
+      - ./certs:/certs
       - spark-worker-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
       - spark-shared-data:/opt/bitnami/spark/tmp
@@ -158,12 +209,25 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
       - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=minio_user
-      - AWS_SECRET_ACCESS_KEY=minio_password
+      # - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      # - AWS_ACCESS_KEY_ID=minio_user
+      # - AWS_SECRET_ACCESS_KEY=minio_password
+      # - AWS_CA_BUNDLE=/certs/dolphin.rootCA.crt
+
+      - SPARK_SSL_ENABLED=yes
+      - SPARK_SSL_KEYSTORE_FILE=/certs/keystore.jks
+      - SPARK_SSL_KEYSTORE_PASSWORD=lmaohehe
+      - SPARK_SSL_KEY_PASSWORD=lmaohehe
+      - SPARK_SSL_TRUSTSTORE_FILE=/certs/truststore.jks
+      - SPARK_SSL_TRUSTSTORE_PASSWORD=lmaohehe
+      - SPARK_WEBUI_SSL_PORT=20443
+      - SPARK_SSL_NEED_CLIENT_AUTH=no
+      - SPARK_METRICS_ENABLED=true
+      
     depends_on:
       - spark-master
     volumes:
+      - ./certs:/certs
       - spark-worker-data:/bitnami/spark
       - ./:/opt/bitnami/spark/testapp
       - spark-shared-data:/opt/bitnami/spark/tmp
@@ -175,9 +239,10 @@ services:
     environment:
 
       - MLFLOW_TRACKING_URI=http://mlflow:5000
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
-      - AWS_ACCESS_KEY_ID=minio_user
-      - AWS_SECRET_ACCESS_KEY=minio_password
+      # - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+      # - AWS_ACCESS_KEY_ID=minio_user
+      # - AWS_SECRET_ACCESS_KEY=minio_password
+      # - AWS_CA_BUNDLE=/certs/dolphin.rootCA.crt
     depends_on:
       - spark-master
     volumes:

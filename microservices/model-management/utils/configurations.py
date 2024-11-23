@@ -8,6 +8,14 @@ class Conf(BaseSettings):
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
     
+    ROOT_CA_CERT_PATH: str
+    
+    SERVER_CERT_PATH: str
+    SERVER_KEY_PATH: str
+    
+    MLFLOW_TRACKING_USERNAME:str
+    MLFLOW_TRACKING_PASSWORD:str
+    
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", env_prefix=""
     )

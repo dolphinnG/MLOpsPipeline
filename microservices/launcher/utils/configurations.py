@@ -21,6 +21,9 @@ class Conf(BaseSettings):
     
     ROOT_CA_CERT_PATH: str
     
+    MLFLOW_TRACKING_USERNAME:str
+    MLFLOW_TRACKING_PASSWORD:str
+    
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", env_prefix=""
     )

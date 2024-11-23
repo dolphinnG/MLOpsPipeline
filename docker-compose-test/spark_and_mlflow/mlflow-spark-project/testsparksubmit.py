@@ -10,9 +10,12 @@ from mlflow.models import infer_signature, set_signature
 
 # from dummy_class import A
 
+os.environ['MLFLOW_TRACKING_USERNAME'] = "admin"
+os.environ['MLFLOW_TRACKING_PASSWORD'] = "password"
+# os.environ['MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING'] = "true"
 def main():
     # A()
-    # spark-submit --master spark://spark-master:7077 --num-executors 2 testsparksubmit.py
+    # spark-submit --master spark://spark-master:7077 testsparksubmit.py
     
     # Initialize Spark session
     spark = SparkSession.builder \
@@ -84,7 +87,7 @@ def main():
     # os.environ['AWS_ACCESS_KEY_ID'] = "minio_user"
     # os.environ['AWS_SECRET_ACCESS_KEY'] = "minio_password"
     # mlflow.set_tracking_uri("http://mlflow:5000")
-    # mlflow.set_experiment("yyyy")
+    mlflow.set_experiment("lmaoexperiment")
     with mlflow.start_run():
         mlflow.log_param("model_type", "LogisticRegddression")
         for param, value in model_params.items():
@@ -96,18 +99,18 @@ def main():
         # os.environ["DISABLE_MLFLOWDBFS"] = "true"
         model_info = mlflow.spark.log_model(lr_model, "kekekemodel", signature=signature, dfs_tmpdir="/opt/bitnami/spark/tmp/")
         
-        m = mlflow.spark.load_model(model_info.model_uri)
-        # Example data similar to test_df
-        from pyspark.ml.linalg import Vectors
-        data = [("Bob", 45, 0, Vectors.dense([45.0]))]
-        columns = ["Name", "Age", "Label", "features"]
+        # m = mlflow.spark.load_model(model_info.model_uri)
+        # # Example data similar to test_df
+        # from pyspark.ml.linalg import Vectors
+        # data = [("Bob", 45, 0, Vectors.dense([45.0]))]
+        # columns = ["Name", "Age", "Label", "features"]
 
-        # Create a Spark DataFrame
-        spark_df = spark.createDataFrame(data, columns)
+        # # Create a Spark DataFrame
+        # spark_df = spark.createDataFrame(data, columns)
 
-        # Make predictions
-        predictions = m.transform(spark_df)
-        predictions.show()
+        # # Make predictions
+        # predictions = m.transform(spark_df)
+        # predictions.show()
         
         
         # # Example data similar to test_df
