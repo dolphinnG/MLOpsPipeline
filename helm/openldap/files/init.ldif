@@ -7,13 +7,13 @@ o: Dolphin Organization
 dc: dolphin
 
 # Organizational Unit
-dn: ou=ccc,dc=dolphin,dc=lmao
+dn: ou=mlOpsPipeline,dc=dolphin,dc=lmao
 objectClass: top
 objectClass: organizationalUnit
 ou: users
 
 # New User Entry with additional attributes
-dn: uid=lmaohehe,ou=ccc,dc=dolphin,dc=lmao
+dn: uid=lmaohehe,ou=mlOpsPipeline,dc=dolphin,dc=lmao
 # objectClass: top
 # objectClass: person
 # objectClass: organizationalPerson
@@ -23,69 +23,91 @@ sn: Two
 uid: lmaohehe
 mail: lmaohehe@dolphin.lmao
 userPassword: password2
-# description: 30
-title: Software Engineer
+title: unemployedlmao
 l: USA
 # displayName is user account name
 telephoneNumber: +1234567890
-# photo:
 
 # User Entry 1
-dn: uid=user1,ou=ccc,dc=dolphin,dc=lmao
+dn: uid=EngineerNo1,ou=mlOpsPipeline,dc=dolphin,dc=lmao
 objectClass: inetOrgPerson
 cn: User One
 sn: One
-uid: user1
+uid: EngineerNo1
 mail: user1@dolphin.lmao
-userPassword: password1
+userPassword: engineerPassword
 title: Data Analyst
 l: Canada
 telephoneNumber: +1234567891
 
 # User Entry 2
-dn: uid=user2,ou=ccc,dc=dolphin,dc=lmao
+dn: uid=EngineerNo2,ou=mlOpsPipeline,dc=dolphin,dc=lmao
 objectClass: inetOrgPerson
 cn: User Three
 sn: Three
-uid: user2
+uid: EngineerNo2
 mail: user2@dolphin.lmao
-userPassword: password3
+userPassword: engineerPassword
 title: Project Manager
 l: UK
 telephoneNumber: +1234567892
 
 # User Entry 3
-dn: uid=user3,ou=ccc,dc=dolphin,dc=lmao
+dn: uid=ScientistNo1,ou=mlOpsPipeline,dc=dolphin,dc=lmao
 objectClass: inetOrgPerson
 cn: User Four
 sn: Four
-uid: user3
+uid: ScientistNo1
 mail: user3@dolphin.lmao
-userPassword: password4
-title: System Administrator
+userPassword: scientistPassword
+title: scientist
 l: Germany
 telephoneNumber: +1234567893
 
 # User Entry 4
-dn: uid=user4,ou=ccc,dc=dolphin,dc=lmao
+dn: uid=ScientistNo2,ou=mlOpsPipeline,dc=dolphin,dc=lmao
 objectClass: inetOrgPerson
 cn: User Five
 sn: Five
-uid: user4
+uid: ScientistNo2
 mail: user4@dolphin.lmao
-userPassword: password5
-title: Network Engineer
+userPassword: scientistPassword
+title: scientist
 l: Australia
 telephoneNumber: +1234567894
 
-# User Entry 5
-dn: uid=user5,ou=ccc,dc=dolphin,dc=lmao
-objectClass: inetOrgPerson
-cn: User Six
-sn: Six
-uid: user5
-mail: user5@dolphin.lmao
-userPassword: password6
-title: Software Developer
-l: India
-telephoneNumber: +1234567895
+
+
+# Groups Organizational Unit
+dn: ou=Groups,dc=dolphin,dc=lmao
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+
+# Group Entry for admins
+dn: cn=MLOpsEngineer,ou=Groups,dc=dolphin,dc=lmao
+objectClass: top
+objectClass: groupOfNames
+cn: MLOpsEngineer
+description: Group for all developers
+member: uid=EngineerNo1,ou=mlOpsPipeline,dc=dolphin,dc=lmao
+member: uid=EngineerNo2,ou=mlOpsPipeline,dc=dolphin,dc=lmao
+
+# Group Entry for users
+dn: cn=DataScientist,ou=Groups,dc=dolphin,dc=lmao
+objectClass: top
+objectClass: groupOfNames
+cn: DataScientist
+description: Group for all analysts
+member: uid=ScientistNo2,ou=mlOpsPipeline,dc=dolphin,dc=lmao
+member: uid=ScientistNo1,ou=mlOpsPipeline,dc=dolphin,dc=lmao
+
+
+# Group Entry for viewers
+dn: cn=Viewer,ou=Groups,dc=dolphin,dc=lmao
+objectClass: top
+objectClass: groupOfNames
+cn: Viewer
+description: Group for all analysts
+member: uid=lmaohehe,ou=mlOpsPipeline,dc=dolphin,dc=lmao
+

@@ -1,12 +1,16 @@
 fullnameOverride: keycloak-dolphin-service
 
-# extraEnvVars:
-#   - name: KEYCLOAK_IMPORT
-#     value: /realm
+
+image: 
+  tag: 26.0.5-debian-12-r0 # MUST BE THIS TAG AND NOT LATER OTHERWISE REALM IMPORT WILL GET FUCKED!!!!
+
+
 extraEnvVars:
   - name: KEYCLOAK_EXTRA_ARGS
     # value: --import-realm
     value: "--import-realm"
+  # - name: KEYCLOAK_LOG_LEVEL
+  #   value: DEBUG
 
 extraVolumes:
   - name: realm-config
@@ -29,13 +33,18 @@ extraVolumeMounts:
 
 auth:
   adminUser: admin
-  adminPassword: secret
+  adminPassword: admin
+
 
 postgresql:
-  primary:
-    persistence:
-      enabled: false # disable persistence
-
+  enabled: false
+  
+externalDatabase:
+  host: postgresqltest
+  port: 5432
+  user: bn_keycloak
+  password: supahakka
+  database: bitnami_keycloak
 
 
 # BOTH TLS AND SPI TRUST STORE SETTINGS MUST BE SPECIFIED OTHERWISE YOU ARE FUCKED!

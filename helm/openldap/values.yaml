@@ -1,8 +1,8 @@
 LDAP_PORT_NUMBER: 1389
 service:
-  # port: 389
+  # port: 389 # i hardcoded this in the service.yaml
   type: ClusterIP
-  nodePort: 30000 
+  # nodePort: 30000 
 ## secrets
 secrets:
   LDAP_ADMIN_USERNAME: topg

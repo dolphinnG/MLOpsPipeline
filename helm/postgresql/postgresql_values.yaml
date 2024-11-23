@@ -1,0 +1,24 @@
+primary: 
+  initdb: 
+    user: postgres
+    password: adminpassword
+    scripts: 
+      my_init_script.sql: |
+        CREATE DATABASE bitnami_keycloak;
+        CREATE USER bn_keycloak WITH PASSWORD 'supahakka';
+        GRANT ALL PRIVILEGES ON DATABASE bitnami_keycloak TO bn_keycloak;
+        \c bitnami_keycloak
+        GRANT ALL PRIVILEGES ON SCHEMA public TO bn_keycloak;
+  persistence: 
+    enabled: false
+
+image: 
+  debug: true
+
+
+
+
+auth:
+  enablePostgresUser: true
+  postgresPassword: adminpassword
+

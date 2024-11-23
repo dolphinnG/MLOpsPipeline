@@ -3,7 +3,5 @@ kind: ConfigMap
 metadata:
     name: dolphin-realm-configmap
 data:
-    dolphin-app-realm.json: |
-        {{ .Files.Get "realms/dolphin_app-realm.json" | nindent 8 }}
-    master-realm.json: |
-        {{ .Files.Get "realms/master-realm.json" | nindent 8 }}
+    realm.json: |
+        {{ .Files.Get "realms/realm.json" | nindent 8 }}
