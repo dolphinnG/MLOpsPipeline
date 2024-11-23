@@ -2,7 +2,7 @@ fullnameOverride: keycloak-dolphin-service
 
 
 image: 
-  tag: 26.0.5-debian-12-r0 # MUST BE THIS TAG AND NOT LATER OTHERWISE REALM IMPORT WILL GET FUCKED!!!!
+  tag: 26.0.5-debian-12-r0 # MUST BE THIS TAG or later OTHERWISE REALM IMPORT WILL GET FUCKED!!!!
 
 
 extraEnvVars:
