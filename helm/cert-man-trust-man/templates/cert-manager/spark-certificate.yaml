@@ -1,0 +1,46 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: spark-hehe 
+spec:
+  secretName: spark-tls-secret
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+
+  keystores:
+    # keystore.jks contains the private key and the certificate
+    # truststore.jks contains the issuer certificate 
+    jks:
+      create: true
+      alias: certificate # the default alias of the key in the keystore
+      passwordSecretRef: # this must be a reference to an existing k8s secret
+        name: dolphin-jks-keystore-password 
+        key: password
+    #   profile: Modern2023
+
+  duration: 9760h 
+  renewBefore: 8760h 
+
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+
+  subject:
+    organizations:
+      - cert-manager
+
+  commonName: spark-dolphin-service
+  dnsNames:
+
+    # - spark-dolphin-service-controller-0.spark-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
+    # - spark-dolphin-service-controller-1.spark-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
+    # - spark-dolphin-service-controller-2.spark-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
+    - spark*
+
+  issuerRef:
+    name: dolphin-ca-issuer
+    kind: Issuer

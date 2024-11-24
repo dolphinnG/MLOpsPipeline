@@ -60,8 +60,8 @@ spec:
 
   # At least one of commonName (possibly through literalSubject), dnsNames, uris, emailAddresses, ipAddresses or otherNames is required.
   dnsNames: # must match the fullNameOverride
-    - mlflow-dolphin-service.dolphin-ns.svc.cluster.local
-    - mlflow-dolphin-service
+    - mlflow-dolphin-service-tracking.dolphin-ns.svc.cluster.local
+    - mlflow-dolphin-service-tracking
 #   uris:
 #     - spiffe://cluster.local/ns/sandbox/sa/example
 #   emailAddresses:

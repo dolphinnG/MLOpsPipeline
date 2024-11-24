@@ -20,6 +20,7 @@ spec:
           ports:
             - containerPort: 8080
             - containerPort: 7077
+            - containerPort: 20443
           env:
             - name: SPARK_MODE
               value: master
@@ -29,23 +30,50 @@ spec:
               value: "no"
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
               value: "no"
+
+            # - name: MLFLOW_TRACKING_URI
+            #   value: "https://mlflow-dolphin-service-tracking:443"
+            
+            # - name: MLFLOW_S3_ENDPOINT_URL
+            #   value: "http://mlflowtest-minio:80"
+            # - name: AWS_ACCESS_KEY_ID
+            #   value: "admin"
+            # - name: AWS_SECRET_ACCESS_KEY
+            #   value: "admin123"
+
             - name: SPARK_SSL_ENABLED
+              value: "yes"
+            - name: SPARK_SSL_KEYSTORE_FILE
+              value: "/certs/keystore.jks"
+            - name: SPARK_SSL_KEYSTORE_PASSWORD
+              value: "lmaohehe"
+            - name: SPARK_SSL_KEY_PASSWORD
+              value: "lmaohehe"
+            - name: SPARK_SSL_TRUSTSTORE_FILE
+              value: "/certs/truststore.jks"
+            - name: SPARK_SSL_TRUSTSTORE_PASSWORD
+              value: "lmaohehe"
+            - name: SPARK_WEBUI_SSL_PORT
+              value: "20443"
+            - name: SPARK_SSL_NEED_CLIENT_AUTH
               value: "no"
-            - name: MLFLOW_TRACKING_URI
-              value: "http://mlflowtest-tracking:80"
-            - name: MLFLOW_S3_ENDPOINT_URL
-              value: "http://mlflowtest-minio:80"
-            - name: AWS_ACCESS_KEY_ID
-              value: "admin"
-            - name: AWS_SECRET_ACCESS_KEY
-              value: "admin123"
+            - name: SPARK_METRICS_ENABLED
+              value: "true"
+
+
           volumeMounts:
             - name: nfs-volume
               mountPath: /opt/bitnami/spark/tmp
+            - name: spark-tls
+              mountPath: "/certs"
+              readOnly: true
       volumes:
         - name: nfs-volume
           persistentVolumeClaim:
             claimName: nfs-pvc
+        - name: spark-tls
+          secret:
+            secretName: spark-tls-secret
 
 ---
 apiVersion: apps/v1
@@ -80,23 +108,49 @@ spec:
               value: "no"
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
               value: "no"
+
+            # - name: MLFLOW_TRACKING_URI
+            #   value: "https://mlflow-dolphin-service-tracking:443"
+
+
             - name: SPARK_SSL_ENABLED
+              value: "yes"
+            - name: SPARK_SSL_KEYSTORE_FILE
+              value: "/certs/keystore.jks"
+            - name: SPARK_SSL_KEYSTORE_PASSWORD
+              value: "lmaohehe"
+            - name: SPARK_SSL_KEY_PASSWORD
+              value: "lmaohehe"
+            - name: SPARK_SSL_TRUSTSTORE_FILE
+              value: "/certs/truststore.jks"
+            - name: SPARK_SSL_TRUSTSTORE_PASSWORD
+              value: "lmaohehe"
+            - name: SPARK_WEBUI_SSL_PORT
+              value: "20443"
+            - name: SPARK_SSL_NEED_CLIENT_AUTH
               value: "no"
-            - name: MLFLOW_TRACKING_URI
-              value: "http://mlflowtest-tracking:80"
-            - name: MLFLOW_S3_ENDPOINT_URL
-              value: "http://mlflowtest-minio:80"
-            - name: AWS_ACCESS_KEY_ID
-              value: "admin"
-            - name: AWS_SECRET_ACCESS_KEY
-              value: "admin123"
+            - name: SPARK_METRICS_ENABLED
+              value: "true"
+
+            # - name: MLFLOW_S3_ENDPOINT_URL
+            #   value: "http://mlflowtest-minio:80"
+            # - name: AWS_ACCESS_KEY_ID
+            #   value: "admin"
+            # - name: AWS_SECRET_ACCESS_KEY
+            #   value: "admin123"
           volumeMounts:
             - name: nfs-volume
               mountPath: /opt/bitnami/spark/tmp
+            - name: spark-tls
+              mountPath: "/certs"
+              readOnly: true
       volumes:
         - name: nfs-volume
           persistentVolumeClaim:
             claimName: nfs-pvc
+        - name: spark-tls
+          secret:
+            secretName: spark-tls-secret
 
 ---
 apiVersion: v1
@@ -116,5 +170,11 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
+    - name: spark-web-ui-ssl
+      protocol: TCP
+      port: 20443
+      targetPort: 20443
+
+
 
 

@@ -12,12 +12,17 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
+# os.environ['MLFLOW_TRACKING_SERVER_CERT_PATH'] = "/etc/ssl/certs/ca-certificates.crt"
+# os.environ['MLFLOW_TRACKING_USERNAME'] = "mlflow"
+# os.environ['MLFLOW_TRACKING_PASSWORD'] = "mlflow"
+
 def main():
-    os.environ['MLFLOW_S3_ENDPOINT_URL'] = f"http://mlflowtest-minio:80"
-    os.environ['AWS_ACCESS_KEY_ID'] = "admin"
-    os.environ['AWS_SECRET_ACCESS_KEY'] = "admin123"
-    mlflow.set_tracking_uri("http://mlflowtest-tracking:80")
+    # os.environ['MLFLOW_S3_ENDPOINT_URL'] = f"http://mlflowtest-minio:80"
+    # os.environ['AWS_ACCESS_KEY_ID'] = "admin"
+    # os.environ['AWS_SECRET_ACCESS_KEY'] = "admin123"
+    # mlflow.set_tracking_uri("http://mlflowtest-tracking:80")
     
+    # spark-submit --master spark://spark-master-svc:7077 testspark5.py
     mlflow.set_experiment("SPARK-TEST-5")
     
     logger.log(logging.INFO, "Starting the spark session")

@@ -17,13 +17,22 @@ spec:
         image: supahakka/mlflow-run:v7
         env: 
         - name: MLFLOW_TRACKING_URI
-          value: http://mlflowtest-tracking:80
-        - name: MLFLOW_S3_ENDPOINT_URL
-          value: http://mlflowtest-minio:80
-        - name: AWS_ACCESS_KEY_ID
-          value: admin
-        - name: AWS_SECRET_ACCESS_KEY
-          value: admin123
+          value: https://mlflow-dolphin-service-tracking:443
+          
+        - name: MLFLOW_TRACKING_SERVER_CERT_PATH
+          value: /etc/ssl/certs/ca-certificates.crt
+        - name: MLFLOW_TRACKING_USERNAME
+          value: mlflow
+        - name: MLFLOW_TRACKING_PASSWORD
+          value: mlflow
+
+        # - name: MLFLOW_S3_ENDPOINT_URL
+        #   value: http://mlflowtest-minio:80
+        # - name: AWS_ACCESS_KEY_ID
+        #   value: admin
+        # - name: AWS_SECRET_ACCESS_KEY
+        #   value: admin123
+
         - name: POD_IP
           valueFrom:
             fieldRef:
@@ -38,6 +47,9 @@ spec:
           name: host-folder
         - mountPath: /opt/bitnami/spark/tmp
           name: nfs-volume
+        - mountPath: /etc/ssl/certs/
+          name: dolphin-ca-bundle
+          readOnly: true
       volumes:
       - name: host-folder
         hostPath:
@@ -46,3 +58,9 @@ spec:
       - name: nfs-volume
         persistentVolumeClaim:
           claimName: nfs-pvc
+      - name: dolphin-ca-bundle
+        configMap:
+          name: dolphin-trusted-ca-bundle
+          items:
+          - key: root-certs.pem
+            path: ca-certificates.crt
