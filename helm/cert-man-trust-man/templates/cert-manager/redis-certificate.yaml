@@ -61,7 +61,8 @@ spec:
   # At least one of commonName (possibly through literalSubject), dnsNames, uris, emailAddresses, ipAddresses or otherNames is required.
   dnsNames: # must match the fullNameOverride
     - redis-dolphin-service.dolphin-ns.svc.cluster.local
-    - redis-dolphin-service*
+    - redis-dolphin-service-master
+    - redis-dolphin-service-headless
 #   uris:
 #     - spiffe://cluster.local/ns/sandbox/sa/example
 #   emailAddresses:

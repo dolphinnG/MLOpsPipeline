@@ -39,7 +39,7 @@ spec:
     # - spark-dolphin-service-controller-0.spark-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
     # - spark-dolphin-service-controller-1.spark-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
     # - spark-dolphin-service-controller-2.spark-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
-    - spark*
+    - spark-master-svc
 
   issuerRef:
     name: dolphin-ca-issuer
