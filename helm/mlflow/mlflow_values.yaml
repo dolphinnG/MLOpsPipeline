@@ -26,7 +26,7 @@ postgresql:
 
 externalDatabase: 
   dialectDriver: postgresql
-  host: postgresqltest
+  host: postgresql-dolphin-service
   port: 5432
   database: mlflow
   authDatabase: mlflow_auth
