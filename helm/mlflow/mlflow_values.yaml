@@ -43,7 +43,7 @@ minio:
   #   rootPassword: admin123
 
 externalS3:
-  host: miniotest
+  host: minio-dolphin
   port: 9000
   useCredentialsInSecret: true
   accessKeyID: admin_minio 

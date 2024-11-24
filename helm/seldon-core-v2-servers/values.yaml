@@ -3,4 +3,4 @@ mlserver:
   replicas: 1
 
 triton:
-  replicas: 0
+  replicas: 1

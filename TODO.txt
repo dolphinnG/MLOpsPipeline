@@ -11,3 +11,15 @@ REMOVE MLFLOW_S3_ENDPOINT_URL AND RELATED ACCESS_KEY/SECRET/AWS_CA_BUNDLE ENVS O
 ------
 
 add to env the s3 bucker for logs file "projectlogs" in launcher microservices, minio helm should sync the name 
+
+-----
+
+launcher, spark images, torchddp images: 
+# os.environ['MLFLOW_TRACKING_SERVER_CERT_PATH'] = "/etc/ssl/certs/ca-certificates.crt"
+# os.environ['MLFLOW_TRACKING_USERNAME'] = "mlflow"
+# os.environ['MLFLOW_TRACKING_PASSWORD'] = "mlflow"
+
+
+-----
+deployment service, set seldon-controlplane-client-tls-secret cert path in .env.
+deployment service pod needs seldon-controlplane-client-tls-secret mounted. 

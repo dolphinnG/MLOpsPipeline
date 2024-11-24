@@ -1,5 +1,10 @@
 fullnameOverride: kafka-dolphin-service
 
+controller: 
+  replicaCount: 2
+  persistence:
+    enabled: false
+
 extraVolumes:
   - name: bundle-inject
     configMap:
@@ -20,7 +25,7 @@ tls:
   keystorePassword: lmaohehe
   jksTruststoreKey: truststore.jks
   truststorePassword: lmaohehe
-  sslClientAuth: requested
+  sslClientAuth: none
 
 listeners: 
   client: 
@@ -36,6 +41,7 @@ listeners:
     protocol: SASL_SSL
 
 sasl: 
+  enabledMechanisms: "PLAIN,SCRAM-SHA-256,SCRAM-SHA-512"
   interbroker: 
     user: kafka-interbroker-user
     password: kafka-interbroker-password
@@ -44,11 +50,11 @@ sasl:
     password: kafka-controller-password
   client:
     users:
-      - user1 
-      - user2
-      - user3
+      - seldon 
+      # - user2
+      # - user3
     passwords: 
-      - password1
-      - password2
-      - password3
+      - seldonPassword
+      # - password2
+      # - password3
 

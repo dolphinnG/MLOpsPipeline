@@ -41,6 +41,7 @@ spec:
     # - kafka-dolphin-service-controller-1.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
     # - kafka-dolphin-service-controller-2.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local
     - '*.kafka-dolphin-service-controller-headless.dolphin-ns.svc.cluster.local'
+    # <pod-name>.<service-name>.<namespace>.svc.cluster.local for headless services
 
   issuerRef:
     name: dolphin-ca-issuer

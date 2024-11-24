@@ -1,0 +1,111 @@
+kafka:
+  debug:
+  bootstrap: kafka-dolphin-service:9092
+  topicPrefix: dolphin-seldon-topic
+  consumerGroupIdPrefix: dolphin-seldon-group
+  consumer:
+    sessionTimeoutMs: 6000
+    autoOffsetReset: earliest
+    topicMetadataRefreshIntervalMs: 1000
+    topicMetadataPropagationMaxMs: 300000
+    messageMaxBytes: 1000000000
+  producer:
+    lingerMs: 0
+    messageMaxBytes: 1000000000
+  topics:
+    replicationFactor: 1
+    numPartitions: 1
+
+
+# Security settings
+security:
+  controlplane:
+    protocol: SSL
+    ssl:
+      server:
+        secret: seldon-controlplane-server-tls-secret # remind: cert-man gen this shit
+        clientValidationSecret: seldon-controlplane-client-tls-secret # and this shit
+        # keyPath: tls.key
+        # crtPath: tls.crt
+        # caPath: ca.crt
+        # clientCaPath: ca.crt
+      client:
+        secret: seldon-controlplane-client-tls-secret
+        serverValidationSecret: seldon-controlplane-server-tls-secret
+        # keyPath: tls.key
+        # crtPath: tls.crt
+        # caPath: ca.crt
+        # serverCaPath: ca.crt
+
+
+  kafka:
+    protocol: SASL_SSL
+    sasl:
+      mechanism: SCRAM-SHA-512
+      client:
+        username: seldon
+        secret: kafka-dolphin-service-user-passwords
+        passwordPath: client-passwords
+    ssl:
+      client:
+        brokerValidationSecret: kafka-tls-secret # remind: cert-man gen this shit
+        # brokerCaPath: ca.crt
+        
+        # below are for client mtls, not needed for now
+        # secret:
+        # keyPath: /tmp/certs/kafka/client/tls.key
+        # crtPath: /tmp/certs/kafka/client/tls.crt
+        # caPath: /tmp/certs/kafka/client/ca.crt
+        # endpointIdentificationAlgorithm:
+
+
+  envoy:
+    protocol: PLAINTEXT # ALPN bug on seldon mesh makes grpc tls failed. PLAINTEXT 4 now
+    ssl:
+      upstream:
+        server:
+          secret: seldon-upstream-server-tls-secret # remind: cert-man gen this shit
+          clientValidationSecret: seldon-upstream-client-tls-secret # remind: cert-man gen this shit
+          # keyPath: tls.key
+          # crtPath: tls.crt
+          # caPath: ca.crt
+          # clientCaPath: ca.crt
+        client:
+          secret: seldon-upstream-client-tls-secret
+          serverValidationSecret: seldon-upstream-server-tls-secret
+          # keyPath: tls.key
+          # crtPath: tls.crt
+          # caPath: ca.crt
+          # serverCaPath: ca.crt
+      downstream:
+        server:
+          secret: seldon-downstream-server-tls-secret # remind: cert-man gen this shit
+          clientValidationSecret: 
+          # clientCaPath: ca.crt
+          # keyPath: tls.key
+          # crtPath: tls.crt
+          # caPath: ca.crt
+        client:
+          mtls: false
+          secret: 
+          serverValidationSecret: seldon-downstream-server-tls-secret
+          # keyPath: tls.key
+          # crtPath: tls.crt
+          # caPath: ca.crt
+          # serverCaPath: ca.crt
+
+# A list of image pull secrets
+# imagePullSecrets:
+
+serverConfig:
+  mlserver:
+    image: 
+    # use custom mlserver image thta i built with additional support for openai llm, langchain. 
+    # If need more, then should  build a new one based on this
+      pullPolicy: IfNotPresent
+      registry: docker.io
+      repository: supahakka/mlmlserver
+      tag: withlangchain2
+    openai:
+      apiKey: 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
+

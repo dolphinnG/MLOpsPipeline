@@ -1,4 +1,4 @@
-fullnameOverride: miniotest
+fullnameOverride: minio-dolphin
 
 mode: standalone
 auth: 

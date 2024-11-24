@@ -26,4 +26,6 @@ async def grpc_exception_handler(request, exc: RpcError):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="localhost", port=15004, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key")
+    # uvicorn.run("app:app", host="localhost", port=15004, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key")
+    uvicorn.run("app:app", host="0.0.0.0", port=15004, reload=True)
+    

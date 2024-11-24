@@ -15,6 +15,8 @@ spec:
       containers:
       - name: mlflow-spark-dummy-deployment-test
         image: supahakka/mlflow-run:v7
+        ports:
+        - containerPort: 15004
         env: 
         - name: MLFLOW_TRACKING_URI
           value: http://mlflowtest-tracking:80
@@ -36,13 +38,19 @@ spec:
         volumeMounts:
         - mountPath: /mnt/host-folder
           name: host-folder
-        - mountPath: /opt/bitnami/spark/tmp
-          name: nfs-volume
+        # - mountPath: /opt/bitnami/spark/tmp
+        #   name: nfs-volume
+        - mountPath: /seldon
+          name: seldon-controlplane-client-tls-secret
+          readOnly: true
       volumes:
       - name: host-folder
         hostPath:
           path: /mnt/host-folder
           type: Directory
-      - name: nfs-volume
-        persistentVolumeClaim:
-          claimName: nfs-pvc
+      # - name: nfs-volume
+      #   persistentVolumeClaim:
+      #     claimName: nfs-pvc
+      - name: seldon-controlplane-client-tls-secret
+        secret:
+          secretName: seldon-controlplane-client-tls-secret
