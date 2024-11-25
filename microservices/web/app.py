@@ -26,6 +26,11 @@ logging.basicConfig(
 )
 
 app = FastAPI()
+
+# Add HTTPS redirect middleware
+# pip install starlette
+# app.add_middleware(HTTPSRedirectMiddleware)
+
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
