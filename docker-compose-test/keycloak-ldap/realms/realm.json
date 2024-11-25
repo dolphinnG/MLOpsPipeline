@@ -1732,7 +1732,7 @@
         "usernameLDAPAttribute" : [ "uid" ],
         "vendor" : [ "other" ],
         "uuidLDAPAttribute" : [ "entryUUID" ],
-        "connectionUrl" : [ "ldap://openldap-dolphin-service:389" ],
+        "connectionUrl" : [ "ldap://openldap:389" ],
         "allowKerberosAuthentication" : [ "false" ],
         "syncRegistrations" : [ "true" ],
         "authType" : [ "simple" ],

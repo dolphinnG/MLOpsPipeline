@@ -4,6 +4,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
+      # - ./grafana.ini:/opt/bitnami/grafana/conf/grafana.ini
       - grafana_data:/bitnami/grafana
       - ./grafana-ds:/provisioning/datasources
     environment:

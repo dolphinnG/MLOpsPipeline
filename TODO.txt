@@ -24,3 +24,9 @@ launcher, spark images, torchddp images:  --> done for launcher
 -----
 deployment service, set seldon-controlplane-client-tls-secret cert path in .env.
 deployment service pod needs seldon-controlplane-client-tls-secret mounted. 
+
+-------
+set these 2 in launcher, spark images, torchddp images, mlserver images: 
+os.environ['OPENAI_API_KEY'] = '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'
+# Set the endpoint of the OpenTelemetry Collector
+os.environ["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = "http://localhost:4317/v1/traces"

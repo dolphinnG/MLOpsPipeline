@@ -103,7 +103,7 @@ services:
       # MLFLOW_TRACKING_USERNAME: "lmao" # these are for clients
       # MLFLOW_TRACKING_PASSWORD: "hehe" # these are for clients
       # DEFAULT CREDENTIALS FOR MLFLOW SERVER ARE admin:password, and can't be changed from config, must be through other means
-      MLFLOW_TRACKING_INSECURE_TLS: false # these are for clients
+      # MLFLOW_TRACKING_INSECURE_TLS: false # these are for clients
       # MLFLOW_TRACKING_SERVER_CERT_PATH: /certs/dolphin.rootCA.crt  # these are for clients
       # MLFLOW_TRACKING_CLIENT_CERT_PATH: /certs/dolphin.rootCA.key # these are for clients
       BITNAMI_DEBUG: true
