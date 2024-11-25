@@ -3,8 +3,7 @@ import logging
 from logging.config import dictConfig
 from opentelemetry import trace
 
-# pip install opentelemetry-distro
-# pip install opentelemetry-exporter-otlp
+# pip install opentelemetry-distro opentelemetry-exporter-otlp
 # log_config = {
 #     "version": 1,
 #     "formatters": {

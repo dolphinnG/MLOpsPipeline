@@ -16,22 +16,35 @@ exporters:
     tls: 
       insecure: true
 
-  prometheus:
-    endpoint: "0.0.0.0:9999"
-    # tls:
-    #   ca_file: "/path/to/ca.pem"
-    #   cert_file: "/path/to/cert.pem"
-    #   key_file: "/path/to/key.pem"
-    # namespace: test-space
-    const_labels:
-      label1: value1
-      # "another label": spaced value
-    send_timestamps: true
-    metric_expiration: 180m
-    enable_open_metrics: true
-    add_metric_suffixes: false
+
+  prometheusremotewrite:
+    endpoint: "http://prometheus:9090/api/v1/write"
+    tls: 
+      insecure: true
+    # wal: # Enabling the Write-Ahead-Log for the exporter.
+    #   directory: /tmp/prom_rw # The directory to store the WAL in
+    #   buffer_size: 100 # Optional count of elements to be read from the WAL before truncating; default of 300
+    #   truncate_frequency: 45s # Optional frequency for how often the WAL should be truncated. It is a time.ParseDuration; default of 1m
     resource_to_telemetry_conversion:
-      enabled: true
+      enabled: true # Convert resource attributes to metric labels
+
+
+  # prometheus:
+  #   endpoint: "0.0.0.0:9999"
+  #   # tls:
+  #   #   ca_file: "/path/to/ca.pem"
+  #   #   cert_file: "/path/to/cert.pem"
+  #   #   key_file: "/path/to/key.pem"
+  #   # namespace: test-space
+  #   const_labels:
+  #     label1: value1
+  #     # "another label": spaced value
+  #   send_timestamps: true
+  #   metric_expiration: 180m
+  #   enable_open_metrics: true
+  #   add_metric_suffixes: false
+  #   resource_to_telemetry_conversion:
+  #     enabled: true
 
   # Data sources: traces
   otlp/jaeger-grpc:
@@ -66,12 +79,13 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/jaeger-grpc, debug]
+      exporters: [otlp/jaeger-grpc]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      # exporters: [prometheus]
+      exporters: [prometheusremotewrite, debug]
     logs:
       receivers: [otlp]
       # processors: [batch]
-      exporters: [otlphttp, debug]
+      exporters: [otlphttp]

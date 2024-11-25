@@ -1,6 +1,7 @@
 
-pip install psutil pynvml AND SET os.environ['MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING'] = "true" 
-ON THE LAUNCHER AND SPARK IMAGES TO LOG MLFLOW SYSTEM METRICS PER RUN
+pip install psutil pynvml AND SET os.environ['MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING'] = "true"  --> done
+ON THE LAUNCHER ->>> done
+AND SPARK IMAGES TO LOG MLFLOW SYSTEM METRICS PER RUN ->> not yet
 THOSE METRICS WILL APPEAR ON RUN DETAIL UI 
 THAT MEANS THE base IMAGE FOR TORCHDDP, SPARK, AND LAUNCHER IMAGES NEED TO BE INSTALLED AND HAVE THE ENV SET
 
@@ -14,7 +15,7 @@ add to env the s3 bucker for logs file "projectlogs" in launcher microservices, 
 
 -----
 
-launcher, spark images, torchddp images: 
+launcher, spark images, torchddp images:  --> done for launcher
 # os.environ['MLFLOW_TRACKING_SERVER_CERT_PATH'] = "/etc/ssl/certs/ca-certificates.crt"
 # os.environ['MLFLOW_TRACKING_USERNAME'] = "mlflow"
 # os.environ['MLFLOW_TRACKING_PASSWORD'] = "mlflow"

@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from routers import launch
 from utils import utils
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )

@@ -13,3 +13,6 @@ def set_env():
     
     os.environ['MLFLOW_TRACKING_USERNAME'] = settings.MLFLOW_TRACKING_USERNAME
     os.environ['MLFLOW_TRACKING_PASSWORD'] = settings.MLFLOW_TRACKING_PASSWORD
+    os.environ['MLFLOW_TRACKING_SERVER_CERT_PATH'] = settings.MLFLOW_TRACKING_SERVER_CERT_PATH
+    
+    os.environ['MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING'] = "true" 

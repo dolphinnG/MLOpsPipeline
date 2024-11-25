@@ -24,6 +24,10 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
+    command: 
+      - "--config.file=/opt/bitnami/prometheus/conf/prometheus.yml"
+      - "--web.enable-remote-write-receiver"
+    
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -53,6 +57,25 @@ services:
       - 4317:4317 # OTLP gRPC receiver
       - 4318:4318 # OTLP http receiver
       - 55679:55679 # zpages extension
+
+  app:
+    image: supahakka/model-management:v3
+    ports:
+      - 15000:15000
+    volumes:
+      - ./.env:/app/.env
+    environment:
+      - OTEL_PYTHON_LOG_LEVEL=debug
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_SERVICE_NAME=app-model-management
+      - OTEL_METRICS_EXPORTER=otlp,console
+      - OTEL_TRACES_EXPORTER=otlp,console
+      - OTEL_LOGS_EXPORTER=console,otlp
+      - OTEL_PYTHON_LOG_CORRELATION=true
+      # - OTEL_PYTHON_LOG_FORMAT=%(msg)s [span_id=%(span_id)s]
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+    # entrypoint: ["/bin/sh", "-c", "while :; do sleep 10; done"]
 
 
   # promtail:

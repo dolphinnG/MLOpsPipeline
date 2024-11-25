@@ -1,6 +1,21 @@
 global:
   scrape_interval: 15s  # How often to scrape targets
 
+
+# THIS IS ABOUT PROMETHEUS DOING THE WRITE ITSELF. NOT ABOUT RECEIVING WRITES FROM OTLP COLLECTOR
+# FOR RECEIVING WRITE, MUST ADD  "--web.enable-remote-write-receiver" TO THE PROMETHEUS COMMAND IN docker-compose.yml
+# AND HAVE OTEL COL PUSHING TO PROMETHEUS ENDPOINT BELOW
+# remote_write:  
+# - url: "http://prometheus:9090/api/v1/write"
+#   # Sets the `Authorization` header on every remote write request with the
+#   # configured username and password.
+#   # password and password_file are mutually exclusive.
+#   # basic_auth:
+#   #   [ username: <string> ]
+#   #   [ password: <secret> ]
+#   #   [ password_file: <string> ]
+
+
 # scrape_configs:
 #   - job_name: 'app1'
 #     static_configs:

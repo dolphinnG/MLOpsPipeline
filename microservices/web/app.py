@@ -20,7 +20,7 @@ from dependencies.deps import get_configurations
 from utils.constants import USER_SESSION_KEY, USER_DATA_KEY
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
