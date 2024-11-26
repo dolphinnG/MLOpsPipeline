@@ -37,7 +37,9 @@ spec:
   dnsNames:
     - keycloak-dolphin-service.dolphin-ns.svc.cluster.local
     - keycloak-dolphin-service
-
+  ipAddresses:
+    - 192.168.49.2 
+    
   issuerRef:
     name: dolphin-ca-issuer
     kind: Issuer

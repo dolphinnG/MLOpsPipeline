@@ -19,14 +19,14 @@
       loop_control:
         loop_var: item
 
-    - name: Wait for 10 seconds before uninstalling seldon-core-v2-setup
-      ansible.builtin.pause:
-        seconds: 10
+    # - name: Wait for 10 seconds before uninstalling seldon-core-v2-setup
+    #   ansible.builtin.pause:
+    #     seconds: 10
 
-    - name: Uninstall seldon-core-v2-setup Helm release
-      ansible.builtin.command: helm uninstall seldon-core-v2-setup-hehe
-      register: seldon_core_v2_setup_uninstall
-      changed_when: "'uninstalled' in seldon_core_v2_setup_uninstall.stdout"
+    # - name: Uninstall seldon-core-v2-setup Helm release
+    #   ansible.builtin.command: helm uninstall seldon-core-v2-setup-hehe
+    #   register: seldon_core_v2_setup_uninstall
+    #   changed_when: "'uninstalled' in seldon_core_v2_setup_uninstall.stdout"
 
     - name: Delete all PersistentVolumeClaims
       ansible.builtin.command: kubectl delete pvc --all

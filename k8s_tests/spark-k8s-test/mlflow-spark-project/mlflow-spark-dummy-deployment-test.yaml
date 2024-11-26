@@ -16,7 +16,7 @@ spec:
       - name: mlflow-spark-dummy-deployment-test
         image: supahakka/mlflow-run:v7
         ports:
-        - containerPort: 15004
+        - containerPort: 14999
         env: 
         - name: MLFLOW_TRACKING_URI
           value: http://mlflowtest-tracking:80

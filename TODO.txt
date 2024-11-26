@@ -34,3 +34,6 @@ os.environ["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = "http://localhost:4317/v1/tra
 
 ----- 
 turn on openldap periodic sync in keycloak realm.json --> prolly done
+
+---- 
+mount nfs volume to launcher service pod

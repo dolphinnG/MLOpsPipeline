@@ -9,6 +9,7 @@ class Conf(BaseSettings):
     KEYCLOAK_REALM_NAME: str
     KEYCLOAK_REDIRECT_URI: str
     KEYCLOAK_TOKEN_AUDIENCE: str
+    KEYCLOAK_INGRESS_DOMAIN:str
     
     REDIS_HOST: str
     REDIS_PORT: int

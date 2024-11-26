@@ -28,7 +28,7 @@ subjects:
 - kind: ServiceAccount
   name: kubeconfig-generator-admin
   namespace: dolphin-ns
-  
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -54,24 +54,24 @@ spec:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
                     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-                      value: "otel-collector:4317"
+                      value: "otelcol-deploymentset-hehe-opentelemetry-collector:4317"
                     - name: OTEL_EXPORTER_OTLP_INSECURE
                       value: "true"
                     - name: OTEL_SERVICE_NAME
                       value: "app-model-management"
                     - name: OTEL_METRICS_EXPORTER
-                      value: "otlp,console"
+                      value: "otlp"
                     - name: OTEL_TRACES_EXPORTER
-                      value: "otlp,console"
+                      value: "otlp"
                     - name: OTEL_LOGS_EXPORTER
-                      value: "console,otlp"
+                      value: "otlp"
                     - name: OTEL_PYTHON_LOG_CORRELATION
                       value: "true"
                     - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
                       value: "true"
                     - name: IS_ON_K8S
                       value: "true"
-                    - name: POD_IP
+                    - name: POD_ID # typo, should have been POD_IP but fuck it 
                       valueFrom:
                         fieldRef:
                           fieldPath: status.podIP 
@@ -80,7 +80,6 @@ spec:
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/
-                        subpath: .env
                       - name: tls-secret
                         mountPath: /app/certs/
                       #   subPath: tls.crt

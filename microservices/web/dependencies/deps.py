@@ -9,6 +9,8 @@ from services.interfaces.IUserService import IUserService
 from utils.configurations import Conf
 
 
+
+
 @lru_cache
 def get_configurations() -> Conf:
     return Conf()  # type: ignore

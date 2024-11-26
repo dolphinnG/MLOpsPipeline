@@ -62,6 +62,9 @@ spec:
   dnsNames: # must match the fullNameOverride
     - dolphin-web-service.dolphin-ns.svc.cluster.local
     - dolphin-web-service
+  ipAddresses:
+    - 192.168.49.2 
+    
 #   uris:
 #     - spiffe://cluster.local/ns/sandbox/sa/example
 #   emailAddresses:

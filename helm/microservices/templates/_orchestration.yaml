@@ -1,47 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dolphin-deployment
+    name: dolphin-orchestration
     labels:
-        app: dolphin-deployment
+        app: dolphin-orchestration
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: dolphin-deployment
+            app: dolphin-orchestration
     template:
         metadata:
             labels:
-                app: dolphin-deployment
+                app: dolphin-orchestration
         spec:
             containers:
-                - name: deployment
-                  image: "supahakka/deployment:v2"
+                - name: orchestration
+                  image: "supahakka/orchestration:v2"
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
                     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-                      value: "otel-collector:4317"
+                      value: "otelcol-deploymentset-hehe-opentelemetry-collector:4317"
                     - name: OTEL_EXPORTER_OTLP_INSECURE
                       value: "true"
                     - name: OTEL_SERVICE_NAME
                       value: "app-model-management"
                     - name: OTEL_METRICS_EXPORTER
-                      value: "otlp,console"
+                      value: "otlp"
                     - name: OTEL_TRACES_EXPORTER
-                      value: "otlp,console"
+                      value: "otlp"
                     - name: OTEL_LOGS_EXPORTER
-                      value: "console,otlp"
+                      value: "otlp"
                     - name: OTEL_PYTHON_LOG_CORRELATION
                       value: "true"
                     - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
                       value: "true"
                   ports:
-                      - containerPort: 15004
+                      - containerPort: 15001
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/
-                        subpath: .env
                       - name: tls-secret
                         mountPath: /app/certs/
                       #   subPath: tls.crt
@@ -60,18 +59,18 @@ spec:
                     #     path: .env
               - name: tls-secret
                 secret:
-                    secretName: dolphin-deployment-tls-secret
+                    secretName: dolphin-orchestration-tls-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dolphin-deployment-service
+  name: dolphin-orchestration-service
   labels:
-    app: dolphin-deployment
+    app: dolphin-orchestration
 spec:
   selector:
-    app: dolphin-deployment
+    app: dolphin-orchestration
   ports:
     - protocol: TCP
-      port: 15004
-      targetPort: 15004
+      port: 15001
+      targetPort: 15001

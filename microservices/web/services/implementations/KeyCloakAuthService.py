@@ -1,4 +1,5 @@
 import json
+import logging
 from keycloak import KeycloakOpenID
 from services.interfaces.ICacheService import ICacheService
 from utils.configurations import Conf
@@ -16,6 +17,7 @@ from jwcrypto.jwt import JWTExpired
 from keycloak import KeycloakGetError
 from typing import Optional
 from services.interfaces.IAuthService import IAuthService
+from urllib.parse import urlparse, urlunparse
 
 class KeyCloakAuthService(IAuthService):
     _instance: Optional["KeyCloakAuthService"] = None
@@ -43,7 +45,8 @@ class KeyCloakAuthService(IAuthService):
         if cls._instance is None:
             cls._instance = cls(keycloak_openid, cache_service, configs)
         return cls._instance
-
+ 
+ 
     async def login(self, response: Response):
         state = "".join(random.choices(string.ascii_letters + string.digits, k=16))
         nonce = "".join(random.choices(string.ascii_letters + string.digits, k=16))
@@ -53,6 +56,7 @@ class KeyCloakAuthService(IAuthService):
             state=state,
             nonce=nonce,
         )
+        logging.debug(f"auth_url: {auth_url}")
         code_verifier = generate_code_verifier()
         code_challenge = generate_code_challenge(code_verifier)
         session_id = str(uuid.uuid4())
@@ -63,7 +67,17 @@ class KeyCloakAuthService(IAuthService):
         )
         await self.cache_service.set_pydantic_cache(session_id, user_session)
         auth_url += "&code_challenge=" + code_challenge + "&code_challenge_method=S256"
-        res = RedirectResponse(url=auth_url)
+        
+        # Parse the auth_url and replace the domain
+        parsed_url = urlparse(auth_url)
+        new_netloc = self.configs.KEYCLOAK_INGRESS_DOMAIN
+        
+        logging.debug(f"old url: {parsed_url}")
+        new_url = urlunparse(parsed_url._replace(netloc=new_netloc))
+        logging.debug(f"new_url: {new_url}")
+        
+        # res = RedirectResponse(url=auth_url)
+        res = RedirectResponse(url=new_url)
         res.set_cookie(key=USER_SESSION_KEY, value=session_id)
         
         return res

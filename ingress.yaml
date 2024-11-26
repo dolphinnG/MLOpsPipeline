@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  namespace: dolphin-ns
+  # annotations:
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS" # needed this shit for non-tls termination forward
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: dolphin-gateway
+    http:
+      paths:
+      # - path: /
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: keycloak-dolphin-service
+      #       port:
+      #         number: 443
+      # - path: /
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: keycloak-dolphin-service
+      #       port:
+      #         number: 80
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: dolphin-web-service
+            port:
+              number: 14999
+  

@@ -48,10 +48,9 @@ app.include_router(launch.router, prefix="/launcher")
 app.include_router(Scheduler.router, prefix="/scheduler")
 app.include_router(Dataplane.router, prefix="/dataplane")
 
-# Add middleware
+# Add middleware  
 app.add_middleware(TokenValidationMiddleware)
-app.add_middleware(ExceptionHandlingMiddleware)
-
+app.add_middleware(ExceptionHandlingMiddleware) 
 
 @app.get("/")
 async def read_root(request: Request):
@@ -61,12 +60,12 @@ async def read_root(request: Request):
     )
 
 
-@app.get("/protected")
-async def protected(request: Request):
-    user_session = request.cookies.get(USER_SESSION_KEY)
-    return templates.TemplateResponse(
-        "protected.html", {"request": request, "user_session": user_session}
-    )
+# @app.get("/protected")
+# async def protected(request: Request):
+#     user_session = request.cookies.get(USER_SESSION_KEY)
+#     return templates.TemplateResponse(
+#         "protected.html", {"request": request, "user_session": user_session}
+#     )
 
 
 @app.get("/profile")
@@ -89,10 +88,11 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
-        app,
+        # app,
+        'app:app',
         host="0.0.0.0",
         port=14999,
-        # reload=True,
-        ssl_certfile=settings.SERVER_CERT_PATH,
-        ssl_keyfile=settings.SERVER_KEY_PATH,
+        reload=True,
+        # ssl_certfile=settings.SERVER_CERT_PATH,
+        # ssl_keyfile=settings.SERVER_KEY_PATH,
     )  # TODO: set workers

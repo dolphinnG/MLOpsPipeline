@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Request, Depends, Response, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
@@ -17,6 +18,7 @@ async def login(
     auth_service: IAuthService = Depends(KeyCloakAuthService.get_instance),
     templates: Jinja2Templates = Depends(get_templates)
 ):
+    logging.debug(f"/LOGIN HERE")
     return await auth_service.login(response)
 
 @router.get("/callback")
