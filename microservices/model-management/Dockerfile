@@ -15,6 +15,7 @@ WORKDIR /app
 COPY . . 
 
 RUN rm -rf .venv .vscode __pycache__ 
+RUN rm dolphin.rootCA.crt dolphin.rootCA.key
 # GOTTA MOUNT THE CERTS AND .ENV WHEN DEPLOYING
 
 # Install any needed packages specified in requirements.txt
@@ -35,7 +36,7 @@ RUN rm -rf .venv .vscode __pycache__
 
 RUN opentelemetry-bootstrap -a install
 
-EXPOSE 15000
+EXPOSE 6969
 
 # Run app.py when the container launches
 CMD ["opentelemetry-instrument", "python", "app.py"]

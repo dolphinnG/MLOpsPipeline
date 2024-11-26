@@ -18,15 +18,19 @@ class Conf(BaseSettings):
     REDIS_PORT: int 
     REDIS_DB: int 
     REDIS_PASSWORD: str
-    
+        
     ROOT_CA_CERT_PATH: str
+    
+    SERVER_CERT_PATH: str
+    SERVER_KEY_PATH: str
     
     MLFLOW_TRACKING_SERVER_CERT_PATH: str
     MLFLOW_TRACKING_USERNAME:str
     MLFLOW_TRACKING_PASSWORD:str
+    MLFLOW_TRACING_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: str
     
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", env_prefix="", extra="ignore"
+        env_file="env/.env", env_file_encoding="utf-8", env_prefix="", extra="ignore"
     )
     # model_config = SettingsConfigDict(secrets_dir='/run/secrets')
 

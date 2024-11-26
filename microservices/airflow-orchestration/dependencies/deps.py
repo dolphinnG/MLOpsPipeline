@@ -2,7 +2,11 @@ from functools import lru_cache
 from services.AirflowService import AirflowFacade
 from utils.configurations import Conf
 
-settings = Conf()  # type: ignore
+@lru_cache
+def get_settings():
+    return Conf() # type: ignore
+
+settings = get_settings()  # type: ignore
 
  
 @lru_cache

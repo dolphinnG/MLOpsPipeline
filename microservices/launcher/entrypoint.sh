@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Source the bashrc to ensure conda is initialized
-source ~/.bashrc
+if [ "$IS_ON_K8S" = "true" ]; then
+    python generate_kubeconfig.py
+fi
+# Run spark-con.sh script
+./spark-conf-generation-script.sh
 
-# Keep the container running
-tail -f /dev/null
+
+# Run app.py when the container launches
+exec opentelemetry-instrument python app.py

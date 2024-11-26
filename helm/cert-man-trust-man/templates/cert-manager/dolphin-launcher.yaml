@@ -1,0 +1,24 @@
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dolphin-launcher
+spec:
+  secretName: dolphin-launcher-tls-secret
+  duration: 9760h 
+  renewBefore: 8760h
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+  subject:
+    organizations:
+      - cert-manager
+  commonName: dolphin-launcher-service
+  dnsNames:
+    - dolphin-launcher-service.dolphin-ns.svc.cluster.local
+    - dolphin-launcher-service
+  issuerRef:
+    name: dolphin-ca-issuer
+    kind: Issuer

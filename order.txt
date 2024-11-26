@@ -1,0 +1,9 @@
+cert-man ->
+-> minio, redis, postgres, volcano 
+> openldap -> keycloak 
+-> loki, prometheus, jaeger, grafana
+-> otelco deployment set, otelco daemon set
+-> kafka -> mlflow -> airflow 
+-> nfs-server -> spark
+-> seldon setup -> seldon runtime -> seldon server 
+-> all microservices

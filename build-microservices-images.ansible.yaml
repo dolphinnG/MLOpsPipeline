@@ -1,0 +1,50 @@
+---
+- name: Build multiple Docker images
+  hosts: localhost
+  vars:
+    root_dir: "{{ lookup('pipe', 'pwd') }}"
+    version: "v2"
+    push_images: true  # Set this to true to push images to my remote repo
+    force_source: false  # force docker build
+    images:
+      - name: "supahakka/orchestration:{{ version }}"
+        path: "{{ root_dir }}/microservices/airflow-orchestration"
+      - name: "supahakka/deployment:{{ version }}"
+        path: "{{ root_dir }}/microservices/deployment"
+      - name: "supahakka/model-management:{{ version }}"
+        path: "{{ root_dir }}/microservices/model-management"
+      - name: "supahakka/jobs-monitor:{{ version }}"
+        path: "{{ root_dir }}/microservices/jobs-monitor"
+      - name: "supahakka/launcher:{{ version }}"
+        path: "{{ root_dir }}/microservices/launcher"
+      - name: "supahakka/web:{{ version }}"
+        path: "{{ root_dir }}/microservices/web"
+
+  tasks:
+    - name: Print root_dir
+      ansible.builtin.debug:
+        msg: "The root directory is {{ root_dir }}"
+
+    # - name: Clear cached Docker images in Minikube
+    #   shell: |
+    #     eval $(minikube docker-env)
+    #     docker rmi $(docker images -q) || true
+
+    - name: Build Docker images
+      community.docker.docker_image:
+        name: "{{ item.name }}"
+        source: build
+        build:
+          path: "{{ item.path }}"
+          dockerfile: Dockerfile
+        state: present
+        force_source: "{{ force_source }}"
+      loop: "{{ images }}"
+
+    - name: Push Docker images
+      community.docker.docker_image:
+        name: "{{ item.name }}"
+        source: local
+        push: true
+      when: push_images
+      loop: "{{ images }}"

@@ -5,7 +5,7 @@ FROM pytorch/pytorch:latest
 WORKDIR /app
 
 # Install Python packages
-RUN pip install --no-cache-dir mlflow torchvision torchx[dev] torchx[kubernetes]
+RUN pip install --no-cache-dir mlflow torchvision torchx[dev] torchx[kubernetes] boto3 psutil pynvml 
 
 # Copy the application code
 COPY . /app

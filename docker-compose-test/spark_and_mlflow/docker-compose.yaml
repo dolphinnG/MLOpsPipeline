@@ -251,6 +251,27 @@ services:
     networks:
       - shared_network
 
+  dolphin-launcher:
+    image: supahakka/launcher:v1
+    ports:
+      - "15003:15003"
+    environment:
+      - OTEL_PYTHON_LOG_LEVEL=debug
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_SERVICE_NAME=app-model-management
+      - OTEL_METRICS_EXPORTER=console
+      - OTEL_TRACES_EXPORTER=console
+      - OTEL_LOGS_EXPORTER=console
+      - OTEL_PYTHON_LOG_CORRELATION=true
+      # - OTEL_PYTHON_LOG_FORMAT=%(msg)s [span_id=%(span_id)s]
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+    volumes:
+      # - ./:/opt/bitnami/spark/testapp
+      - spark-shared-data:/opt/bitnami/spark/tmp
+    networks:
+      - shared_network
+
 volumes:
   # postgres-data:
   spark-shared-data:

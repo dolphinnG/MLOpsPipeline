@@ -4,6 +4,9 @@ import logging
 from routers.dag_router import dag_router
 from routers.dag_run_router import dag_run_router
 from routers.task_instance_router import task_instance_router
+from dependencies.deps import get_settings
+
+settings = get_settings()
 
 app = FastAPI()
 
@@ -34,7 +37,14 @@ app.include_router(task_instance_router, prefix="/api/v1")
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("app:app", host="localhost", port=15001, reload=True, ssl_certfile="dolphin.rootCA.crt", ssl_keyfile="dolphin.rootCA.key")
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=15001,
+        # reload=True,
+        ssl_certfile=settings.SERVER_CERT_PATH,
+        ssl_keyfile=settings.SERVER_KEY_PATH,
+    )
 
 # configuration = client.Configuration(host="http://localhost:8080/api/v1", username="user", password="bitnami")
 

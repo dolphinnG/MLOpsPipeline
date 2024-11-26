@@ -6,8 +6,8 @@ from utils.utils import set_env
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(levelname)s - %(asctime)s - %(name)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
+    format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 set_env()
@@ -20,5 +20,13 @@ app.include_router(mlflow.router, prefix="/mlflow")
 
 if __name__ == "__main__":
     import uvicorn
-    # uvicorn.run('app:app', host="localhost", port=15000, reload=True, ssl_certfile=settings.SERVER_CERT_PATH, ssl_keyfile=settings.SERVER_KEY_PATH)
-    uvicorn.run(app, host="0.0.0.0", port=15000)
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=15000,
+        # reload=True,
+        ssl_certfile=settings.SERVER_CERT_PATH,
+        ssl_keyfile=settings.SERVER_KEY_PATH,
+    )
+    # uvicorn.run(app, host="0.0.0.0", port=15000)

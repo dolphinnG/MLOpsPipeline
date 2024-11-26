@@ -1,0 +1,24 @@
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dolphin-orchestration
+spec:
+  secretName: dolphin-orchestration-tls-secret
+  duration: 9760h 
+  renewBefore: 8760h
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+  subject:
+    organizations:
+      - cert-manager
+  commonName: dolphin-orchestration-service
+  dnsNames:
+    - dolphin-orchestration-service.dolphin-ns.svc.cluster.local
+    - dolphin-orchestration-service
+  issuerRef:
+    name: dolphin-ca-issuer
+    kind: Issuer

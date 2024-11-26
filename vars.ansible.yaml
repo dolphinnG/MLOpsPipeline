@@ -1,0 +1,70 @@
+# common_vars.yml
+charts:
+  - chart_path: helm/cert-man-trust-man
+    release: cert-man-trust-man-hehe
+    values_file: values.yaml
+
+  # - chart_path: helm/redis
+  #   release: redis-hehe
+  #   values_file: redis_values.yaml
+  # - chart_path: helm/postgresql
+  #   release: postgresql-hehe
+  #   values_file: postgresql_values.yaml
+  # - chart_path: helm/minio
+  #   release: minio-hehe
+  #   values_file: minio_values.yaml
+  # - chart_path: helm/volcano
+  #   release: volcano-hehe
+  #   values_file: values.yaml
+  # - chart_path: helm/openldap
+  #   release: openldap-hehe
+  #   values_file: values.yaml
+  # - chart_path: helm/keycloak
+  #   release: keycloak-hehe
+  #   values_file: keycloak_values.yaml
+
+  # - chart_path: helm/grafana-loki
+  #   release: grafana-loki-hehe
+  #   values_file: loki_values.yaml
+  # - chart_path: helm/prometheus
+  #   release: prometheus-hehe
+  #   values_file: prometheus_values.yaml
+  # - chart_path: helm/jaeger
+  #   release: jaeger-hehe
+  #   values_file: values.yaml
+  # - chart_path: helm/grafana
+  #   release: grafana-hehe
+  #   values_file: grafana_values.yaml
+
+  # - chart_path: helm/opentelemetry-collector
+  #   release: otelcol-deploymentset-hehe
+  #   values_file: deployment_values.yaml
+  # - chart_path: helm/opentelemetry-collector
+  #   release: otelcol-daemonset-hehe
+  #   values_file: daemonSet_values.yaml
+  # - chart_path: helm/airflow
+  #   release: airflow-hehe
+  #   values_file: airflow_values.yaml
+  # - chart_path: helm/kafka
+  #   release: kafka-hehe
+  #   values_file: kafka_values.yaml
+  # - chart_path: helm/mlflow
+  #   release: mlflow-hehe
+  #   values_file: mlflow_values.yaml
+  # - chart_path: helm/nfs-server
+  #   release: nfs-server-hehe
+  #   values_file: values.yaml
+  # - chart_path: helm/spark
+  #   release: spark-hehe
+  #   values_file: values.yaml
+
+  # - chart_path: helm/seldon-core-v2-runtime
+  #   release: seldon-core-v2-runtime-hehe
+  #   values_file: 2_runtime_values.yaml
+  # - chart_path: helm/seldon-core-v2-servers
+  #   release: seldon-core-v2-servers-hehe
+  #   values_file: values.yaml
+
+  - chart_path: helm/microservices
+    release: microservices-hehe
+    values_file: values.yaml

@@ -10,6 +10,9 @@ from grpcStub.v2_dataplane_pb2_grpc import GRPCInferenceServiceStub
 from services.BaseSeldonGrpcService import BaseSeldonGrpcService
 from utils.configurations import Conf
 
+@lru_cache
+def get_settings():
+    return Conf() # type: ignore
 
 T = TypeVar('T', bound=BaseSeldonGrpcService)
 
@@ -47,7 +50,7 @@ def get_service(service_class: Type[T], stub_class: Type, address: str, use_secu
         return service_class(stub)
     return _get_service
 
-settings = Conf() # type: ignore
+settings = get_settings() # type: ignore
 get_scheduler_service2 = get_service(SchedulerService, SchedulerStub, settings.SELDON_SCHEDULER_GRPC_ENDPOINT, use_secure_channel=True)
 get_inference_service2 = get_service(InferenceService, GRPCInferenceServiceStub, settings.SELDON_INFERENCE_GRPC_ENDPOINT, use_secure_channel=False)
 get_dataplane_service2 = get_service(DataPlaneService, GRPCInferenceServiceStub, settings.SELDON_DATAPLANE_GRPC_ENDPOINT, use_secure_channel=False)

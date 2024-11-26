@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from routers import (
     auth,
     user,
@@ -28,7 +29,6 @@ logging.basicConfig(
 app = FastAPI()
 
 # Add HTTPS redirect middleware
-# pip install starlette
 # app.add_middleware(HTTPSRedirectMiddleware)
 
 templates = Jinja2Templates(directory="templates")
@@ -89,10 +89,10 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
-        "app:app",
-        host="127.0.0.1",
+        app,
+        host="0.0.0.0",
         port=14999,
-        reload=True,
+        # reload=True,
         ssl_certfile=settings.SERVER_CERT_PATH,
         ssl_keyfile=settings.SERVER_KEY_PATH,
     )  # TODO: set workers

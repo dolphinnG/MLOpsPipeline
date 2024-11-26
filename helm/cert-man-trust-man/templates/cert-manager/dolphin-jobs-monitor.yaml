@@ -1,0 +1,24 @@
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dolphin-jobs-monitor
+spec:
+  secretName: dolphin-jobs-monitor-tls-secret
+  duration: 9760h 
+  renewBefore: 8760h
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+    - digital signature
+  subject:
+    organizations:
+      - cert-manager
+  commonName: dolphin-jobs-monitor-service
+  dnsNames:
+    - dolphin-jobs-monitor-service.dolphin-ns.svc.cluster.local
+    - dolphin-jobs-monitor-service
+  issuerRef:
+    name: dolphin-ca-issuer
+    kind: Issuer

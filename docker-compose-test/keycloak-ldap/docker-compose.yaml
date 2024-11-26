@@ -25,10 +25,10 @@ services:
       - KEYCLOAK_SPI_TRUSTSTORE_FILE=/certs/truststore.jks
       - KEYCLOAK_SPI_TRUSTSTORE_PASSWORD=lmaohehe
 
-      # - KEYCLOAK_ENABLE_HTTPS=true
-      # - KEYCLOAK_HTTPS_USE_PEM=true  # need this shit!
-      # - KEYCLOAK_HTTPS_CERTIFICATE_FILE=/certs/dolphin.rootCA.crt
-      # - KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE=/certs/dolphin.rootCA.key
+      - KEYCLOAK_ENABLE_HTTPS=true
+      - KEYCLOAK_HTTPS_USE_PEM=true  # need this shit!
+      - KEYCLOAK_HTTPS_CERTIFICATE_FILE=/certs/dolphin.rootCA.crt
+      - KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE=/certs/dolphin.rootCA.key
     ports:
       - "18080:8080"
       - "18443:8443"

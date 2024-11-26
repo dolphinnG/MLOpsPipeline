@@ -60,39 +60,54 @@ RUN echo "export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" 
 # Install procps for ps command
 RUN apt-get update && apt-get install -y procps && apt-get clean
 
-# Copy the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-
-# Make the entrypoint script executable
-RUN chmod +x /entrypoint.sh
-
-# Set the entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
 
 RUN pip install --no-cache-dir mlflow boto3 pyspark virtualenv torchx torchx[kubernetes] kubernetes
 
-# Create user with UID 1001
-# WE WANT TO HAVE A SHARED MOUNTED VOLUMES BETWEEN ALL THE SPARK WORKERS AND THE DRIVER
-# SO need to create user with the same uid and username to the spark workers 
-# to run as non-root otherwise dfs_tmpdir will not work and you are fucked
-# RUN useradd -u 1001 -m -d /home/dolphinnG dolphinnG
+# # Create user with UID 1001
+# # WE WANT TO HAVE A SHARED MOUNTED VOLUMES BETWEEN ALL THE SPARK WORKERS AND THE DRIVER
+# # SO need to create user with the same uid and gid, username to the spark workers 
+# # to run as non-root otherwise dfs_tmpdir will not work and you are fucked
+# # RUN useradd -u 1001 -m -d /home/dolphinnG dolphinnG
 RUN useradd -u 1001 -m -d /home/spark spark
 USER 1001
 
+COPY ./requirements.txt /app/requirements.txt
 
-# Copy your application code to the container
-# COPY . /app
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Set the working directory
-# WORKDIR /app
+# Set the working directory in the container
+WORKDIR /app
 
-# Install Python dependencies
-# RUN pip install -r requirements.txt
+# Copy the current directory contents into the container at /app
+COPY . . 
 
-# Command to run your application
-# CMD ["python", "your_script.py"]
+USER root
+RUN rm -rf .venv .vscode __pycache__ 
+# RUN apt-get update && apt-get install -y sudo && apt-get clean
+# RUN echo "spark ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Expose any ports if necessary
-# EXPOSE 8080
+# RUN echo "cache bust"
+# RUN rm dolphin.rootCA.crt dolphin.rootCA.key
+# GOTTA MOUNT THE CERTS AND .ENV WHEN DEPLOYING
 
-# supahakka/projecc-launcher:v2
+RUN pip install opentelemetry-distro opentelemetry-exporter-otlp
+
+RUN opentelemetry-bootstrap -a install
+
+
+EXPOSE 15003
+
+# # Run app.py when the container launches
+# CMD ["opentelemetry-instrument", "python", "app.py"]
+
+# Copy the entrypoint script
+COPY entrypoint.sh ./entrypoint.sh
+COPY spark-conf-generation-script.sh ./spark-conf-generation-script.sh
+
+RUN chmod 777 entrypoint.sh spark-conf-generation-script.sh dolphin-spark.conf dolphin.rootCA.crt dolphin.rootCA.key
+
+USER 1001 
+
+# Set the entrypoint
+ENTRYPOINT ["./entrypoint.sh"]
+

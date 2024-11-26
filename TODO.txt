@@ -2,16 +2,17 @@
 pip install psutil pynvml AND SET os.environ['MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING'] = "true"  --> done
 ON THE LAUNCHER ->>> done
 AND SPARK IMAGES TO LOG MLFLOW SYSTEM METRICS PER RUN ->> not yet
+AND torchddp base image ->>>> not yet
 THOSE METRICS WILL APPEAR ON RUN DETAIL UI 
 THAT MEANS THE base IMAGE FOR TORCHDDP, SPARK, AND LAUNCHER IMAGES NEED TO BE INSTALLED AND HAVE THE ENV SET
 
 -----
 
-REMOVE MLFLOW_S3_ENDPOINT_URL AND RELATED ACCESS_KEY/SECRET/AWS_CA_BUNDLE ENVS ON CLIENT
+REMOVE MLFLOW_S3_ENDPOINT_URL AND RELATED ACCESS_KEY/SECRET/AWS_CA_BUNDLE ENVS ON CLIENT -> prolly done
 
 ------
 
-add to env the s3 bucker for logs file "projectlogs" in launcher microservices, minio helm should sync the name 
+add to env the s3 bucker for logs file "projectlogs" in launcher microservices, minio helm should sync the name ->> prolly done
 
 -----
 
@@ -26,7 +27,10 @@ deployment service, set seldon-controlplane-client-tls-secret cert path in .env.
 deployment service pod needs seldon-controlplane-client-tls-secret mounted. 
 
 -------
-set these 2 in launcher, spark images, torchddp images, mlserver images: 
+set in launcher, mlserver images: -> done in mlserver deployment
 os.environ['OPENAI_API_KEY'] = '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'
-# Set the endpoint of the OpenTelemetry Collector
+# set in launcher, spark images, torchddp images, mlserver images:  -> done in launcher
 os.environ["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = "http://localhost:4317/v1/traces"
+
+----- 
+turn on openldap periodic sync in keycloak realm.json --> prolly done

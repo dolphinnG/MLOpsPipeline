@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dolphin-microservices-config
+data:
+  .env: |
+    {{ .Files.Get "files/.env" | nindent 4 }}

@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: dolphin-model-management
+    labels:
+        app: dolphin-model-management
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: dolphin-model-management
+    template:
+        metadata:
+            labels:
+                app: dolphin-model-management
+        spec:
+            containers:
+                - name: model-management
+                  image: "supahakka/model-management:v2"
+                  env:
+                    - name: OTEL_PYTHON_LOG_LEVEL
+                      value: "debug"
+                    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+                      value: "otel-collector:4317"
+                    - name: OTEL_EXPORTER_OTLP_INSECURE
+                      value: "true"
+                    - name: OTEL_SERVICE_NAME
+                      value: "app-model-management"
+                    - name: OTEL_METRICS_EXPORTER
+                      value: "otlp,console"
+                    - name: OTEL_TRACES_EXPORTER
+                      value: "otlp,console"
+                    - name: OTEL_LOGS_EXPORTER
+                      value: "console,otlp"
+                    - name: OTEL_PYTHON_LOG_CORRELATION
+                      value: "true"
+                    - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
+                      value: "true"
+                  ports:
+                      - containerPort: 15000
+                  volumeMounts:
+                      - name: config-volume
+                        mountPath: /app/env/
+                        subpath: .env
+                      - name: tls-secret
+                        mountPath: /app/certs/
+                      #   subPath: tls.crt
+                      # - name: tls-secret
+                      #   mountPath: /app/
+                      #   subPath: tls.key
+                      # - name: tls-secret
+                      #   mountPath: /app/
+                      #   subPath: ca.crt
+            volumes:
+              - name: config-volume
+                configMap:
+                    name: dolphin-microservices-config
+                    # items:
+                    #   - key: .env
+                    #     path: .env
+              - name: tls-secret
+                secret:
+                    secretName: dolphin-model-management-tls-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dolphin-model-management-service
+  labels:
+    app: dolphin-model-management
+spec:
+  selector:
+    app: dolphin-model-management
+  ports:
+    - protocol: TCP
+      port: 15000
+      targetPort: 15000
