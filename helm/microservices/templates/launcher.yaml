@@ -1,22 +1,56 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubeconfig-generator-admin
+  namespace: dolphin-ns
+  labels:
+    app.kubernetes.io/managed-by: "Helm"
+  annotations:
+    meta.helm.sh/release-name: "microservices-hehe"
+    meta.helm.sh/release-namespace: "dolphin-ns"
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubeconfig-generator-admin-binding
+  labels:
+    app.kubernetes.io/managed-by: "Helm"
+  annotations:
+    meta.helm.sh/release-name: "microservices-hehe"
+    meta.helm.sh/release-namespace: "dolphin-ns"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: kubeconfig-generator-admin
+  namespace: dolphin-ns
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dolphin-deployment
+    name: dolphin-launcher
     labels:
-        app: dolphin-deployment
+        app: dolphin-launcher
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: dolphin-deployment
+            app: dolphin-launcher
     template:
         metadata:
             labels:
-                app: dolphin-deployment
+                app: dolphin-launcher
         spec:
+            serviceAccountName: kubeconfig-generator-admin
             containers:
-                - name: deployment
-                  image: "supahakka/deployment:v2"
+                - name: launcher
+                  image: "supahakka/launcher:v3"
+                  imagePullPolicy: Always
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
@@ -36,8 +70,14 @@ spec:
                       value: "true"
                     - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
                       value: "true"
+                    - name: IS_ON_K8S
+                      value: "true"
+                    - name: POD_ID # typo, should have been POD_IP but fuck it 
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: status.podIP 
                   ports:
-                      - containerPort: 15004
+                      - containerPort: 15003
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/
@@ -53,24 +93,24 @@ spec:
             volumes:
               - name: config-volume
                 configMap:
-                    name: dolphin-microservices-config
-                    # items:
-                    #   - key: .env
-                    #     path: .env
+                  name: dolphin-microservices-config
+                  # items:
+                  #   - key: .env
+                  #     path: .env
               - name: tls-secret
                 secret:
-                    secretName: dolphin-deployment-tls-secret
+                    secretName: dolphin-launcher-tls-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dolphin-deployment-service
+  name: dolphin-launcher-service
   labels:
-    app: dolphin-deployment
+    app: dolphin-launcher
 spec:
   selector:
-    app: dolphin-deployment
+    app: dolphin-launcher
   ports:
     - protocol: TCP
-      port: 15004
-      targetPort: 15004
+      port: 15003
+      targetPort: 15003

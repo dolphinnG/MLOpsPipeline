@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dolphin-model-management
+    name: dolphin-orchestration
     labels:
-        app: dolphin-model-management
+        app: dolphin-orchestration
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: dolphin-model-management
+            app: dolphin-orchestration
     template:
         metadata:
             labels:
-                app: dolphin-model-management
+                app: dolphin-orchestration
         spec:
             containers:
-                - name: model-management
-                  image: "supahakka/model-management:v2"
+                - name: orchestration
+                  image: "supahakka/orchestration:v3"
+                  imagePullPolicy: Always
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
@@ -37,7 +38,7 @@ spec:
                     - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
                       value: "true"
                   ports:
-                      - containerPort: 15000
+                      - containerPort: 15001
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/
@@ -59,18 +60,18 @@ spec:
                     #     path: .env
               - name: tls-secret
                 secret:
-                    secretName: dolphin-model-management-tls-secret
+                    secretName: dolphin-orchestration-tls-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dolphin-model-management-service
+  name: dolphin-orchestration-service
   labels:
-    app: dolphin-model-management
+    app: dolphin-orchestration
 spec:
   selector:
-    app: dolphin-model-management
+    app: dolphin-orchestration
   ports:
     - protocol: TCP
-      port: 15000
-      targetPort: 15000
+      port: 15001
+      targetPort: 15001

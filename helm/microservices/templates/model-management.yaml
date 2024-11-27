@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dolphin-jobs-monitor
+    name: dolphin-model-management
     labels:
-        app: dolphin-jobs-monitor
+        app: dolphin-model-management
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: dolphin-jobs-monitor
+            app: dolphin-model-management
     template:
         metadata:
             labels:
-                app: dolphin-jobs-monitor
+                app: dolphin-model-management
         spec:
             containers:
-                - name: jobs-monitor
-                  image: "supahakka/jobs-monitor:v2"
+                - name: model-management
+                  image: "supahakka/model-management:v3"
+                  imagePullPolicy: Always
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
@@ -37,7 +38,7 @@ spec:
                     - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
                       value: "true"
                   ports:
-                      - containerPort: 15002
+                      - containerPort: 15000
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/
@@ -59,18 +60,18 @@ spec:
                     #     path: .env
               - name: tls-secret
                 secret:
-                    secretName: dolphin-jobs-monitor-tls-secret
+                    secretName: dolphin-model-management-tls-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dolphin-jobs-monitor-service
+  name: dolphin-model-management-service
   labels:
-    app: dolphin-jobs-monitor
+    app: dolphin-model-management
 spec:
   selector:
-    app: dolphin-jobs-monitor
+    app: dolphin-model-management
   ports:
     - protocol: TCP
-      port: 15002
-      targetPort: 15002
+      port: 15000
+      targetPort: 15000

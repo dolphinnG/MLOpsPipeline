@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dolphin-orchestration
+    name: dolphin-deployment
     labels:
-        app: dolphin-orchestration
+        app: dolphin-deployment
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: dolphin-orchestration
+            app: dolphin-deployment
     template:
         metadata:
             labels:
-                app: dolphin-orchestration
+                app: dolphin-deployment
         spec:
             containers:
-                - name: orchestration
-                  image: "supahakka/orchestration:v2"
+                - name: deployment
+                  image: "supahakka/deployment:v3"
+                  imagePullPolicy: Always
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
@@ -37,7 +38,7 @@ spec:
                     - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
                       value: "true"
                   ports:
-                      - containerPort: 15001
+                      - containerPort: 15004
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/
@@ -50,6 +51,8 @@ spec:
                       # - name: tls-secret
                       #   mountPath: /app/
                       #   subPath: ca.crt
+                      - name: seldon-controlplane-client-tls-secret
+                        mountPath: /app/seldon/
             volumes:
               - name: config-volume
                 configMap:
@@ -59,18 +62,21 @@ spec:
                     #     path: .env
               - name: tls-secret
                 secret:
-                    secretName: dolphin-orchestration-tls-secret
+                    secretName: dolphin-deployment-tls-secret
+              - name: seldon-controlplane-client-tls-secret
+                secret:
+                    secretName: seldon-controlplane-client-tls-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: dolphin-orchestration-service
+  name: dolphin-deployment-service
   labels:
-    app: dolphin-orchestration
+    app: dolphin-deployment
 spec:
   selector:
-    app: dolphin-orchestration
+    app: dolphin-deployment
   ports:
     - protocol: TCP
-      port: 15001
-      targetPort: 15001
+      port: 15004
+      targetPort: 15004

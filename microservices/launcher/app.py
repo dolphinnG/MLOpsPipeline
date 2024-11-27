@@ -17,6 +17,20 @@ app = FastAPI()
 
 app.include_router(launch.router, prefix="/launcher", tags=["launcher"])
 
+# Health check endpoints
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+@app.get("/liveness")
+async def liveness_check():
+    return {"status": "alive"}
+
+@app.get("/readiness")
+async def readiness_check():
+    # Add any necessary checks to determine if the app is ready to serve traffic
+    return {"status": "ready"}
+
 if __name__ == "__main__":
     import uvicorn
 

@@ -16,7 +16,7 @@ add to env the s3 bucker for logs file "projectlogs" in launcher microservices, 
 
 -----
 
-launcher, spark images, torchddp images:  --> done for launcher
+launcher, spark images, torchddp imagesm model-management:  --> done for launcher
 # os.environ['MLFLOW_TRACKING_SERVER_CERT_PATH'] = "/etc/ssl/certs/ca-certificates.crt"
 # os.environ['MLFLOW_TRACKING_USERNAME'] = "mlflow"
 # os.environ['MLFLOW_TRACKING_PASSWORD'] = "mlflow"

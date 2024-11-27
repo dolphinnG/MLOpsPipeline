@@ -22,7 +22,6 @@
     - name: Deploy Helm chart
       ansible.builtin.command: >
         helm install {{ item.release }} . -f {{ item.values_file }}
-        {% if 'airflow' not in item.chart_path %} --wait {% endif %}
       args:
         chdir: "{{ item.chart_path }}"
       register: helm_install

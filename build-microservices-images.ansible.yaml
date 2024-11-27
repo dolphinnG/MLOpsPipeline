@@ -3,9 +3,9 @@
   hosts: localhost
   vars:
     root_dir: "{{ lookup('pipe', 'pwd') }}"
-    version: "v2"
+    version: "v3"
     push_images: true  # Set this to true to push images to my remote repo
-    force_source: false  # force docker build
+    force_source: true  # force docker build
     images:
       - name: "supahakka/orchestration:{{ version }}"
         path: "{{ root_dir }}/microservices/airflow-orchestration"

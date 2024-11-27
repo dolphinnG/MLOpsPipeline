@@ -15,6 +15,7 @@ def get_settings():
     return Conf() # type: ignore
 
 T = TypeVar('T', bound=BaseSeldonGrpcService)
+settings = get_settings() # type: ignore
 
 def get_service(service_class: Type[T], stub_class: Type, address: str, use_secure_channel: bool) -> Callable[[], T]:
     @lru_cache
@@ -22,9 +23,9 @@ def get_service(service_class: Type[T], stub_class: Type, address: str, use_secu
         
         if use_secure_channel:
             # Paths to the certificates and key
-            server_cert_path = '/seldon/ca.crt'
-            client_cert_path = '/seldon/tls.crt'
-            client_key_path = '/seldon/tls.key'
+            server_cert_path = 'seldon/ca.crt'
+            client_cert_path = 'seldon/tls.crt'
+            client_key_path = 'seldon/tls.key'
             
             # Read the server's certificate
             with open(server_cert_path, 'rb') as f:
@@ -50,7 +51,6 @@ def get_service(service_class: Type[T], stub_class: Type, address: str, use_secu
         return service_class(stub)
     return _get_service
 
-settings = get_settings() # type: ignore
 get_scheduler_service2 = get_service(SchedulerService, SchedulerStub, settings.SELDON_SCHEDULER_GRPC_ENDPOINT, use_secure_channel=True)
 get_inference_service2 = get_service(InferenceService, GRPCInferenceServiceStub, settings.SELDON_INFERENCE_GRPC_ENDPOINT, use_secure_channel=False)
 get_dataplane_service2 = get_service(DataPlaneService, GRPCInferenceServiceStub, settings.SELDON_DATAPLANE_GRPC_ENDPOINT, use_secure_channel=False)

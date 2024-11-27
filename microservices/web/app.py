@@ -59,15 +59,6 @@ async def read_root(request: Request):
         "index.html", {"request": request, "cookies": cookies}
     )
 
-
-# @app.get("/protected")
-# async def protected(request: Request):
-#     user_session = request.cookies.get(USER_SESSION_KEY)
-#     return templates.TemplateResponse(
-#         "protected.html", {"request": request, "user_session": user_session}
-#     )
-
-
 @app.get("/profile")
 async def profile(request: Request):
     user_data = request.cookies.get(USER_DATA_KEY)
@@ -77,10 +68,19 @@ async def profile(request: Request):
         "profile.html", {"request": request, "user_data_dict": user_data_dict}
     )
 
+# Health check endpoints
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
-# @app.get("/dag")
-# async def dag(request: Request):
-#     return templates.TemplateResponse("dag.html", {"request": request})
+@app.get("/liveness")
+async def liveness_check():
+    return {"status": "alive"}
+
+@app.get("/readiness")
+async def readiness_check():
+    # Add any necessary checks to determine if the app is ready to serve traffic
+    return {"status": "ready"}
 
 settings = get_configurations()
 
@@ -88,11 +88,10 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(
-        # app,
-        'app:app',
+        app,
         host="0.0.0.0",
         port=14999,
-        reload=True,
-        # ssl_certfile=settings.SERVER_CERT_PATH,
-        # ssl_keyfile=settings.SERVER_KEY_PATH,
+        # reload=True,
+        ssl_certfile=settings.SERVER_CERT_PATH,
+        ssl_keyfile=settings.SERVER_KEY_PATH,
     )  # TODO: set workers

@@ -68,16 +68,16 @@ class KeyCloakAuthService(IAuthService):
         await self.cache_service.set_pydantic_cache(session_id, user_session)
         auth_url += "&code_challenge=" + code_challenge + "&code_challenge_method=S256"
         
-        # Parse the auth_url and replace the domain
-        parsed_url = urlparse(auth_url)
-        new_netloc = self.configs.KEYCLOAK_INGRESS_DOMAIN
+        # # Parse the auth_url and replace the domain
+        # parsed_url = urlparse(auth_url)
+        # new_netloc = self.configs.KEYCLOAK_INGRESS_DOMAIN
         
-        logging.debug(f"old url: {parsed_url}")
-        new_url = urlunparse(parsed_url._replace(netloc=new_netloc))
-        logging.debug(f"new_url: {new_url}")
+        # logging.debug(f"old url: {parsed_url}")
+        # new_url = urlunparse(parsed_url._replace(netloc=new_netloc))
+        # logging.debug(f"new_url: {new_url}")
+        # res = RedirectResponse(url=new_url)
         
-        # res = RedirectResponse(url=auth_url)
-        res = RedirectResponse(url=new_url)
+        res = RedirectResponse(url=auth_url)
         res.set_cookie(key=USER_SESSION_KEY, value=session_id)
         
         return res

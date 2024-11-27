@@ -7,7 +7,9 @@ image:
 
 service: 
   type: LoadBalancer
-
+  # loadBalancerIP: "10.108.237.147"
+  # clusterIP: "10.96.12.153"
+  
 extraEnvVars:
   - name: KEYCLOAK_EXTRA_ARGS
     # value: --import-realm

@@ -19,14 +19,30 @@
       loop_control:
         loop_var: item
 
-    # - name: Wait for 10 seconds before uninstalling seldon-core-v2-setup
-    #   ansible.builtin.pause:
-    #     seconds: 10
+    - name: Check for existing seldon deployments
+      ansible.builtin.command: kubectl get deployments --all-namespaces -o json
+      register: seldon_deployments
+      changed_when: false
 
-    # - name: Uninstall seldon-core-v2-setup Helm release
-    #   ansible.builtin.command: helm uninstall seldon-core-v2-setup-hehe
-    #   register: seldon_core_v2_setup_uninstall
-    #   changed_when: "'uninstalled' in seldon_core_v2_setup_uninstall.stdout"
+    - name: Check for existing seldon stateful sets
+      ansible.builtin.command: kubectl get statefulsets --all-namespaces -o json
+      register: seldon_statefulsets
+      changed_when: false
+
+    - name: Wait for seldon deployments and stateful sets to be deleted
+      ansible.builtin.command: >
+        kubectl get deployments,statefulsets --all-namespaces -o json
+      register: seldon_resources
+      until: >
+        seldon_resources.stdout | from_json | json_query('items[?contains(metadata.name, `seldon`)]') | length == 0
+      retries: 10
+      delay: 10
+      changed_when: false
+
+    - name: Uninstall seldon-core-v2-setup Helm release
+      ansible.builtin.command: helm uninstall seldon-core-v2-setup-hehe
+      register: seldon_core_v2_setup_uninstall
+      changed_when: "'uninstalled' in seldon_core_v2_setup_uninstall.stdout"
 
     - name: Delete all PersistentVolumeClaims
       ansible.builtin.command: kubectl delete pvc --all

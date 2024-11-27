@@ -13,6 +13,7 @@ class Conf(BaseSettings):
     SERVER_CERT_PATH: str
     SERVER_KEY_PATH: str
     
+    MLFLOW_TRACKING_SERVER_CERT_PATH: str
     MLFLOW_TRACKING_USERNAME:str
     MLFLOW_TRACKING_PASSWORD:str
     

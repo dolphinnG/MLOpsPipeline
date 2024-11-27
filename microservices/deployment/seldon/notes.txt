@@ -1,0 +1,1 @@
+mount the seldon control plane client tls secret here.
