@@ -11,13 +11,13 @@
       failed_when: helm_version.rc != 0
       changed_when: false
 
-    # - name: Deploy seldon-core-v2-setup Helm chart
-    #   ansible.builtin.command: >
-    #     helm install seldon-core-v2-setup-hehe . -f 2_setup_values.yaml --wait
-    #   args:
-    #     chdir: "helm/seldon-core-v2-setup"
-    #   register: seldon_core_v2_setup_install
-    #   changed_when: "'STATUS: deployed' in seldon_core_v2_setup_install.stdout"
+    - name: Deploy seldon-core-v2-setup Helm chart
+      ansible.builtin.command: >
+        helm install seldon-core-v2-setup-hehe . -f 2_setup_values.yaml
+      args:
+        chdir: "helm/seldon-core-v2-setup"
+      register: seldon_core_v2_setup_install
+      changed_when: "'STATUS: deployed' in seldon_core_v2_setup_install.stdout"
 
     - name: Deploy Helm chart
       ansible.builtin.command: >

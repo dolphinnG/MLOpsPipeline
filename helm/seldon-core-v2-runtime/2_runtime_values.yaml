@@ -5,6 +5,12 @@ envoy:
   serviceType: ClusterIP 
 
 config:
+  tracingConfig:
+    disable: false
+    otelExporterEndpoint: "otelcol-deploymentset-hehe-opentelemetry-collector:4317"
+    otelExporterProtocol: "grpc"
+    ratio: "1"
+
   # CHANGED TO SET KAFKA CONFIG IN SELDON SETUP YAML, DROP THIS SHIT
   # kafkaConfig:
   #   bootstrap: kafka-dolphin-service:9092

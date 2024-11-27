@@ -62,4 +62,4 @@ spec:
       disable: {{ .Values.config.tracingConfig.disable }}
       otelExporterEndpoint: {{ .Values.config.tracingConfig.otelExporterEndpoint }}
       otelExporterProtocol: {{ .Values.config.tracingConfig.otelExporterProtocol }}
-      ratio: {{ .Values.config.tracingConfig.ratio }}
+      ratio: "{{ .Values.config.tracingConfig.ratio }}"
