@@ -1,4 +1,5 @@
 import base64
+import logging
 import numpy as np
 from grpcStub.v2_dataplane_pb2 import (
     ModelInferRequest,
@@ -7,7 +8,8 @@ from models.dataplane_proto_pydantic import (
     ModelInferRequestPydantic,
 )
 from services.BaseSeldonGrpcService import BaseSeldonGrpcService
-
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 class InferenceService(BaseSeldonGrpcService):
     # def __init__(self, stub: GRPCInferenceServiceStub):
     #     self.stub = stub
@@ -40,7 +42,6 @@ class InferenceService(BaseSeldonGrpcService):
             "FP32": np.float32,
             "FP64": np.float64
         }
-        
         for output in processed_response['outputs']:
             raw_output_content = raw_output_contents.pop(0)
             b64decoded_output_content = base64.b64decode(raw_output_content)
@@ -68,6 +69,10 @@ class InferenceService(BaseSeldonGrpcService):
         metadata = [('seldon-model', seldon_model_header)]
         response = self.stub.ModelInfer(request, metadata=metadata)
         processed_response = self._process_response(response)
-        processed_response = self._process_raw_output_contents(processed_response)
+            
+        logger.info("Processed responsezzz: %s", processed_response)
+        if processed_response['rawOutputContents']:
+            logger.info("raw output contents found")
+            processed_response = self._process_raw_output_contents(processed_response)
         return processed_response
 

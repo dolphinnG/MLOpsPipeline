@@ -38,3 +38,33 @@
       loop: "{{ charts }}"
       loop_control:
         loop_var: item
+
+    - name: Get ClusterIP of keycloak-dolphin-service
+      ansible.builtin.command: kubectl get svc keycloak-dolphin-service -o jsonpath='{.spec.clusterIP}'
+      register: keycloak_cluster_ip
+      changed_when: false
+
+    - name: Get ClusterIP of grafana-dolphin-service
+      ansible.builtin.command: kubectl get svc grafana-dolphin-service -o jsonpath='{.spec.clusterIP}'
+      register: grafana_cluster_ip
+      changed_when: false
+
+    - name: Update KEYCLOAK_SERVER_URL in .env file
+      ansible.builtin.replace:
+        path: helm/microservices/files/.env
+        regexp: 'KEYCLOAK_SERVER_URL="https://[^:]+'
+        replace: 'KEYCLOAK_SERVER_URL="https://{{ keycloak_cluster_ip.stdout }}'
+
+    - name: Update GRAFANA_UI_URL in .env file
+      ansible.builtin.replace:
+        path: helm/microservices/files/.env
+        regexp: 'GRAFANA_UI_URL="http://[^:]+'
+        replace: 'GRAFANA_UI_URL="http://{{ grafana_cluster_ip.stdout }}'
+
+    - name: Deploy microservices
+      ansible.builtin.command: >
+        helm install microservices-hehe . -f values.yaml
+      args:
+        chdir: "helm/microservices"
+      register: microservices_deploy
+      changed_when: "'STATUS: deployed' in microservices_deploy.stdout"

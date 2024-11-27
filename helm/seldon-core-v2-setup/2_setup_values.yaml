@@ -104,8 +104,8 @@ serverConfig:
     # If need more, then should  build a new one based on this
       pullPolicy: IfNotPresent
       registry: docker.io
-      repository: supahakka/mlmlserver
-      tag: withlangchain2
+      repository: supahakka/dolphin-mlserver
+      tag: v1
     openai:
       apiKey: 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
 

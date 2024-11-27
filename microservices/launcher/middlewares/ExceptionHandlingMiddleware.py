@@ -12,5 +12,5 @@ class ExceptionHandlingMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             return response
         except Exception as exc:
-            logger.error("Exception Occured: %s", exc)
+            logger.error("Exception Occured: %s", exc, exc_info=True)
             return Response(content=str(exc), status_code=500)

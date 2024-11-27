@@ -22,7 +22,8 @@ def get_service(service_class: Type[T], stub_class: Type, address: str, use_secu
     def _get_service() -> T:
         
         if use_secure_channel:
-            # Paths to the certificates and key
+            # Paths to the certificates and key, WILL BE MOUNTED TO THE POD BY KUBERNETES
+            # MEANING IF RUNNING LOCALLY, MUST PROVIDE MOCK CERTIFICATES
             server_cert_path = 'seldon/ca.crt'
             client_cert_path = 'seldon/tls.crt'
             client_key_path = 'seldon/tls.key'

@@ -18,6 +18,11 @@
       loop: "{{ charts }}"
       loop_control:
         loop_var: item
+    
+    - name: Uninstall microservices
+      ansible.builtin.command: helm uninstall microservices-hehe
+      register: microservices_uninstall
+      changed_when: "'uninstalled' in microservices_uninstall.stdout"
 
     - name: Check for seldon pods
       ansible.builtin.command: kubectl get pods --all-namespaces -o json
@@ -38,6 +43,7 @@
       until: "'uninstalled' in seldon_core_v2_setup_uninstall.stdout"
       retries: 10
       delay: 5
+      changed_when: false
 
     - name: Wait for 5 seconds before rechecking seldon pods
       ansible.builtin.pause:

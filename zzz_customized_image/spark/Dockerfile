@@ -5,7 +5,7 @@ USER root
 COPY requirements.txt /dolphin/requirements.txt
 
 RUN pip install -r /dolphin/requirements.txt
-
+RUN pip install psutil pynvml 
 # Create user with UID 1001
 RUN useradd -u 1001 -m -d /home/dolphinnG dolphinnG
 

@@ -1,39 +1,42 @@
 
 pip install psutil pynvml AND SET os.environ['MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING'] = "true"  --> done
 ON THE LAUNCHER ->>> done
-AND SPARK IMAGES TO LOG MLFLOW SYSTEM METRICS PER RUN ->> not yet
-AND torchddp base image ->>>> not yet
+AND SPARK IMAGES TO LOG MLFLOW SYSTEM METRICS PER RUN ->> DONE
+AND torchddp base image ->>>> done
 THOSE METRICS WILL APPEAR ON RUN DETAIL UI 
 THAT MEANS THE base IMAGE FOR TORCHDDP, SPARK, AND LAUNCHER IMAGES NEED TO BE INSTALLED AND HAVE THE ENV SET
 
 -----
 
-REMOVE MLFLOW_S3_ENDPOINT_URL AND RELATED ACCESS_KEY/SECRET/AWS_CA_BUNDLE ENVS ON CLIENT -> prolly done
+REMOVE MLFLOW_S3_ENDPOINT_URL AND RELATED ACCESS_KEY/SECRET/AWS_CA_BUNDLE ENVS ON CLIENT 
+-> done, no need AWS_CA_BUNDLE because I changed to use mlflow tracking server as proxy for minio
 
 ------
 
-add to env the s3 bucker for logs file "projectlogs" in launcher microservices, minio helm should sync the name ->> prolly done
+add to env the s3 bucker for logs file "projectlogs" in launcher microservices, minio helm should sync the name ->> done
 
 -----
 
-launcher, spark images, torchddp imagesm model-management:  --> done for launcher
+launcher, spark images, torchddp imagesm model-management:  --> done for launcher, torchddp, model-management
+---> NOT DONE FOR SPARK, CHECK IF NEEDED
 # os.environ['MLFLOW_TRACKING_SERVER_CERT_PATH'] = "/etc/ssl/certs/ca-certificates.crt"
 # os.environ['MLFLOW_TRACKING_USERNAME'] = "mlflow"
 # os.environ['MLFLOW_TRACKING_PASSWORD'] = "mlflow"
 
 
 -----
-deployment service, set seldon-controlplane-client-tls-secret cert path in .env.
-deployment service pod needs seldon-controlplane-client-tls-secret mounted. 
+deployment service, set seldon-controlplane-client-tls-secret cert path in .env. --> DONE
+deployment service pod needs seldon-controlplane-client-tls-secret mounted. --> DONE
 
 -------
-set in launcher, mlserver images: -> done in mlserver deployment
+set in launcher, mlserver images: -> done in mlserver SELDON deployment
+-->> NOT DONE IN LAUNCHER
 os.environ['OPENAI_API_KEY'] = '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'
-# set in launcher, spark images, torchddp images, mlserver images:  -> done in launcher
+# set in launcher, spark images, torchddp images, mlserver images:  -> done in launcher, torchddp. Spark probably not needed
 os.environ["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = "http://localhost:4317/v1/traces"
 
 ----- 
 turn on openldap periodic sync in keycloak realm.json --> prolly done
 
 ---- 
-mount nfs volume to launcher service pod
+mount nfs volume to launcher service pod -->> done

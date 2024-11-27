@@ -18,6 +18,7 @@ spec:
                 - name: deployment
                   image: "supahakka/deployment:v3"
                   imagePullPolicy: {{ .Values.imagePullPolicy }}
+                  # imagePullPolicy: Always
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"

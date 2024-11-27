@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: spark-master
-          image: supahakka/dolphin-spark:with-username
+          image: supahakka/dolphin-spark:v1
           ports:
             - containerPort: 8080
             - containerPort: 7077
@@ -59,7 +59,8 @@ spec:
               value: "no"
             - name: SPARK_METRICS_ENABLED
               value: "true"
-
+            - name: MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING
+              value: "true"
 
           volumeMounts:
             - name: nfs-volume
@@ -94,7 +95,7 @@ spec:
     spec:
       containers:
         - name: spark-worker
-          image: supahakka/dolphin-spark:with-username
+          image: supahakka/dolphin-spark:v1
           ports:
             - containerPort: 8081
           env:
@@ -108,7 +109,8 @@ spec:
               value: "no"
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
               value: "no"
-
+            - name: MLFLOW_ENABLE_SYSTEM_METRICS_LOGGING
+              value: "true"
             # - name: MLFLOW_TRACKING_URI
             #   value: "https://mlflow-dolphin-service-tracking:443"
 
