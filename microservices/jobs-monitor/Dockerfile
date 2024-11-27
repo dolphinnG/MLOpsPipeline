@@ -37,6 +37,8 @@ RUN rm  dolphin.rootCA.crt dolphin.rootCA.key
 RUN opentelemetry-bootstrap -a install
 
 EXPOSE 6969
+ENV PATH="$PATH:."
+RUN chmod 777 vcctl generate_kubeconfig.py init.sh
 
 # Run app.py when the container launches
-CMD ["opentelemetry-instrument", "python", "app.py"]
+CMD ["./init.sh"]

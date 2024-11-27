@@ -9,7 +9,7 @@ fullnameOverride: airflow-dolphin-service
 dags: 
   enabled: true
   repositories:
-    - repository: https://dolphinnG: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@github.com/dolphinnG/airflowdag
+    - repository: https://github.com/dolphinnG/airflowdag
       branch: main
       name: airflowdag
 auth: 

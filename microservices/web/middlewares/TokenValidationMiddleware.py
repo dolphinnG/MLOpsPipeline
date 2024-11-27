@@ -23,7 +23,7 @@ class TokenValidationMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint):
         if not request.url.path.startswith(
-            ("/auth", "/static", "/docs", "/openapi.json", "/favicon.ico")
+            ("/auth", "/static", "/docs", "/openapi.json", "/favicon.ico", "/readiness", '/liveness', '/health')
         ):
             if request.url.path != "/":
                 try:

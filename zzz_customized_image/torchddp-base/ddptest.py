@@ -21,7 +21,7 @@ import pandas as pd
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 # Define a simple model
 class SimpleModel(nn.Module):
@@ -39,11 +39,11 @@ def train(rank, world_size):
     logger.info(f"Initializing process group with rank {rank} and world size {world_size}")
     # Initialize the process group
     dist.init_process_group("gloo", rank=rank, world_size=world_size)
-    logger.info(f"mlflow s3 endpoint: {os.environ['MLFLOW_S3_ENDPOINT_URL']}")
+    # logger.info(f"mlflow s3 endpoint: {os.environ['MLFLOW_S3_ENDPOINT_URL']}")
     logger.info(f"mlflow tracking uri: {os.environ['MLFLOW_TRACKING_URI']}")
-    logger.info(f"mlflow aws id: {os.environ['AWS_ACCESS_KEY_ID']}")
+    # logger.info(f"mlflow aws id: {os.environ['AWS_ACCESS_KEY_ID']}")
     # logger.info(f"mlflow aws secret: {os.environ['AWS_SECRET_ACCESS_KEY']}")
-    logger.info(f"mlflow experiment: {os.environ['MLFLOW_EXPERIMENT_NAME']}")
+    # logger.info(f"mlflow experiment: {os.environ['MLFLOW_EXPERIMENT_NAME']}")
         
     # Determine the device to use (GPU or CPU)
     if torch.cuda.is_available():
@@ -75,7 +75,7 @@ def train(rank, world_size):
     
     # Start MLflow run
     if rank == 0:
-        
+        mlflow.set_experiment("torchddp")
         # mlflow.set_experiment(os.environ['MLFLOW_EXPERIMENT_NAME']) # can be set in the launch, and not here
         mlflow.start_run()
         logger.info("Started MLflow run")

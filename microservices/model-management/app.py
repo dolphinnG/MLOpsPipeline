@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from routers import mlflow
 from dependencies.deps import get_settings
 from utils.utils import set_env
-
+from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
@@ -14,7 +14,11 @@ set_env()
 settings = get_settings()
 
 app = FastAPI()
+
+
 app.include_router(mlflow.router, prefix="/mlflow")
+
+app.add_middleware(ExceptionHandlingMiddleware)
 # templates = Jinja2Templates(directory="templates")
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 

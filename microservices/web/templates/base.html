@@ -21,7 +21,7 @@
                 {% endif %}
             {% endif %}
             {% if request.cookies.user_session_id %}
-            <a href="http://localhost:3000" class="button"><i class="fas fa-chart-line"></i> Grafana</a> <!-- Updated Grafana button link -->
+                <a href="{{request.state.GRAFANA_UI_URL}}" class="button"><i class="fas fa-chart-line"></i> Grafana</a> <!-- Updated Grafana button link -->
                 <a href="/profile" class="button"><i class="fas fa-user"></i></a>
                 <a href="/auth/logout" class="button">Logout</a>
             {% else %}

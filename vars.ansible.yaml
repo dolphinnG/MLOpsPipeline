@@ -66,6 +66,6 @@ charts:
   #   release: seldon-core-v2-servers-hehe
   #   values_file: values.yaml
 
-  - chart_path: helm/microservices
-    release: microservices-hehe
-    values_file: values.yaml
+  # - chart_path: helm/microservices
+  #   release: microservices-hehe
+  #   values_file: values.yaml

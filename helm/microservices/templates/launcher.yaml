@@ -50,7 +50,7 @@ spec:
             containers:
                 - name: launcher
                   image: "supahakka/launcher:v3"
-                  imagePullPolicy: Always
+                  imagePullPolicy: {{ .Values.imagePullPolicy }}
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
@@ -78,7 +78,31 @@ spec:
                           fieldPath: status.podIP 
                   ports:
                       - containerPort: 15003
+                  livenessProbe:
+                    httpGet:
+                      scheme: HTTPS
+                      path: /liveness
+                      port: 15003
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                  readinessProbe:
+                    httpGet:
+                      scheme: HTTPS
+                      path: /readiness
+                      port: 15003
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                  startupProbe:
+                    httpGet:
+                      scheme: HTTPS
+                      path: /health
+                      port: 15003
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                    failureThreshold: 10
                   volumeMounts:
+                      - name: nfs-volume
+                        mountPath: /opt/bitnami/spark/tmp
                       - name: config-volume
                         mountPath: /app/env/
                       - name: tls-secret
@@ -91,6 +115,9 @@ spec:
                       #   mountPath: /app/
                       #   subPath: ca.crt
             volumes:
+              - name: nfs-volume
+                persistentVolumeClaim:
+                  claimName: nfs-pvc
               - name: config-volume
                 configMap:
                   name: dolphin-microservices-config

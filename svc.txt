@@ -23,3 +23,5 @@ spark-master-svc                                     ClusterIP   10.98.159.179  
 triton-0                                             ClusterIP   None             <none>        9000/TCP,9500/TCP,9005/TCP                                37s
 volcano-hehe-admission-service                       ClusterIP   10.102.10.2      <none>        443/TCP                                                   6m18s
 volcano-hehe-scheduler-service                       ClusterIP   10.105.159.131   <none>        8080/TCP                                                  6m18s
+
+grafana-dolphin-service:3000

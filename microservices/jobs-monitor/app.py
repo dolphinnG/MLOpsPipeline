@@ -2,6 +2,7 @@ import logging
 from fastapi import FastAPI
 from routers import distributed_jobs_monitor
 from dependencies.deps import get_settings
+from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
@@ -13,7 +14,7 @@ settings = get_settings()
 app = FastAPI()
 
 app.include_router(distributed_jobs_monitor.router, prefix="/distributed")
-
+app.add_middleware(ExceptionHandlingMiddleware)
 
 # Health check endpoints
 @app.get("/health")

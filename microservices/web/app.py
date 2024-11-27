@@ -17,6 +17,7 @@ from routers import (
 )
 from middlewares.TokenValidationMiddleware import TokenValidationMiddleware
 from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
+from middlewares.PopulateRequestStateMiddleware import PopulateRequestStateMiddleware
 from dependencies.deps import get_configurations
 from utils.constants import USER_SESSION_KEY, USER_DATA_KEY
 
@@ -49,6 +50,7 @@ app.include_router(Scheduler.router, prefix="/scheduler")
 app.include_router(Dataplane.router, prefix="/dataplane")
 
 # Add middleware  
+app.add_middleware(PopulateRequestStateMiddleware)
 app.add_middleware(TokenValidationMiddleware)
 app.add_middleware(ExceptionHandlingMiddleware) 
 

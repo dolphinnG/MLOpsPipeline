@@ -7,6 +7,7 @@ from routers import Scheduler
 from fastapi.responses import JSONResponse
 from grpc import RpcError
 from dependencies.deps import get_settings
+from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
@@ -19,7 +20,7 @@ settings = get_settings()
 app = FastAPI()
 app.include_router(Scheduler.router, prefix="/scheduler")
 app.include_router(Dataplane.router, prefix="/dataplane")
-
+app.add_middleware(ExceptionHandlingMiddleware)
 
 @app.exception_handler(RpcError)
 async def grpc_exception_handler(request, exc: RpcError):

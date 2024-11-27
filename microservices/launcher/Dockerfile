@@ -104,9 +104,10 @@ EXPOSE 15003
 COPY entrypoint.sh ./entrypoint.sh
 COPY spark-conf-generation-script.sh ./spark-conf-generation-script.sh
 
-RUN chmod 777 entrypoint.sh spark-conf-generation-script.sh dolphin-spark.conf dolphin.rootCA.crt dolphin.rootCA.key
+RUN chmod 777 vcctl entrypoint.sh spark-conf-generation-script.sh dolphin-spark.conf dolphin.rootCA.crt dolphin.rootCA.key
 
 USER 1001 
+ENV PATH="$PATH:."
 
 # Set the entrypoint
 ENTRYPOINT ["./entrypoint.sh"]

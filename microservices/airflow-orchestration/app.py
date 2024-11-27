@@ -5,7 +5,7 @@ from routers.dag_router import dag_router
 from routers.dag_run_router import dag_run_router
 from routers.task_instance_router import task_instance_router
 from dependencies.deps import get_settings
-
+from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 settings = get_settings()
 
 app = FastAPI()
@@ -33,7 +33,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(dag_router, prefix="/api/v1")
 app.include_router(dag_run_router, prefix="/api/v1")
 app.include_router(task_instance_router, prefix="/api/v1")
-
+app.add_middleware(ExceptionHandlingMiddleware)
 # Health check endpoints
 @app.get("/health")
 async def health_check():

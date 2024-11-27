@@ -17,7 +17,7 @@ spec:
             containers:
                 - name: deployment
                   image: "supahakka/deployment:v3"
-                  imagePullPolicy: Always
+                  imagePullPolicy: {{ .Values.imagePullPolicy }}
                   env:
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
@@ -39,6 +39,28 @@ spec:
                       value: "true"
                   ports:
                       - containerPort: 15004
+                  livenessProbe:
+                    httpGet:
+                      scheme: HTTPS
+                      path: /liveness
+                      port: 15004
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                  readinessProbe:
+                    httpGet:
+                      scheme: HTTPS
+                      path: /readiness
+                      port: 15004
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                  startupProbe:
+                    httpGet:
+                      scheme: HTTPS
+                      path: /health
+                      port: 15004
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                    failureThreshold: 10
                   volumeMounts:
                       - name: config-volume
                         mountPath: /app/env/

@@ -1,3 +1,4 @@
+fullnameOverride: grafana-dolphin-service
 
 datasources:
   secretDefinition:
@@ -55,3 +56,8 @@ datasources:
 admin:
   user: admin
   password: admin
+
+
+service: 
+  type: LoadBalancer 
+  # ClusterIP

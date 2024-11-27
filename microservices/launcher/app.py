@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from routers import launch
 from utils import utils
 from dependencies.deps import get_configs
-
+from middlewares.ExceptionHandlingMiddleware import ExceptionHandlingMiddleware
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(levelname)s - %(asctime)s - %(name)s - %(message)s",
@@ -16,7 +16,7 @@ settings = get_configs()
 app = FastAPI()
 
 app.include_router(launch.router, prefix="/launcher", tags=["launcher"])
-
+app.add_middleware(ExceptionHandlingMiddleware)
 # Health check endpoints
 @app.get("/health")
 async def health_check():
