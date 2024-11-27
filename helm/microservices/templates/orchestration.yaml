@@ -26,7 +26,7 @@ spec:
                     - name: OTEL_EXPORTER_OTLP_INSECURE
                       value: "true"
                     - name: OTEL_SERVICE_NAME
-                      value: "app-model-management"
+                      value: "dolphin-orchestration-service"
                     - name: OTEL_METRICS_EXPORTER
                       value: "otlp"
                     - name: OTEL_TRACES_EXPORTER

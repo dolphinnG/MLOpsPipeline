@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+data:
+  prometheus.yml: |
+    global:
+        scrape_interval: 15s  # How often to scrape targets
+
+
+    # THIS IS ABOUT PROMETHEUS DOING THE WRITE ITSELF. NOT ABOUT RECEIVING WRITES FROM OTLP COLLECTOR
+    # FOR RECEIVING WRITE, MUST ADD  "--web.enable-remote-write-receiver" TO THE PROMETHEUS COMMAND IN docker-compose.yml
+    # AND HAVE OTEL COL PUSHING TO PROMETHEUS ENDPOINT BELOW
+    # remote_write:  
+    # - url: "http://prometheus:9090/api/v1/write"
+    #   # Sets the `Authorization` header on every remote write request with the
+    #   # configured username and password.
+    #   # password and password_file are mutually exclusive.
+    #   # basic_auth:
+    #   #   [ username: <string> ]
+    #   #   [ password: <secret> ]
+    #   #   [ password_file: <string> ]
+
+
+    # scrape_configs:
+    #   - job_name: 'app1'
+    #     static_configs:
+    #       - targets: ['host.docker.internal:9999']  # Replace with your FastAPI app's host and port
+    #       # - labels:
+    #       #     metric_job: 'app1'
+
+    # scrape_configs:
+    #   - job_name: 'app1'
+    #     static_configs:
+    #       - targets: ['otel-collector:9999']  # Replace with your FastAPI app's host and port
+
+        # - labels:
+        #     metric_job: 'app1'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: bitnami/prometheus:2.55.1-debian-12-r2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+          command: 
+            - "prometheus"
+            - "--config.file=/opt/bitnami/prometheus/conf/prometheus.yml"
+            - "--web.enable-remote-write-receiver"
+            # - "sh"
+            # - "-c"
+            # - |
+            #   sleep infinity
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /opt/bitnami/prometheus/conf/prometheus.yml
+              subPath: prometheus.yml
+      volumes:
+        - name: prometheus-config-volume
+          configMap:
+            name: prometheus-config
+

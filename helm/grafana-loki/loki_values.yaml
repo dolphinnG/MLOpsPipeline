@@ -1,4 +1,4 @@
-# fullnameOverride: loki-dolphin
+fullnameOverride: loki-dolphin-service
 
 # loki: 
 #   configuration: loki-config

@@ -1,5 +1,7 @@
 mode: deployment
 
+fullnameOverride: otelcol-deploymentset-hehe-opentelemetry-collector
+
 image:
   repository: otel/opentelemetry-collector-contrib
 
@@ -18,18 +20,18 @@ config:
   exporters:
     debug: {}
 
-    # otlp/jaeger-grpc:
-    #   endpoint: http://jaegertest-collector:4317
-    #   tls: 
-    #     insecure: true
+    otlp/jaeger-grpc:
+      endpoint: http://jaeger-dolphin-service-collector:4317
+      tls: 
+        insecure: true
 
     otlphttp: # this must be correct and not arbitrary. the name after the / can be though.
-      endpoint: http://lokitest-grafana-loki-distributor:3100/otlp
+      endpoint: http://loki-dolphin-service-distributor:3100/otlp
       tls: 
         insecure: true
 
     prometheusremotewrite:
-      endpoint: "http://promtest-prometheus-server:80/api/v1/write"
+      endpoint: "http://prometheus-dolphin-service:9090/api/v1/write"
       tls: 
         insecure: true
       # wal: # Enabling the Write-Ahead-Log for the exporter.
@@ -65,7 +67,7 @@ config:
       traces:
         exporters:
           - debug
-          # - otlp/jaeger-grpc
+          - otlp/jaeger-grpc
         processors:
           - memory_limiter
           - batch
