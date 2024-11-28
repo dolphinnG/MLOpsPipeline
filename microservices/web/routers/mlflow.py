@@ -1,4 +1,5 @@
 import json
+import logging
 from fastapi import APIRouter, Query, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -8,6 +9,8 @@ from fastapi import Request
 from dependencies.deps import get_httpx_async_client
 from utils.utils import proxy_to_model_management
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 templates = Jinja2Templates(directory="templates")
 # Add custom filter to Jinja2 templates
 templates.env.filters['load_json'] = json.loads
@@ -32,6 +35,7 @@ async def get_runs(
     httpx_client: AsyncClient = Depends(get_httpx_async_client),
 ):
     response = await proxy_to_model_management(request, httpx_client, f"experiments/{experiment_id}/runs")
+    logger.info("mlflow runs response: %s", response)
     return templates.TemplateResponse("get_runs.html", {
         "request": request,
         "runs": response['runs'],

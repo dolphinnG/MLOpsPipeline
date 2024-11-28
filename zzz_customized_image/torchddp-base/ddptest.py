@@ -23,6 +23,7 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
 # Define a simple model
 class SimpleModel(nn.Module):
     def __init__(self):
@@ -33,10 +34,13 @@ class SimpleModel(nn.Module):
         x = x.view(-1, 28 * 28)
         return self.fc(x)
 
+
 # Training function
 def train(rank, world_size):
-    
-    logger.info(f"Initializing process group with rank {rank} and world size {world_size}")
+
+    logger.info(
+        f"Initializing process group with rank {rank} and world size {world_size}"
+    )
     # Initialize the process group
     dist.init_process_group("gloo", rank=rank, world_size=world_size)
     # logger.info(f"mlflow s3 endpoint: {os.environ['MLFLOW_S3_ENDPOINT_URL']}")
@@ -44,42 +48,44 @@ def train(rank, world_size):
     # logger.info(f"mlflow aws id: {os.environ['AWS_ACCESS_KEY_ID']}")
     # logger.info(f"mlflow aws secret: {os.environ['AWS_SECRET_ACCESS_KEY']}")
     # logger.info(f"mlflow experiment: {os.environ['MLFLOW_EXPERIMENT_NAME']}")
-        
+
     # Determine the device to use (GPU or CPU)
     if torch.cuda.is_available():
-        device = torch.device(f'cuda:{rank}')
+        device = torch.device(f"cuda:{rank}")
         device_ids = [rank]
     else:
-        device = torch.device('cpu')
+        device = torch.device("cpu")
         device_ids = None
-    
+
     # hardcoding device to cpu for testing on non-gpu machines
-    device = torch.device('cpu')
+    device = torch.device("cpu")
     device_ids = None
     logger.info(f"Using device: {device}")
-    
+
     # Set up the model, loss function, and optimizer
     model = SimpleModel().to(device)
     ddp_model = DDP(model, device_ids=device_ids)
     criterion = nn.CrossEntropyLoss().to(device)
     optimizer = optim.SGD(ddp_model.parameters(), lr=0.01)
-    
+
     # Set up the data loader
     transform = transforms.Compose([transforms.ToTensor()])
-    # YAN LECUNn MNIST URL IS DOWN, AND SO ARE ALL THE MIRRORS, THIS DOWNLOAD WILL RETURN 403, 
+    # YAN LECUNn MNIST URL IS DOWN, AND SO ARE ALL THE MIRRORS, THIS DOWNLOAD WILL RETURN 403,
     # NOTE: CHANGE TO A LOCAL COPY OF THE DATASET FOR THIS DEMO
     # local means the dataset must be accessible by all the podgroup members, and not the launcher pod
-    dataset = datasets.MNIST('/app', train=True, download=False, transform=transform)
-    sampler = torch.utils.data.DistributedSampler(dataset, num_replicas=world_size, rank=rank)
+    dataset = datasets.MNIST("/app", train=True, download=False, transform=transform)
+    sampler = torch.utils.data.DistributedSampler(
+        dataset, num_replicas=world_size, rank=rank
+    )
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, sampler=sampler)
-    
+
     # Start MLflow run
     if rank == 0:
         mlflow.set_experiment("torchddp")
         # mlflow.set_experiment(os.environ['MLFLOW_EXPERIMENT_NAME']) # can be set in the launch, and not here
         mlflow.start_run()
         logger.info("Started MLflow run")
-    
+
     # Training loop
     for epoch in range(2):
         ddp_model.train()
@@ -92,19 +98,27 @@ def train(rank, world_size):
             loss.backward()
             optimizer.step()
             epoch_loss += loss.item()
-        
+
         # Log metrics with MLflow
         if rank == 0:
             mlflow.log_metric("loss", epoch_loss / len(dataloader), step=epoch)
             logger.info(f"Epoch {epoch}, Loss: {epoch_loss / len(dataloader)}")
-    
+
     # Save the model with MLflow
     if rank == 0:
         # Create an input example and infer the model signature
         input_example = torch.randn(1, 1, 28, 28).to(device)
-        signature = infer_signature(input_example.cpu().numpy(), model(input_example).cpu().detach().numpy())
-        
-        model_info = mlflow.pytorch.log_model(ddp_model.module, "model", signature=signature, input_example=input_example.cpu().numpy())
+        signature = infer_signature(
+            input_example.cpu().numpy(), model(input_example).cpu().detach().numpy()
+        )
+
+        model_info = mlflow.pytorch.log_model(
+            ddp_model.module,
+            "model",
+            signature=signature,
+            input_example=input_example.cpu().numpy(),
+            registered_model_name="torchddp-model-test",
+        )
         logger.info(f"Model saved with MLflow, model_uri: {model_info.model_uri}")
 
         # End MLflow run
@@ -115,21 +129,26 @@ def train(rank, world_size):
         test_input = input_example.cpu().numpy().reshape(1, 1, 28, 28)
         predictions = pyfunc_model.predict(test_input)
         logger.info(f"Model predictions: {predictions}")
-        
+
     # Clean up
-    logger.info(f"MASTER_ADDR: {os.environ['MASTER_ADDR']}, MASTER_PORT: {os.environ['MASTER_PORT']}")
+    logger.info(
+        f"MASTER_ADDR: {os.environ['MASTER_ADDR']}, MASTER_PORT: {os.environ['MASTER_PORT']}"
+    )
     dist.destroy_process_group()
     logger.info(f"Destroyed process group for rank {rank}")
 
+
 # Main function
 def main():
-    world_size = int(os.environ['WORLD_SIZE'])
-    rank = int(os.environ['RANK'])
-        
+    world_size = int(os.environ["WORLD_SIZE"])
+    rank = int(os.environ["RANK"])
+
     logger.info(f"Starting training with rank {rank} and world size {world_size}")
-    logger.info(f"MASTER_ADDR: {os.environ['MASTER_ADDR']}, MASTER_PORT: {os.environ['MASTER_PORT']}")
+    logger.info(
+        f"MASTER_ADDR: {os.environ['MASTER_ADDR']}, MASTER_PORT: {os.environ['MASTER_PORT']}"
+    )
     train(rank, world_size)
-    
+
 
 if __name__ == "__main__":
     main()

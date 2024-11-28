@@ -1,2 +1,2 @@
-# imagePullPolicy: Always 
-imagePullPolicy: IfNotPresent 
+imagePullPolicy: Always 
+# imagePullPolicy: IfNotPresent 

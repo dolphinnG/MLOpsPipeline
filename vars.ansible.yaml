@@ -30,9 +30,9 @@ charts:
   - chart_path: helm/grafana-loki
     release: grafana-loki-hehe
     values_file: loki_values.yaml
-  - chart_path: helm/prometheus
-    release: prometheus-hehe
-    values_file: values.yaml
+  # - chart_path: helm/prometheus
+  #   release: prometheus-hehe
+  #   values_file: values.yaml
   - chart_path: helm/jaeger
     release: jaeger-hehe
     values_file: jaeger_values.yaml
@@ -43,9 +43,9 @@ charts:
     release: otelcol-daemonset-hehe
     values_file: daemonSet_values.yaml
 
-  - chart_path: helm/airflow
-    release: airflow-hehe
-    values_file: airflow_values.yaml
+  # - chart_path: helm/airflow
+  #   release: airflow-hehe
+  #   values_file: airflow_values.yaml
   - chart_path: helm/mlflow
     release: mlflow-hehe
     values_file: mlflow_values.yaml
@@ -56,15 +56,15 @@ charts:
     release: spark-hehe
     values_file: values.yaml
 
-  - chart_path: helm/kafka
-    release: kafka-hehe
-    values_file: kafka_values.yaml
-  - chart_path: helm/seldon-core-v2-runtime
-    release: seldon-core-v2-runtime-hehe
-    values_file: 2_runtime_values.yaml
-  - chart_path: helm/seldon-core-v2-servers
-    release: seldon-core-v2-servers-hehe
-    values_file: values.yaml
+  # - chart_path: helm/kafka
+  #   release: kafka-hehe
+  #   values_file: kafka_values.yaml
+  # - chart_path: helm/seldon-core-v2-runtime
+  #   release: seldon-core-v2-runtime-hehe
+  #   values_file: 2_runtime_values.yaml
+  # - chart_path: helm/seldon-core-v2-servers
+  #   release: seldon-core-v2-servers-hehe
+  #   values_file: values.yaml
 
 
   # MICROSERVICES ARE DEPLOYED AND UNDEPLOYED IN A SEPARATE TASK

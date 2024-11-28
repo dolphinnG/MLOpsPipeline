@@ -35,12 +35,12 @@ datasources:
         access: proxy
         url: http://jaeger-dolphin-service-query:16686
         isDefault: false      
-        jsonData:
-          tracesToLogsV2: 
-            customQuery: true
-            datasourceUid: P8E80F9AEF21F6940
-            filterByTraceId: false
-            query: "{service_name=~\".+\"} | span_id=`$${__span.spanId}`" # must use $$ to escape the $
+        # jsonData:
+        #   tracesToLogsV2: 
+        #     customQuery: true
+        #     datasourceUid: P8E80F9AEF21F6940
+        #     filterByTraceId: false
+        #     query: "{service_name=~\".+\"} | span_id=`$${__span.spanId}`" # must use $$ to escape the $
             
     #   httpHeaderName1: "Authorization"
     #   httpHeaderValue1: "Bearer YOUR_ACCESS_TOKEN"        

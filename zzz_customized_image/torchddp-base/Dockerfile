@@ -23,4 +23,4 @@ ENV MLFLOW_TRACING_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="http://otelcol-deployment
 # # Command to run the application (optional, can be overridden)
 # CMD ["python", "main.py"]
 
-# supahakka/torchdpp-base:v1
+# supahakka/torchdpp-base:v5
