@@ -71,7 +71,7 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="22" value="rank 1&amp;nbsp;&lt;br&gt;node/pod" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+                <mxCell id="22" value="ML project training pod" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
                     <mxGeometry x="140" y="170" width="90" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="23" value="" style="endArrow=classic;html=1;" parent="1" edge="1">
@@ -141,7 +141,7 @@
                         <mxPoint x="617" y="726" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="42" value="" style="endArrow=classic;html=1;fontSize=15;" edge="1" parent="1">
+                <mxCell id="42" value="" style="endArrow=classic;html=1;fontSize=15;" parent="1" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="420" y="620" as="sourcePoint"/>
                         <mxPoint x="550" y="690" as="targetPoint"/>
@@ -150,11 +150,11 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="43" value="log stream" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;fontSize=15;" connectable="0" vertex="1" parent="42">
+                <mxCell id="43" value="log stream" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;fontSize=15;" parent="42" connectable="0" vertex="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="45" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Do real time streaming&lt;/span&gt;&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;of spark job logs&lt;/span&gt;&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;to web UI&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=15;" vertex="1" parent="1">
-                    <mxGeometry x="410" y="625" width="140" height="70" as="geometry"/>
+                <mxCell id="45" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Do real time streaming&lt;/span&gt;&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;of MLProject training job logs&lt;/span&gt;&lt;br style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;to web UI&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=15;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="631" width="180" height="70" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

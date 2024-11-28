@@ -43,16 +43,6 @@
                 <mxCell id="69" value="submit DDP job to Volcano Scheduler" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="260" y="535" width="220" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="70" value="" style="endArrow=classic;html=1;" parent="1" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="540" y="550" as="sourcePoint"/>
-                        <mxPoint x="220" y="540" as="targetPoint"/>
-                        <Array as="points">
-                            <mxPoint x="540" y="620"/>
-                            <mxPoint x="220" y="620"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
                 <mxCell id="71" value="communicate with Volcano to do real time streaming of &lt;br&gt;training logs to web UI" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="239.78999999999996" y="625" width="310" height="40" as="geometry"/>
                 </mxCell>
@@ -202,17 +192,27 @@
                 <mxCell id="122" value="Pull the ML &lt;br&gt;project image" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="620" y="492" width="100" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="126" value="" style="endArrow=classic;html=1;" edge="1" parent="1">
+                <mxCell id="126" value="" style="endArrow=classic;html=1;" parent="1" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="610" y="560" as="sourcePoint"/>
                         <mxPoint x="680" y="660" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="127" value="log stream" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;" connectable="0" vertex="1" parent="126">
+                <mxCell id="127" value="log stream" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;" parent="126" connectable="0" vertex="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="128" value="&lt;span style=&quot;color: rgb(240, 240, 240); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(42, 37, 47); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;Do real time streaming&lt;br&gt;of spark job logs&lt;br&gt;to web UI&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                <mxCell id="128" value="&lt;span style=&quot;color: rgb(240, 240, 240); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(42, 37, 47); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;Do real time streaming&lt;br&gt;of torchDDP job logs&lt;br&gt;to web UI&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
                     <mxGeometry x="620" y="550" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="129" value="" style="endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="220" y="550" as="sourcePoint"/>
+                        <mxPoint x="540" y="560" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="220" y="620"/>
+                            <mxPoint x="540" y="620"/>
+                        </Array>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>
