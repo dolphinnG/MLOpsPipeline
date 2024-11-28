@@ -31,7 +31,7 @@ deployment service pod needs seldon-controlplane-client-tls-secret mounted. --> 
 -------
 set in launcher, mlserver images: -> done in mlserver SELDON deployment
 -->> NOT DONE IN LAUNCHER
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = ''
 # set in launcher, spark images, torchddp images, mlserver images:  -> done in launcher, torchddp. Spark probably not needed
 os.environ["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = "http://localhost:4317/v1/traces"
 

@@ -2,7 +2,7 @@
 from multiprocessing import context
 import os
 import mlflow
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 from langchain_openai import ChatOpenAI
 from langchain_community.vectorstores import FAISS
 

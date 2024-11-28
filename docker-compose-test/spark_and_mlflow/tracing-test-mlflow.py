@@ -7,7 +7,7 @@ import mlflow
 
 
 
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = ''
 # Set the endpoint of the OpenTelemetry Collector
 os.environ["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = "http://localhost:4317/v1/traces"
 # Using a local MLflow tracking server

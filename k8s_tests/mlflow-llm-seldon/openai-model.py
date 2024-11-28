@@ -11,7 +11,7 @@ import mlflow.pyfunc
 
 # Run a quick validation that we have an entry for the OPEN_API_KEY within environment variables
 # assert "OPENAI_API_KEY" in os.environ, "OPENAI_API_KEY environment variable must be set"
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 lyrics_prompt = (
     "Here's a misheard lyric: {lyric}. What's the actual lyric, which song does it come from, which artist performed it, and can you give a funny "
     "explanation as to why the misheard version doesn't make sense? Also, rate the creativity of the lyric on a scale of 1 to 3, where 3 is good."

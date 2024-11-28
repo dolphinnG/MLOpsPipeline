@@ -3,7 +3,7 @@ from pprint import pprint
 
 import mlflow
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 os.environ['MLFLOW_S3_ENDPOINT_URL'] = f"http://127.0.0.1:9900"
 os.environ['AWS_ACCESS_KEY_ID'] = "minio_user"
 os.environ['AWS_SECRET_ACCESS_KEY'] = "minio_password"

@@ -2,7 +2,7 @@ import os
 import mlflow.openai
 import pandas as pd
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 
 loaded = mlflow.pyfunc.load_model("s3://mlflow/3/82d3892961124a57bcb9ec8d086c5d9d/artifacts/model")
 

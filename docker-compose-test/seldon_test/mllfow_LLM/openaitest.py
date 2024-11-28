@@ -6,7 +6,7 @@ import pandas as pd
 from mlflow.models.signature import ModelSignature
 from mlflow.types.schema import ColSpec, ParamSchema, ParamSpec, Schema
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 
 lyrics_prompt = (
     "Here's a misheard lyric: {lyric}. What's the actual lyric, which song does it come from, which artist performed it, and can you give a funny "
