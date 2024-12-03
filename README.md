@@ -68,11 +68,11 @@ What does this imply?
 This issue could probably be solved only when we change the spark cluster architecture to something that isn't stanalone cluster.
 
 ### Torch DDP
-As cool as torchX and volcano vcctl, they operates on the assumption that you are a human outside of the cluster, who wants to do something inside the cluster. They relies on your local kubectl config located often at ~/.kube/config
+As cool as torchX and volcano vcctl, they operate on the assumption that you are a human outside of the cluster, who wants to do something inside the cluster. They rely on your local kubectl config located often at ~/.kube/config
 
-But when you want to turn these procedural manual cli thingy into something programmatically that can be run by a process inside the cluster itself, the process can't find such config since it is no longer running on your local machine. 
+But when you want to turn these procedural manual CLI thingy into something programmatical, and that can be run by a process inside the cluster itself, the process can't find such config since it is no longer running on your local machine. 
 
-The solution to this is to attach a service account with sufficient permission to the pod running the process, and dynamically generate the config file for these kind of programs/binaries to use.
+The solution to this type is to attach a service account with sufficient permission to the pod running the process, and dynamically generate the config file for these kind of programs/binaries to use.
 
 -  generate_kubeconfig.py
 
@@ -138,14 +138,16 @@ if __name__ == "__main__":
 Note: MLFlow training script must take care to check for whether it is running on rank 0 node/pod before doing anything mlflow related.
 
 ### Seldon
-For something that is supposed to be a "state of the art" solution for mlmodel deployment, Seldon has both 
+For something that is supposed to be a "state of the art" solution for ML model deployment, Seldon has both 
  - disastrously obscure documentation AND 
  - at times, buggy operations.
-Despite having read so much of the official doc for Seldon v2 to the point that I sometime memorize the words in it, for the deployment parts of this to be up and running, a lot of source code deep diving and even manual modofication of the source docker image (MLServer) was needed
+
+Despite having read so much of the official doc for Seldon v2 to the point that I sometime memorize the words in it, for the deployment parts of this to be up and running, a lot of source code deep diving and even manual modification of the source docker image (MLServer) was needed
 
 That is a shame! It appears they tried to cater to too many in order to be able to somehow achieve compatibility across many model formats, but the individual support for each isn't fully completed.
 
-For example, the support for mlflow can't make use of the env specification in MLModel file of mlflow. 
+For example, the support for mlflow can't make use of the env specification in MLModel file of mlflow (Might be possible if we include a model-settings.json in the directory of the mlflow model, but what a barbaric solution that is lmao). 
+
 What does this imply? 
 
 It means seldon, or the mlserver it relies on doesn't automatically read the conda/virtualenv of mlflow MLModel file, but relies on the pod's local python env to satisfy the deployed model. 
@@ -157,6 +159,17 @@ A lot of time was invested in telemetry since this was an uncharted territory fo
 One issue that I still haven't figured out is the dependency graph in grafana for jaeger datasource, which currently returns blank despite when testing locally with 2 fastapi apps, it returns the graph correctly. I might investigate this once i have the time. Since I have configured tracing for all microservices and seldon and some other infrastructure deployments, I expect to have a detailedd dependency graph in grafana, something like this photo:
 
 <img src="./zchart-drawio/images/http-service-map-script.png" alt="jaeger grafana dependency graph" width="50%"/>
+
+### Separate Clusters for segregation of duties
+
+Currently, everyone and their mother are running on 1 cluster.
+
+In a real production scenario, I suppose there should be 3 separate clusters, with inter-cluster communication through something like Calico.
+
+
+My take: 
+
+<img src="./zchart-drawio/images/cluster.png" alt="cluster separation"  width="70%"/>
 
 ## What I intended to further implement 
 
