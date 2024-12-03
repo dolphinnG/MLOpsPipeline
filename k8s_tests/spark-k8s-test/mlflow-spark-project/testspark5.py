@@ -58,7 +58,7 @@ def main():
             lor_model,
             "model",
             # signature=signature,
-            dfs_tmpdir="/opt/bitnami/spark/tmp/"
+            dfs_tmpdir="/opt/bitnami/spark/tmp/" # NFS VOLUME SHARED PATH
         )
 
     # Stop the Spark session

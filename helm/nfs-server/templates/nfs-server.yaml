@@ -56,7 +56,7 @@ spec:
     - ReadWriteMany
   nfs:
     path: /exports
-    server: nfs-server.default.svc.cluster.local
+    server: nfs-server.dolphin-ns.svc.cluster.local
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

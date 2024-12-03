@@ -52,6 +52,10 @@ spec:
                   image: "supahakka/launcher:v3"
                   imagePullPolicy: {{ .Values.imagePullPolicy }}
                   env:
+                    - name: POD_ID # typo, should have been POD_IP 
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: status.podIP 
                     - name: OTEL_PYTHON_LOG_LEVEL
                       value: "debug"
                     - name: OTEL_EXPORTER_OTLP_ENDPOINT
@@ -72,10 +76,6 @@ spec:
                       value: "true"
                     - name: IS_ON_K8S
                       value: "true"
-                    - name: POD_ID # typo, should have been POD_IP but fuck it 
-                      valueFrom:
-                        fieldRef:
-                          fieldPath: status.podIP 
                   ports:
                       - containerPort: 15003
                   livenessProbe:
